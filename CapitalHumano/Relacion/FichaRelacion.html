@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>INDECSA – Asignación de personal</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    :root{
+      --navy:#0B1F3A;
+      --navy-mid:#152D50;
+      --navy-dark:#0a1828;
+      --gold:#C8A96E;
+      --white:#F8F9FC;
+      --muted:#8A9BB5;
+      --success:#5DCAA5;
+      --danger:#F09595;
+      --border:rgba(200,169,110,0.18);
+    }
+
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:var(--white);
+      padding-top:120px;
+    }
+
+    /* HEADER */
+
+    header{
+      background:var(--navy-mid);
+      border-bottom:1px solid var(--border);
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 2rem;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+    }
+
+    .header-tag{
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    /* NAV */
+
+    nav{
+      background:var(--navy-dark);
+      border-bottom:1px solid rgba(200,169,110,0.12);
+      height:48px;
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      gap:8px;
+      position:fixed;
+      top:72px;
+      left:0;
+      right:0;
+    }
+
+    .nav-link{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      padding:6px 14px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .nav-link:hover,.nav-link.active{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
+    }
+
+    .nav-sep{flex:1;}
+
+    main{
+      padding:40px;
+    }
+
+    .page-wrap{
+      max-width:850px;
+      margin:auto;
+    }
+
+    .page-title{
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      margin-bottom:20px;
+    }
+
+    .card{
+      background:var(--navy-mid);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    label{
+      font-size:13px;
+      color:var(--muted);
+      display:block;
+      margin-bottom:6px;
+    }
+
+    select{
+      width:100%;
+      padding:9px;
+      border-radius:8px;
+      border:1px solid var(--border);
+      background:#0f2747;
+      color:white;
+      margin-bottom:10px;
+    }
+
+    button{
+      padding:8px 16px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .btn-add{
+      background:var(--success);
+      color:#0B1F3A;
+    }
+
+    .btn-del{
+      background:var(--danger);
+      color:white;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+    }
+
+    th,td{
+      padding:10px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      font-size:13px;
+    }
+
+    th{
+      color:var(--gold);
+      text-align:left;
+    }
+
+    /* FOOTER */
+
+    footer{
+      background:var(--navy-mid);
+      border-top:1px solid var(--border);
+      margin-top:40px;
+    }
+
+    .footer-content{
+      max-width:700px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      padding:18px 10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <img src="../../img/logo.png" height="52">
+
+  <div class="header-tag">
+    Capital Humano
+  </div>
+
+</header>
+
+<nav>
+
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+
+  <a class="nav-link active">
+    <i class="fa-solid fa-link"></i> Relacionar
+  </a>
+
+  <div class="nav-sep"></div>
+
+</nav>
+
+<main>
+
+  <div class="page-wrap">
+
+    <h2 class="page-title">Asignación de personal</h2>
+
+    <div class="card">
+
+      <label>Agregar trabajador</label>
+
+      <select id="trabajadorSelect"></select>
+
+      <button class="btn-add" onclick="agregarTrabajador()">
+        Agregar trabajador
+      </button>
+
+      <table>
+
+        <thead>
+        <tr>
+          <th>Trabajador</th>
+          <th>Especialidad</th>
+          <th>Acción</th>
+        </tr>
+        </thead>
+
+        <tbody id="tablaTrabajadores"></tbody>
+
+      </table>
+
+    </div>
+
+    <div class="card">
+
+      <label>Contratista</label>
+
+      <select id="contratistaSelect">
+        <option>Constructora Atlas</option>
+        <option>Grupo Industrial MX</option>
+      </select>
+
+      <button class="btn-add" onclick="agregarContratista()">
+        Asignar contratista
+      </button>
+
+      <table>
+
+        <thead>
+        <tr>
+          <th>Contratista</th>
+          <th>Acción</th>
+        </tr>
+        </thead>
+
+        <tbody id="tablaContratista"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+
+  <div class="footer-content">
+
+    <div>
+      <b>INDECSA</b><br>
+      Sistema de gestión de personal
+    </div>
+
+    <div>
+      Contacto<br>
+      soporte@indecsa.com
+    </div>
+
+    <div>
+      © 2026 INDECSA
+    </div>
+
+  </div>
+
+</footer>
+
+<script>
+
+  const trabajadoresDisponibles=[
+
+    {nombre:"Juan Pérez",especialidad:"Carpintero"},
+    {nombre:"Pedro Gómez",especialidad:"Plomero"},
+    {nombre:"Carlos Ruiz",especialidad:"Tablaroquero"},
+    {nombre:"Mario Díaz",especialidad:"Chalan de obra"}
+
+  ];
+
+  let trabajadoresAsignados=[];
+  let contratistaAsignado=null;
+
+  const select=document.getElementById("trabajadorSelect");
+
+  trabajadoresDisponibles.forEach((t,i)=>{
+
+    select.innerHTML+=`<option value="${i}">
+${t.nombre} – ${t.especialidad}
+</option>`;
+
+  });
+
+  function agregarTrabajador(){
+
+    if(trabajadoresAsignados.length>=8){
+      alert("Máximo 8 trabajadores");
+      return;
+    }
+
+    const index=select.value;
+    const t=trabajadoresDisponibles[index];
+
+    trabajadoresAsignados.push(t);
+
+    render();
+
+  }
+
+  function render(){
+
+    let tbody=document.getElementById("tablaTrabajadores");
+
+    tbody.innerHTML="";
+
+    trabajadoresAsignados.forEach((t,i)=>{
+
+      tbody.innerHTML+=`
+
+<tr>
+<td>${t.nombre}</td>
+<td>${t.especialidad}</td>
+<td><button class="btn-del" onclick="eliminarTrabajador(${i})">Eliminar</button></td>
+</tr>
+
+`;
+
+    });
+
+  }
+
+  function eliminarTrabajador(i){
+
+    trabajadoresAsignados.splice(i,1);
+
+    render();
+
+  }
+
+  function agregarContratista(){
+
+    if(contratistaAsignado){
+      alert("Solo puede haber un contratista");
+      return;
+    }
+
+    contratistaAsignado=document.getElementById("contratistaSelect").value;
+
+    document.getElementById("tablaContratista").innerHTML=`
+
+<tr>
+<td>${contratistaAsignado}</td>
+<td><button class="btn-del" onclick="eliminarContratista()">Eliminar</button></td>
+</tr>
+
+`;
+
+  }
+
+  function eliminarContratista(){
+
+    contratistaAsignado=null;
+
+    document.getElementById("tablaContratista").innerHTML="";
+
+  }
+
+</script>
+
+</body>
+</html>

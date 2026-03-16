@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>INDECSA – Detalle del Proyecto</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --navy:#0B1F3A;
+      --navy-mid:#152D50;
+      --navy-dark:#0a1828;
+      --gold:#C8A96E;
+      --white:#F8F9FC;
+      --muted:#8A9BB5;
+      --success:#5DCAA5;
+      --danger:#F09595;
+      --warning:#FAC775;
+      --purple:#AFA9EC;
+      --border:rgba(200,169,110,0.18);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;}
+
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:var(--white);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      padding-top:120px;
+    }
+
+    header{
+      background:var(--navy-mid);
+      border-bottom:1px solid var(--border);
+      padding:0 2rem;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+    }
+
+    .header-tag{
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    nav{
+      background:var(--navy-dark);
+      border-bottom:1px solid rgba(200,169,110,0.12);
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      height:48px;
+      gap:4px;
+      position:fixed;
+      top:72px;
+      left:0;
+      right:0;
+    }
+
+    .nav-link{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .nav-link:hover{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
+    }
+
+    .nav-sep{flex:1;}
+
+    .nav-logout{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--danger);
+      cursor:pointer;
+      border:1px solid rgba(226,75,74,0.25);
+      background:none;
+    }
+
+    main{
+      flex:1;
+      padding:2.5rem 2rem;
+      background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);
+    }
+
+    .page-wrap{
+      max-width:900px;
+      margin:auto;
+    }
+
+    .panel{
+      background:var(--navy-mid);
+      border:1px solid rgba(200,169,110,0.15);
+      border-radius:14px;
+      padding:22px;
+      margin-bottom:18px;
+    }
+
+    .panel-title{
+      font-family:'Playfair Display',serif;
+      font-size:20px;
+      margin-bottom:16px;
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .info-row{
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .info-row i{
+      color:var(--gold);
+    }
+
+    .status-badge{
+      font-size:11px;
+      padding:4px 10px;
+      border-radius:20px;
+      display:inline-block;
+      margin-top:10px;
+    }
+
+    .s-en_curso{
+      background:rgba(93,202,165,0.12);
+      color:#5DCAA5;
+      border:1px solid rgba(93,202,165,0.3);
+    }
+
+    .s-pausado{
+      background:rgba(250,199,117,0.12);
+      color:#FAC775;
+      border:1px solid rgba(250,199,117,0.3);
+    }
+
+    .s-finalizado{
+      background:rgba(175,169,236,0.12);
+      color:#AFA9EC;
+      border:1px solid rgba(175,169,236,0.3);
+    }
+
+    .s-cancelado{
+      background:rgba(240,149,149,0.12);
+      color:#F09595;
+      border:1px solid rgba(240,149,149,0.3);
+    }
+
+    .workers-count{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:12px;
+    }
+
+    .worker-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .worker-card{
+      background:#1a3560;
+      border-radius:8px;
+      padding:10px 12px;
+      display:flex;
+      justify-content:space-between;
+      font-size:13px;
+    }
+
+    .empty{
+      font-size:12px;
+      color:var(--muted);
+      font-style:italic;
+    }
+
+    footer{
+      background:var(--navy-mid);
+      border-top:1px solid var(--border);
+      height:56px;
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+    }
+
+    .footer-left{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52">
+  <div class="header-tag">Capital Humano</div>
+</header>
+
+<nav>
+
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+
+  <a class="nav-link" href="ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+
+  <a class="nav-link" href="../Relacion/Relacionar.html">
+    <i class="fa-solid fa-link"></i> Relacionar
+  </a>
+
+  <div class="nav-sep"></div>
+
+  <button class="nav-logout" onclick="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
+
+</nav>
+
+<main>
+
+  <div class="page-wrap">
+
+    <div class="panel">
+
+      <div class="panel-title" id="nombreProyecto"></div>
+
+      <div class="info-grid">
+
+        <div class="info-row">
+          <i class="fa-solid fa-location-dot"></i>
+          <span id="estado"></span>
+        </div>
+
+        <div class="info-row">
+          <i class="fa-solid fa-map-pin"></i>
+          <span id="municipio"></span>
+        </div>
+
+        <div class="info-row">
+          <i class="fa-solid fa-calendar"></i>
+          <span id="fechaInicio"></span>
+        </div>
+
+      </div>
+
+      <div id="estatus"></div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-title">Trabajadores asignados</div>
+
+      <div class="workers-count" id="contadorTrabajadores"></div>
+
+      <div class="worker-list" id="listaTrabajadores"></div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-title">Contratista</div>
+
+      <div id="contratista"></div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-left">© 2026 INDECSA</div>
+</footer>
+
+<script>
+
+  const proyectos=[
+
+    {
+      id:1,
+      nombre:"Planta Industrial Norte",
+      estado:"Hidalgo",
+      municipio:"Tizayuca",
+      estatus:"EN_CURSO",
+      fecha:"12 Marzo 2026",
+      trabajadores:[
+        {nombre:"Juan García",especialidad:"Soldador"},
+        {nombre:"Pedro López",especialidad:"Electricista"}
+      ],
+      contratista:"Constructora Atlas"
+    }
+
+  ];
+
+  function obtenerID(){
+    const params=new URLSearchParams(window.location.search);
+    return parseInt(params.get("id"));
+  }
+
+  function cargarProyecto(){
+
+    const id=obtenerID();
+
+    const proyecto=proyectos.find(p=>p.id===id);
+
+    if(!proyecto){
+      document.body.innerHTML="<h2 style='padding:40px'>Proyecto no encontrado</h2>";
+      return;
+    }
+
+    document.getElementById("nombreProyecto").innerText=proyecto.nombre;
+    document.getElementById("estado").innerText=proyecto.estado;
+    document.getElementById("municipio").innerText=proyecto.municipio;
+    document.getElementById("fechaInicio").innerText="Inicio: "+proyecto.fecha;
+
+    document.getElementById("estatus").innerHTML=
+      `<span class="status-badge s-${proyecto.estatus.toLowerCase()}">
+${proyecto.estatus.replace("_"," ")}
+</span>`;
+
+    const total = proyecto.trabajadores.length;
+    const maximo = 8;
+
+    document.getElementById("contadorTrabajadores").innerText =
+      total+" / "+maximo+" trabajadores asignados";
+
+    if(total===0){
+      document.getElementById("listaTrabajadores").innerHTML=
+        "<div class='empty'>No hay trabajadores asignados</div>";
+    }else{
+
+      document.getElementById("listaTrabajadores").innerHTML=
+        proyecto.trabajadores.map(t=>`
+
+<div class="worker-card">
+<span>${t.nombre}</span>
+<span>${t.especialidad}</span>
+</div>
+
+`).join("");
+
+    }
+
+    document.getElementById("contratista").innerText=proyecto.contratista;
+
+  }
+
+  function cerrarSesion(){
+    window.location.href='../../index.html';
+  }
+
+  cargarProyecto();
+
+</script>
+
+</body>
+</html>

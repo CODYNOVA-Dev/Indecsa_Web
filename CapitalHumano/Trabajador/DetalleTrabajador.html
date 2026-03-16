@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Detalle del trabajador</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --navy:#0B1F3A;
+      --navy-mid:#152D50;
+      --gold:#C8A96E;
+      --muted:#8A9BB5;
+      --border:rgba(200,169,110,0.18);
+    }
+
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+    }
+
+    .detalle-card{
+      background:var(--navy-mid);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:30px;
+      width:420px;
+      text-align:center;
+    }
+
+    .avatar{
+      width:70px;
+      height:70px;
+      border-radius:50%;
+      background:rgba(200,169,110,0.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      margin:auto;
+      margin-bottom:15px;
+    }
+
+    .nombre{
+      font-family:'Playfair Display',serif;
+      font-size:22px;
+      margin-bottom:10px;
+    }
+
+    .row{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:6px 0;
+      color:var(--muted);
+    }
+
+    .row i{
+      color:var(--gold);
+    }
+
+    button{
+      margin-top:18px;
+      padding:8px 18px;
+      border-radius:8px;
+      border:none;
+      background:var(--gold);
+      cursor:pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="detalle-card">
+
+  <div class="avatar" id="avatar"></div>
+
+  <div class="nombre" id="nombre"></div>
+
+  <div class="row">
+    <i class="fa-solid fa-helmet-safety"></i>
+    <span id="especialidad"></span>
+  </div>
+
+  <div class="row">
+    <i class="fa-solid fa-phone"></i>
+    <span id="telefono"></span>
+  </div>
+
+  <div class="row">
+    <i class="fa-solid fa-envelope"></i>
+    <span id="correo"></span>
+  </div>
+
+  <div class="row">
+    <i class="fa-solid fa-location-dot"></i>
+    <span id="estado"></span>
+  </div>
+
+  <button onclick="volver()">Volver</button>
+
+</div>
+
+<script>
+
+  const trabajador = JSON.parse(localStorage.getItem("trabajadorSeleccionado"));
+
+  function iniciales(n){
+    const p=n.split(" ");
+    return p[0][0]+p[1][0];
+  }
+
+  document.getElementById("avatar").innerText = iniciales(trabajador.nombre);
+  document.getElementById("nombre").innerText = trabajador.nombre;
+  document.getElementById("especialidad").innerText = trabajador.especialidad;
+  document.getElementById("telefono").innerText = trabajador.telefono;
+  document.getElementById("correo").innerText = trabajador.correo;
+  document.getElementById("estado").innerText = trabajador.estado;
+
+  function volver(){
+    window.history.back();
+  }
+
+</script>
+
+</body>
+</html>

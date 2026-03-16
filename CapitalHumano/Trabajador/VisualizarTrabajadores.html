@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INDECSA – Trabajadores</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --navy:#0B1F3A;
+      --navy-mid:#152D50;
+      --navy-dark:#0a1828;
+      --gold:#C8A96E;
+      --white:#F8F9FC;
+      --muted:#8A9BB5;
+      --success:#5DCAA5;
+      --danger:#F09595;
+      --border:rgba(200,169,110,0.18);
+    }
+
+    /* ANIMACION DE ENTRADA DE TARJETAS */
+
+    @keyframes cardFade {
+      from{
+        opacity:0;
+        transform:translateY(14px) scale(.98);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:var(--white);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      padding-top:120px;
+    }
+
+    /* HEADER */
+
+    header{
+      background:var(--navy-mid);
+      border-bottom:1px solid var(--border);
+      padding:0 2rem;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+    }
+
+    .header-tag{
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    /* NAV */
+
+    nav{
+      background:var(--navy-dark);
+      border-bottom:1px solid rgba(200,169,110,0.12);
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      height:48px;
+      gap:4px;
+      position:fixed;
+      top:72px;
+      left:0;
+      right:0;
+    }
+
+    .nav-link{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .nav-link:hover,
+    .nav-link.active{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
+    }
+
+    .nav-sep{flex:1;}
+
+    .nav-logout{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--danger);
+      cursor:pointer;
+      border:1px solid rgba(226,75,74,0.25);
+      background:none;
+    }
+
+    /* MAIN */
+
+    main{
+      flex:1;
+      padding:2.5rem 2rem;
+      background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);
+    }
+
+    .page-wrap{
+      max-width:1100px;
+      margin:auto;
+    }
+
+    /* HEADER PAGINA */
+
+    .page-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      margin-bottom:2rem;
+    }
+
+    .page-title{
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+    }
+
+    .page-sub{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    /* FILTROS */
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      margin-bottom:1.5rem;
+    }
+
+    .filter-group{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+
+    .filter-label{
+      font-size:11px;
+      color:var(--muted);
+      text-transform:uppercase;
+    }
+
+    .filter-select{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(200,169,110,0.2);
+      border-radius:9px;
+      color:white;
+      font-size:13px;
+      padding:8px 10px;
+    }
+
+    /* GRID */
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    /* TARJETA ESTILO ADMIN */
+
+    .worker-card{
+      background:linear-gradient(145deg,#162f54,#142949);
+      border:1px solid rgba(200,169,110,0.18);
+      border-radius:14px;
+      padding:18px;
+      display:grid;
+      grid-template-columns:48px 1fr;
+      gap:14px;
+      cursor:pointer;
+      transition:.35s cubic-bezier(.22,.9,.32,1);
+      position:relative;
+
+      animation:cardFade .45s ease forwards;
+    }
+
+    /* HOVER */
+
+    .worker-card:hover{
+      border-color:rgba(200,169,110,0.55);
+      background:#1c3a6b;
+      transform:translateY(-4px) scale(1.01);
+      box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    /* AVATAR */
+
+    .avatar{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:600;
+
+      background:rgba(133,183,235,0.15);
+      color:#85B7EB;
+
+      border:1px solid rgba(133,183,235,0.3);
+
+      transition:.25s;
+    }
+
+    .worker-card:hover .avatar{
+      background:rgba(133,183,235,0.25);
+      transform:scale(1.05);
+    }
+
+    /* CONTENIDO */
+
+    .wname{
+      font-size:15px;
+      font-weight:500;
+      margin-bottom:8px;
+    }
+
+    .wmeta{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .wrow{
+      display:flex;
+      align-items:center;
+      gap:7px;
+    }
+
+    .wrow i{
+      color:var(--gold);
+      width:14px;
+    }
+
+    /* BADGE */
+
+    .status-badge{
+      position:absolute;
+      top:12px;
+      right:14px;
+      font-size:9px;
+      padding:4px 10px;
+      border-radius:20px;
+      text-transform:uppercase;
+    }
+
+    .s-activo{
+      background:rgba(93,202,165,0.12);
+      color:#5DCAA5;
+      border:1px solid rgba(93,202,165,0.3);
+    }
+
+    .s-inactivo{
+      background:rgba(240,149,149,0.12);
+      color:#F09595;
+      border:1px solid rgba(240,149,149,0.3);
+    }
+
+    /* FOOTER */
+
+    footer{
+      background:var(--navy-mid);
+      border-top:1px solid var(--border);
+      height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 2rem;
+    }
+
+    .footer-left{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52">
+  <div class="header-tag">Gestión de proyectos</div>
+</header>
+
+<nav>
+
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+
+  <a class="nav-link active">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+
+  <a class="nav-link" href="../Relacion/Relacionar.html">
+    <i class="fa-solid fa-link"></i> Relacionar
+  </a>
+
+  <div class="nav-sep"></div>
+
+  <button class="nav-logout" onclick="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
+
+</nav>
+
+<main>
+
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">Trabajadores registrados</div>
+        <div class="page-sub">Consulta del personal dentro del sistema</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+
+      <div class="filter-group">
+        <div class="filter-label">Buscar trabajador</div>
+
+        <input
+          type="text"
+          id="busquedaNombre"
+          placeholder="Buscar por nombre..."
+          oninput="filtrar()"
+          class="filter-select"
+        >
+
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">Estado</div>
+
+        <select class="filter-select" id="filtroEstado" onchange="filtrar()">
+          <option value="">Todos</option>
+          <option value="Hidalgo">Hidalgo</option>
+          <option value="CDMX">CDMX</option>
+          <option value="Puebla">Puebla</option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-left">
+    © 2026 INDECSA
+  </div>
+</footer>
+
+<script>
+
+  const trabajadores=[
+
+    {
+      id:1,
+      nombre:"Juan García",
+      especialidad:"Soldador",
+      telefono:"5551234567",
+      correo:"juan@indecsa.com",
+      estadoLaboral:"ACTIVO",
+      estado:"Hidalgo"
+    },
+
+    {
+      id:2,
+      nombre:"María López",
+      especialidad:"Electricista",
+      telefono:"5559998888",
+      correo:"maria@indecsa.com",
+      estadoLaboral:"ACTIVO",
+      estado:"CDMX"
+    },
+
+    {
+      id:3,
+      nombre:"Carlos Ramírez",
+      especialidad:"Albañil",
+      telefono:"5552223333",
+      correo:"carlos@indecsa.com",
+      estadoLaboral:"INACTIVO",
+      estado:"Puebla"
+    }
+
+  ];
+
+  function iniciales(nombre){
+    const partes=nombre.split(" ");
+    return partes[0][0]+partes[1][0];
+  }
+
+  function verDetalle(id){
+    window.location.href="DetalleTrabajador.html?id="+id;
+  }
+
+  function render(lista){
+
+    const grid=document.getElementById("cardsGrid");
+
+    grid.innerHTML=lista.map(t=>`
+
+<div class="worker-card" onclick="verDetalle(${t.id})">
+
+<div class="avatar">
+${iniciales(t.nombre)}
+</div>
+
+<div>
+
+<div class="wname">${t.nombre}</div>
+
+<div class="wmeta">
+
+<div class="wrow">
+<i class="fa-solid fa-helmet-safety"></i>
+${t.especialidad}
+</div>
+
+<div class="wrow">
+<i class="fa-solid fa-phone"></i>
+${t.telefono}
+</div>
+
+<div class="wrow">
+<i class="fa-solid fa-envelope"></i>
+${t.correo}
+</div>
+
+<div class="wrow">
+<i class="fa-solid fa-location-dot"></i>
+${t.estado}
+</div>
+
+</div>
+
+</div>
+
+<div class="status-badge ${t.estadoLaboral=="ACTIVO"?"s-activo":"s-inactivo"}">
+${t.estadoLaboral}
+</div>
+
+</div>
+
+`).join("");
+
+  }
+
+  function filtrar(){
+
+    const estado=document.getElementById("filtroEstado").value;
+    const busqueda=document.getElementById("busquedaNombre").value.toLowerCase();
+
+    const filtrados=trabajadores.filter(t=>
+
+      (!estado || t.estado===estado) &&
+      t.nombre.toLowerCase().includes(busqueda)
+
+    );
+
+    render(filtrados);
+
+  }
+
+  function cerrarSesion(){
+    window.location.href='../../index.html';
+  }
+
+  render(trabajadores);
+
+</script>
+
+</body>
+</html>

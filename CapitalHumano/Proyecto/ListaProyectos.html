@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>INDECSA – Lista de Proyectos</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    :root{
+      --navy:#0B1F3A;
+      --navy-mid:#152D50;
+      --navy-dark:#0a1828;
+      --gold:#C8A96E;
+      --white:#F8F9FC;
+      --muted:#8A9BB5;
+      --success:#5DCAA5;
+      --danger:#F09595;
+      --warning:#FAC775;
+      --purple:#AFA9EC;
+      --border:rgba(200,169,110,0.18);
+    }
+
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:var(--white);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      padding-top:120px;
+    }
+
+    header{
+      background:var(--navy-mid);
+      border-bottom:1px solid var(--border);
+      padding:0 2rem;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+    }
+
+    .header-tag{
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    nav{
+      background:var(--navy-dark);
+      border-bottom:1px solid rgba(200,169,110,0.12);
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      height:48px;
+      gap:4px;
+      position:fixed;
+      top:72px;
+      left:0;
+      right:0;
+    }
+
+    .nav-link{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .nav-link:hover,.nav-link.active{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
+    }
+
+    .nav-sep{flex:1;}
+
+    .nav-logout{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--danger);
+      cursor:pointer;
+      border:1px solid rgba(226,75,74,0.25);
+      background:none;
+    }
+
+    main{
+      flex:1;
+      padding:2.5rem 2rem;
+      background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);
+    }
+
+    .page-wrap{
+      max-width:960px;
+      margin:auto;
+    }
+
+    .page-title{
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      margin-bottom:4px;
+    }
+
+    .results-count{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:18px;
+    }
+
+    /* FILTROS */
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .filter-group{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+
+    .filter-label{
+      font-size:11px;
+      color:var(--muted);
+      text-transform:uppercase;
+    }
+
+    .filter-select{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(200,169,110,0.2);
+      border-radius:9px;
+      color:var(--white);
+      font-size:13px;
+      padding:9px 34px 9px 13px;
+      cursor:pointer;
+    }
+
+    /* GRID */
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    /* CARD */
+
+    .proj-card{
+      background:var(--navy-mid);
+      border:1px solid rgba(200,169,110,0.15);
+      border-radius:13px;
+      padding:16px;
+      cursor:pointer;
+      position:relative;
+      transition:.25s;
+      opacity:0;
+      transform:translateY(10px);
+      animation:fadeUp .4s ease forwards;
+    }
+
+    .proj-card:hover{
+      border-color:rgba(200,169,110,0.4);
+      background:#1a3560;
+    }
+
+    /* animación */
+
+    @keyframes fadeUp{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* línea superior */
+
+    .proj-card::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:3px;
+      border-radius:13px 13px 0 0;
+    }
+
+    .c-en_curso::before{background:linear-gradient(90deg,transparent,#5DCAA5,transparent);}
+    .c-pausado::before{background:linear-gradient(90deg,transparent,#FAC775,transparent);}
+    .c-finalizado::before{background:linear-gradient(90deg,transparent,#AFA9EC,transparent);}
+    .c-cancelado::before{background:linear-gradient(90deg,transparent,#F09595,transparent);}
+
+    .proj-name{
+      font-size:14px;
+      font-weight:500;
+      margin-bottom:6px;
+    }
+
+    .wmeta{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+
+    .wrow{
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .wrow i{
+      color:var(--gold);
+      font-size:11px;
+    }
+
+    /* BADGE */
+
+    .status-badge{
+      position:absolute;
+      top:12px;
+      right:12px;
+      font-size:9px;
+      padding:4px 9px;
+      border-radius:20px;
+      text-transform:uppercase;
+    }
+
+    .s-en_curso{
+      background:rgba(93,202,165,0.12);
+      color:#5DCAA5;
+      border:1px solid rgba(93,202,165,0.3);
+    }
+
+    .s-pausado{
+      background:rgba(250,199,117,0.12);
+      color:#FAC775;
+      border:1px solid rgba(250,199,117,0.3);
+    }
+
+    .s-finalizado{
+      background:rgba(175,169,236,0.12);
+      color:#AFA9EC;
+      border:1px solid rgba(175,169,236,0.3);
+    }
+
+    .s-cancelado{
+      background:rgba(240,149,149,0.12);
+      color:#F09595;
+      border:1px solid rgba(240,149,149,0.3);
+    }
+
+    footer{
+      background:var(--navy-mid);
+      border-top:1px solid var(--border);
+      height:56px;
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+    }
+
+    .footer-left{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52">
+  <div class="header-tag">Capital Humano</div>
+</header>
+
+<nav>
+
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+
+  <a class="nav-link active">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+
+  <a class="nav-link" href="../Relacion/Relacionar.html">
+    <i class="fa-solid fa-link"></i> Relacionar
+  </a>
+
+  <div class="nav-sep"></div>
+
+  <button class="nav-logout" onclick="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
+
+</nav>
+
+<main>
+
+  <div class="page-wrap">
+
+    <h2 class="page-title">Proyectos registrados</h2>
+
+    <div class="results-count" id="contadorResultados"></div>
+
+    <div class="toolbar">
+
+      <div class="filter-group">
+        <div class="filter-label">Estatus</div>
+
+        <select class="filter-select" id="filtroEstatus" onchange="filtrar()">
+          <option value="">Todos</option>
+          <option value="EN_CURSO">En curso</option>
+          <option value="PAUSADO">Pausado</option>
+          <option value="FINALIZADO">Finalizado</option>
+          <option value="CANCELADO">Cancelado</option>
+        </select>
+
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">Estado</div>
+
+        <select class="filter-select" id="filtroEstado" onchange="filtrar()">
+          <option value="">Todos</option>
+          <option value="CDMX">CDMX</option>
+          <option value="Hidalgo">Hidalgo</option>
+          <option value="Puebla">Puebla</option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-left">
+    © 2026 INDECSA
+  </div>
+</footer>
+
+<script>
+
+  const proyectos=[
+
+    { id:1, nombre:"Planta Industrial Norte", estado:"Hidalgo", estatus:"EN_CURSO", municipio:"Tizayuca" },
+    { id:2, nombre:"Residencial Las Palmas", estado:"Puebla", estatus:"FINALIZADO", municipio:"Puebla" },
+    { id:3, nombre:"Centro Comercial Oriente", estado:"CDMX", estatus:"PAUSADO", municipio:"Iztapalapa" },
+    { id:4, nombre:"Bodega Logística Sur", estado:"Puebla", estatus:"CANCELADO", municipio:"Cholula" }
+
+  ];
+
+  function render(p){
+
+    return `
+
+<div class="proj-card c-${p.estatus.toLowerCase()}" onclick="verProyecto(${p.id})">
+
+<div class="proj-name">${p.nombre}</div>
+
+<div class="wmeta">
+
+<div class="wrow">
+<i class="fa-solid fa-location-dot"></i>
+${p.estado}
+</div>
+
+<div class="wrow">
+<i class="fa-solid fa-map-pin"></i>
+${p.municipio}
+</div>
+
+</div>
+
+<div class="status-badge s-${p.estatus.toLowerCase()}">
+${p.estatus.replace("_"," ")}
+</div>
+
+</div>
+
+`;
+
+  }
+
+  function verProyecto(id){
+
+    window.location.href="VerProyecto.html?id="+id;
+
+  }
+
+  function filtrar(){
+
+    const estatus=document.getElementById("filtroEstatus").value;
+    const estado=document.getElementById("filtroEstado").value;
+
+    const filtrados=proyectos.filter(p=>
+
+      (!estatus||p.estatus===estatus)&&
+      (!estado||p.estado===estado)
+
+    );
+
+    document.getElementById("cardsGrid").innerHTML=filtrados.map(render).join("");
+
+    document.getElementById("contadorResultados").innerText=
+      filtrados.length+" proyecto"+(filtrados.length==1?"":"s")+" encontrado"+(filtrados.length==1?"":"s");
+
+  }
+
+  function cerrarSesion(){
+
+    window.location.href='../../index.html';
+
+  }
+
+  filtrar();
+
+</script>
+
+</body>
+</html>
