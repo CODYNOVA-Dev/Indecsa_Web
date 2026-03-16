@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INDECSA – Lista de Proyectos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root { --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5; --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --purple:#AFA9EC; --blue:#85B7EB; --border:rgba(200,169,110,0.18); }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+    main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+    .page-wrap { max-width:960px; margin:0 auto; }
+    .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; }
+    .page-icon i { font-size:22px; color:var(--purple); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
+    .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; }
+    .btn-add { display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:linear-gradient(135deg,#AFA9EC,#6b63c7); color:#0B1F3A; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:700; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(175,169,236,0.25); transition:transform .2s,box-shadow .2s; text-decoration:none; white-space:nowrap; }
+    .btn-add:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(175,169,236,0.35); }
+    .toolbar-right { margin-left:auto; display:flex; align-items:flex-end; gap:10px; }
+    .filter-group { display:flex; flex-direction:column; gap:5px; }
+    .filter-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+    .filter-select { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 34px 9px 13px; appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; min-width:160px; }
+    .filter-select:focus { outline:none; border-color:var(--gold); }
+    .filter-select option { background:#152D50; }
+    .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
+    .results-info strong { color:var(--white); }
+    .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; animation:fadeUp .4s ease both; }
+    .proj-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:16px; position:relative; cursor:pointer; transition:border-color .2s,background .2s; }
+    .proj-card:hover { border-color:rgba(200,169,110,0.4); background:#1a3560; }
+    .proj-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:13px 13px 0 0; }
+    .proj-card.c-planeacion::before  { background:linear-gradient(90deg,transparent,#85B7EB,transparent); }
+    .proj-card.c-en_curso::before    { background:linear-gradient(90deg,transparent,#5DCAA5,transparent); }
+    .proj-card.c-pausado::before     { background:linear-gradient(90deg,transparent,#FAC775,transparent); }
+    .proj-card.c-finalizado::before  { background:linear-gradient(90deg,transparent,#AFA9EC,transparent); }
+    .proj-card.c-cancelado::before   { background:linear-gradient(90deg,transparent,#F09595,transparent); }
+    .proj-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; padding-right:80px; }
+    .proj-name { font-size:13px; font-weight:500; color:var(--white); margin-bottom:3px; }
+    .proj-type { font-size:11px; color:var(--muted); }
+    .status-badge { position:absolute; top:14px; right:14px; font-size:9px; font-weight:600; padding:3px 9px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; }
+    .s-planeacion  { background:rgba(133,183,235,0.12); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
+    .s-en_curso    { background:rgba(93,202,165,0.12);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
+    .s-pausado     { background:rgba(250,199,117,0.12); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
+    .s-finalizado  { background:rgba(175,169,236,0.12); color:#AFA9EC; border:1px solid rgba(175,169,236,0.3); }
+    .s-cancelado   { background:rgba(240,149,149,0.12); color:#F09595; border:1px solid rgba(240,149,149,0.3); }
+    .wmeta { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+    .wrow { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .wrow i { font-size:10px; color:var(--gold); width:12px; flex-shrink:0; }
+    .wfooter { display:flex; align-items:center; justify-content:space-between; padding-top:9px; border-top:1px solid rgba(255,255,255,0.06); }
+    .wactions { display:flex; gap:6px; }
+    .wact { font-size:11px; padding:4px 11px; border-radius:7px; cursor:pointer; border:1px solid; text-decoration:none; display:flex; align-items:center; gap:5px; transition:background .15s; }
+    .wact i { font-size:10px; }
+    .wact.edit { color:var(--warning); border-color:rgba(250,199,117,0.25); background:rgba(250,199,117,0.06); }
+    .wact.edit:hover { background:rgba(250,199,117,0.12); }
+    .wact.del  { color:var(--danger);  border-color:rgba(240,149,149,0.25); background:rgba(240,149,149,0.06); }
+    .wact.del:hover  { background:rgba(240,149,149,0.12); }
+    .stars-mini { display:flex; gap:1px; }
+    .st { font-size:11px; color:rgba(200,169,110,0.2); }
+    .st.on { color:var(--gold); }
+    .empty-state { grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--muted); }
+    .empty-state i { font-size:36px; color:rgba(200,169,110,0.2); margin-bottom:1rem; display:block; }
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    @media(max-width:700px){ .cards-grid{grid-template-columns:1fr} .toolbar{flex-direction:column;align-items:stretch} .toolbar-right{margin-left:0;flex-wrap:wrap} }
+  </style>
+</head>
+<body>
+<header>
+  <img src="../../img/logo.png" height="52" alt="INDECSA" />
+  <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
+</header>
+<nav>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratistas/AltaContratista.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link active" href="AltaProyecto.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <div class="nav-sep"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+</nav>
+<main>
+  <div class="page-wrap">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="page-icon"><i class="fa-solid fa-diagram-project"></i></div>
+        <div>
+          <div class="page-title">Proyectos registrados</div>
+          <div class="page-sub">Consulta y gestiona todos los proyectos del sistema</div>
+        </div>
+      </div>
+      <div class="breadcrumb">
+        <a href="../Paginaprincipal.html">Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Proyectos</span>
+      </div>
+    </div>
+    <div class="toolbar">
+      <a class="btn-add" href="AltaProyecto.html"><i class="fa-solid fa-folder-plus"></i> Agregar proyecto</a>
+      <div class="toolbar-right">
+        <div class="filter-group">
+          <div class="filter-label">Estatus</div>
+          <select class="filter-select" id="filtroEstatus" onchange="filtrar()">
+            <option value="">Todos los estatus</option>
+            <option value="PLANEACION">Planeación</option>
+            <option value="EN_CURSO">En curso</option>
+            <option value="PAUSADO">Pausado</option>
+            <option value="FINALIZADO">Finalizado</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Estado</div>
+          <select class="filter-select" id="filtroEstado" onchange="filtrar()">
+            <option value="">Todos los estados</option>
+            <option value="CDMX">CDMX</option>
+            <option value="Hidalgo">Hidalgo</option>
+            <option value="Puebla">Puebla</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="results-info"><i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i><span id="resultsLabel">Cargando…</span></div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+</main>
+<footer>
+  <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
+  <div class="footer-contact">
+    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
+    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+  </div>
+</footer>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+<script>
+  const proyectos = [
+    { id_proyecto:1, nombre_proyecto:'Planta Industrial Norte', tipo_proyecto:'Industrial', lugar_proyecto:'Av. Industrial 45', municipio_proyecto:'Tizayuca', estado_proyecto_geo:'Hidalgo', fecha_estimada_inicio:'2024-01-15', fecha_estimada_fin:'2024-12-31', estatus_proyecto:'EN_CURSO', calificacion_proyecto:4, descripcion_proyecto:'Construcción de planta de manufactura de 5,000 m².' },
+    { id_proyecto:2, nombre_proyecto:'Residencial Las Palmas', tipo_proyecto:'Residencial', lugar_proyecto:'Blvd. Las Palmas 120', municipio_proyecto:'Puebla', estado_proyecto_geo:'Puebla', fecha_estimada_inicio:'2023-06-01', fecha_estimada_fin:'2024-05-30', estatus_proyecto:'FINALIZADO', calificacion_proyecto:5, descripcion_proyecto:'Desarrollo de 80 viviendas de interés social.' },
+    { id_proyecto:3, nombre_proyecto:'Centro Comercial Oriente', tipo_proyecto:'Comercial', lugar_proyecto:'Eje 8 Sur 300', municipio_proyecto:'Iztapalapa', estado_proyecto_geo:'CDMX', fecha_estimada_inicio:'2024-03-01', fecha_estimada_fin:'2025-06-30', estatus_proyecto:'PLANEACION', calificacion_proyecto:null, descripcion_proyecto:'Construcción de plaza comercial de 3 niveles.' },
+    { id_proyecto:4, nombre_proyecto:'Bodega Logística Sur', tipo_proyecto:'Logístico', lugar_proyecto:'Carretera Federal 150, km 12', municipio_proyecto:'Cholula', estado_proyecto_geo:'Puebla', fecha_estimada_inicio:'2023-09-01', fecha_estimada_fin:'2024-03-31', estatus_proyecto:'PAUSADO', calificacion_proyecto:2, descripcion_proyecto:'Bodega de 2,000 m² para almacenaje refrigerado.' },
+    { id_proyecto:5, nombre_proyecto:'Remodelación Oficinas CDMX', tipo_proyecto:'Remodelación', lugar_proyecto:'Paseo de la Reforma 250', municipio_proyecto:'Cuauhtémoc', estado_proyecto_geo:'CDMX', fecha_estimada_inicio:'2024-02-01', fecha_estimada_fin:'2024-08-01', estatus_proyecto:'EN_CURSO', calificacion_proyecto:3, descripcion_proyecto:'Remodelación integral de 1,200 m² de oficinas.' },
+    { id_proyecto:6, nombre_proyecto:'Parque Fotovoltaico Hidalgo', tipo_proyecto:'Energía', lugar_proyecto:'Carretera Pachuca-Tulancingo', municipio_proyecto:'Epazoyucan', estado_proyecto_geo:'Hidalgo', fecha_estimada_inicio:'2024-05-01', fecha_estimada_fin:'2025-04-30', estatus_proyecto:'CANCELADO', calificacion_proyecto:1, descripcion_proyecto:'Instalación de 500 paneles solares para generación de 200 kW.' },
+  ];
+  const estatusClase = { PLANEACION:'s-planeacion', EN_CURSO:'s-en_curso', PAUSADO:'s-pausado', FINALIZADO:'s-finalizado', CANCELADO:'s-cancelado' };
+  const estatusLabel = { PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
+  function estrellas(n){ let h=''; for(let i=1;i<=5;i++) h+=`<div class="st${i<=(n||0)?' on':''}"">★</div>`; return h; }
+  function formatFecha(f){ if(!f) return '—'; const[y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
+  function renderCard(p){
+    const sc = estatusClase[p.estatus_proyecto]||'';
+    const sl = estatusLabel[p.estatus_proyecto]||p.estatus_proyecto;
+    const cc = p.estatus_proyecto.toLowerCase().replace('_','_');
+    return `<div class="proj-card c-${p.estatus_proyecto.toLowerCase()}">
+      <div class="proj-header">
+        <div>
+          <div class="proj-name">${p.nombre_proyecto}</div>
+          <div class="proj-type">${p.tipo_proyecto||'Sin tipo'}</div>
+        </div>
+      </div>
+      <div class="wmeta">
+        <div class="wrow"><i class="fa-solid fa-location-dot"></i> ${p.estado_proyecto_geo}${p.municipio_proyecto?', '+p.municipio_proyecto:''}</div>
+        <div class="wrow"><i class="fa-solid fa-map-pin"></i> ${p.lugar_proyecto||'—'}</div>
+        <div class="wrow"><i class="fa-solid fa-calendar-plus"></i> Inicio: ${formatFecha(p.fecha_estimada_inicio)}</div>
+        <div class="wrow"><i class="fa-solid fa-calendar-check"></i> Fin: ${formatFecha(p.fecha_estimada_fin)}</div>
+      </div>
+      <div class="wfooter">
+        <div class="wactions">
+          <a class="wact edit" href="EditarProyecto.html?id=${p.id_proyecto}"><i class="fa-solid fa-pen"></i> Editar</a>
+          <a class="wact del" href="EliminarProyecto.html?id=${p.id_proyecto}"><i class="fa-solid fa-trash"></i> Eliminar</a>
+        </div>
+        <div class="stars-mini">${estrellas(p.calificacion_proyecto)}</div>
+      </div>
+      <div class="status-badge ${sc}">${sl}</div>
+    </div>`;
+  }
+  function filtrar(){
+    const estatus = document.getElementById('filtroEstatus').value;
+    const estado  = document.getElementById('filtroEstado').value;
+    const f = proyectos.filter(p => (!estatus||p.estatus_proyecto===estatus)&&(!estado||p.estado_proyecto_geo===estado));
+    const grid=document.getElementById('cardsGrid'); const lbl=document.getElementById('resultsLabel');
+    if(!f.length){ grid.innerHTML=`<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No se encontraron proyectos.</p></div>`; lbl.innerHTML='Sin resultados'; }
+    else{ grid.innerHTML=f.map(p=>renderCard(p)).join(''); lbl.innerHTML=`<strong>${f.length}</strong> proyecto${f.length!==1?'s':''} encontrado${f.length!==1?'s':''}`; }
+  }
+  let lastScroll=0; const scrollBtn=document.getElementById('scrollTop');
+  window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
+  function cerrarSesion(){ window.location.href='../../index.html'; }
+  filtrar();
+</script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INDECSA – Registrar Contratista</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --border:rgba(200,169,110,0.18);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+
+    main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+
+    .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(93,202,165,0.1); border:1px solid rgba(93,202,165,0.25); display:flex; align-items:center; justify-content:center; }
+    .page-icon i { font-size:22px; color:var(--success); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
+
+    .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
+    .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(93,202,165,0.06) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .form-card-header h3 { font-size:14px; font-weight:500; color:var(--success); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+    .required-note { font-size:11px; color:var(--muted); }
+    .required-note span { color:var(--danger); }
+
+    .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
+    .form-section { display:flex; flex-direction:column; gap:1.25rem; }
+    .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .form-row { display:grid; gap:1rem; }
+    .col-2 { grid-template-columns:1fr 1fr; }
+    .col-1 { grid-template-columns:1fr; }
+    .field { display:flex; flex-direction:column; gap:7px; }
+    .field label { font-size:12px; font-weight:500; color:var(--muted); }
+    .field label .req { color:var(--danger); margin-left:2px; }
+    .input-wrap { position:relative; }
+    .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+    .input-wrap.top-icon i { top:16px; transform:none; }
+    input,select,textarea { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px 11px 42px; transition:border-color .2s,background .2s,box-shadow .2s; outline:none; -webkit-appearance:none; appearance:none; }
+    input::placeholder,textarea::placeholder { color:rgba(138,155,181,0.5); }
+    input:focus,select:focus,textarea:focus { border-color:var(--success); background:rgba(93,202,165,0.04); box-shadow:0 0 0 3px rgba(93,202,165,0.07); }
+    select { cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 14px) center; padding-right:36px; }
+    select option { background:#152D50; color:var(--white); }
+    textarea { resize:vertical; min-height:100px; padding-top:12px; line-height:1.6; }
+
+    .stars-container { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; }
+    .stars-wrap { display:flex; align-items:center; gap:2px; padding:9px 14px; }
+    .star-btn { font-size:22px; cursor:pointer; color:rgba(138,155,181,0.3); transition:color .15s,transform .1s; background:none; border:none; }
+    .star-btn.active { color:var(--gold); }
+    .star-btn:hover { color:var(--gold); transform:scale(1.15); }
+    .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
+
+    .status-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .status-pill input[type="radio"] { display:none; }
+    .status-pill label { display:flex; align-items:center; justify-content:center; gap:7px; padding:10px 8px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; }
+    .pill-activo   input:checked + label { background:rgba(93,202,165,0.12);  border-color:#5DCAA5; color:#5DCAA5; }
+    .pill-inactivo input:checked + label { background:rgba(138,155,181,0.12); border-color:var(--muted); color:var(--muted); }
+    .pill-suspendido input:checked + label { background:rgba(250,199,117,0.12); border-color:#FAC775; color:#FAC775; }
+    .status-pill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
+
+    .form-divider { height:1px; background:var(--border); }
+    .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:flex-end; gap:12px; }
+    .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
+    .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
+    .btn-ghost:hover { border-color:var(--muted); color:var(--white); }
+    .btn-primary { background:linear-gradient(135deg,var(--success),#2a9a72); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(93,202,165,0.2); }
+    .btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(93,202,165,0.3); }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @media(max-width:680px){ .col-2{grid-template-columns:1fr} .status-grid{grid-template-columns:1fr 1fr} }
+  </style>
+</head>
+<body>
+<header>
+  <img src="../../img/logo.png" height="52" alt="INDECSA" />
+  <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
+</header>
+<nav>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link active" href="AltaContratista.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyectos/AltaProyecto.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <div class="nav-sep"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+</nav>
+<main>
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-icon"><i class="fa-solid fa-user-tie"></i></div>
+      <div>
+        <div class="page-title">Registrar contratista</div>
+        <div class="page-sub">Completa el formulario para dar de alta un nuevo contratista</div>
+      </div>
+    </div>
+    <div class="breadcrumb">
+      <a href="../Paginaprincipal.html">Dashboard</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <a href="ListaContratistas.html">Contratistas</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <span>Nuevo registro</span>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">
+      <h3><i class="fa-solid fa-id-card"></i> Datos del contratista</h3>
+      <span class="required-note">Los campos marcados con <span>*</span> son obligatorios</span>
+    </div>
+    <form class="form-body" id="formContratista" onsubmit="submitForm(event)">
+
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-building" style="color:var(--gold);font-size:11px"></i> Información general</div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>RFC <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i>
+              <input type="text" name="rfc_contratista" placeholder="Ej. XAXX010101000" required maxlength="15" style="text-transform:uppercase" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Ubicación <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select name="ubicacion_contratista" required>
+                <option value="">Selecciona una ubicación</option>
+                <option value="CDMX">Ciudad de México (CDMX)</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Puebla">Puebla</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Teléfono <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-phone"></i>
+              <input type="tel" name="telefono_contratista" placeholder="+52 000 000 0000" required maxlength="15" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Correo electrónico <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-envelope"></i>
+              <input type="email" name="correo_contratista" placeholder="correo@empresa.com" required maxlength="100" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Perfil profesional</div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Descripción <span class="req">*</span></label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
+              <textarea name="descripcion_contratista" placeholder="Describe los servicios que ofrece el contratista…" required maxlength="255"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Experiencia</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
+              <textarea name="experiencia" placeholder="Años de experiencia, proyectos relevantes…" maxlength="200"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estado y calificación</div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Estado del contratista <span class="req">*</span></label>
+            <div class="status-grid">
+              <div class="status-pill pill-activo">
+                <input type="radio" name="estado_contratista" id="est-activo" value="ACTIVO" checked />
+                <label for="est-activo"><i class="fa-solid fa-circle-check"></i> Activo</label>
+              </div>
+              <div class="status-pill pill-inactivo">
+                <input type="radio" name="estado_contratista" id="est-inactivo" value="INACTIVO" />
+                <label for="est-inactivo"><i class="fa-solid fa-circle-xmark"></i> Inactivo</label>
+              </div>
+              <div class="status-pill pill-suspendido">
+                <input type="radio" name="estado_contratista" id="est-suspendido" value="SUSPENDIDO" />
+                <label for="est-suspendido"><i class="fa-solid fa-ban"></i> Suspendido</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Calificación</label>
+            <div class="stars-container">
+              <div class="stars-wrap">
+                <button type="button" class="star-btn" data-val="1">&#9733;</button>
+                <button type="button" class="star-btn" data-val="2">&#9733;</button>
+                <button type="button" class="star-btn" data-val="3">&#9733;</button>
+                <button type="button" class="star-btn" data-val="4">&#9733;</button>
+                <button type="button" class="star-btn" data-val="5">&#9733;</button>
+                <span class="star-value-label" id="starLabel">Sin calificar</span>
+              </div>
+            </div>
+            <input type="hidden" name="calificacion_contratista" id="calificacion_contratista" value="" />
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="form-footer">
+      <button class="btn btn-ghost" type="button" onclick="limpiarForm()"><i class="fa-solid fa-rotate-left"></i> Limpiar</button>
+      <button class="btn btn-primary" type="submit" form="formContratista"><i class="fa-solid fa-user-plus"></i> Registrar contratista</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
+  <div class="footer-contact">
+    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
+    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+  </div>
+</footer>
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check" id="toastIcon"></i><span id="toastMsg"></span></div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
+<script>
+  const starLabels = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+  let currentStar = 0;
+  const stars = document.querySelectorAll('.star-btn');
+  stars.forEach(s => {
+    s.addEventListener('click', () => { currentStar = parseInt(s.dataset.val); document.getElementById('calificacion_contratista').value = currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent = starLabels[currentStar]; });
+    s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
+    s.addEventListener('mouseleave', () => paintStars(currentStar));
+  });
+  function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
+  function submitForm(e) { e.preventDefault(); showToast('Contratista registrado correctamente', true); }
+  function limpiarForm() { document.getElementById('formContratista').reset(); currentStar = 0; document.getElementById('calificacion_contratista').value = ''; paintStars(0); document.getElementById('starLabel').textContent = 'Sin calificar'; document.querySelector('#est-activo').checked = true; }
+  function showToast(msg, ok) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; document.getElementById('toastIcon').style.color = ok ? 'var(--success)' : 'var(--danger)'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+  let lastScroll = 0;
+  const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => { const c = window.scrollY; document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80); lastScroll = c <= 0 ? 0 : c; scrollBtn.classList.toggle('visible', c > 200); });
+</script>
+</body>
+</html>

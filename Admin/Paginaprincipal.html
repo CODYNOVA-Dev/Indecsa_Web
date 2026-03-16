@@ -20,15 +20,18 @@
     body { font-family: 'DM Sans', sans-serif; background: var(--navy); min-height: 100vh; display: flex; flex-direction: column; }
 
     header {
-      background: var(--navy-mid); border-bottom: 1px solid rgba(200,169,110,0.25);
+      background: var(--navy-mid);
+      border-bottom: 1px solid rgba(200,169,110,0.25);
       padding: 0 2rem; height: 72px;
       display: flex; align-items: center; justify-content: space-between;
     }
     .header-tag { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
 
     nav {
-      background: var(--navy-dark); border-bottom: 1px solid rgba(200,169,110,0.15);
-      display: flex; align-items: center; padding: 0 2rem; height: 48px;
+      background: var(--navy-dark);
+      border-bottom: 1px solid rgba(200,169,110,0.15);
+      display: flex; align-items: center;
+      padding: 0 2rem; height: 48px;
     }
     .nav-sep { flex: 1; }
     .nav-logout {
@@ -40,6 +43,7 @@
       transition: background 0.2s;
     }
     .nav-logout:hover { background: rgba(226,75,74,0.1); }
+    .nav-logout i { font-size: 13px; }
 
     main {
       flex: 1; padding: 2.5rem 2rem;
@@ -93,21 +97,16 @@
     .divider { width: 100%; height: 1px; background: rgba(200,169,110,0.15); margin-bottom: 1rem; pointer-events: none; }
 
     .crud-list { width: 100%; display: flex; flex-direction: column; gap: 7px; }
-
     .crud-item {
       display: flex; align-items: center; gap: 9px;
       padding: 8px 12px; border-radius: 8px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.05);
-      font-size: 12px;
-      cursor: pointer;
+      font-size: 12px; cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
       position: relative; z-index: 1;
     }
-    .crud-item:hover {
-      background: rgba(200,169,110,0.08);
-      border-color: rgba(200,169,110,0.25);
-    }
+    .crud-item:hover { background: rgba(200,169,110,0.08); border-color: rgba(200,169,110,0.25); }
     .crud-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .crud-item span { color: var(--muted); pointer-events: none; }
     .dot-green { background: #5DCAA5; }
@@ -147,19 +146,24 @@
   </div>
 
   <div class="stats-row">
-    <div class="stat"><div class="stat-num">24</div><div class="stat-label">Trabajadores activos</div></div>
-    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Contratistas registrados</div></div>
-    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Proyectos en curso</div></div>
+    <div class="stat">
+      <div class="stat-num">24</div>
+      <div class="stat-label">Trabajadores activos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Contratistas registrados</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Proyectos en curso</div>
+    </div>
   </div>
 
   <div class="cards-grid">
 
-    <!-- ══════════════════════════════════════════════════════
-         TARJETA TRABAJADORES
-         ► Clic en la tarjeta (título/ícono/texto)  → cambia RUTA_TRABAJADORES
-         ► Clic en cada opción CRUD                 → cambia su RUTA_* individual
-    ═══════════════════════════════════════════════════════ -->
-    <div class="mod-card" onclick="ir('RUTA_TRABAJADORES')">
+    <!-- TRABAJADORES -->
+    <div class="mod-card" onclick="ir('Trabajador/VisualizarTrabajadores.html')">
       <div class="mod-icon">
         <svg viewBox="0 0 36 36" fill="none">
           <circle cx="18" cy="12" r="6" stroke="#C8A96E" stroke-width="2"/>
@@ -170,27 +174,20 @@
       <p>Gestiona el personal registrado: altas, consultas, modificaciones y bajas de empleados dentro del sistema.</p>
       <div class="divider"></div>
       <div class="crud-list">
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_TRABAJADORES_NUEVO')">
+        <div class="crud-item" onclick="irCrud(event, 'Trabajador/AltaTrabajador.html')">
           <div class="crud-dot dot-green"></div><span>Registrar nuevo empleado</span>
         </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_TRABAJADORES_LISTA')">
+        <div class="crud-item" onclick="irCrud(event, 'Trabajador/VisualizarTrabajadores.html')">
           <div class="crud-dot dot-blue"></div><span>Ver lista de personal</span>
         </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_TRABAJADORES_EDITAR')">
+        <div class="crud-item" onclick="irCrud(event, 'Trabajador/EditTrabajador.html')">
           <div class="crud-dot dot-amber"></div><span>Editar datos del empleado</span>
-        </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_TRABAJADORES_BAJA')">
-          <div class="crud-dot dot-red"></div><span>Dar de baja empleado</span>
         </div>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         TARJETA CONTRATISTAS
-         ► Clic en la tarjeta  → cambia RUTA_CONTRATISTAS
-         ► Clic en cada opción → cambia su RUTA_* individual
-    ═══════════════════════════════════════════════════════ -->
-    <div class="mod-card" onclick="ir('RUTA_CONTRATISTAS')">
+    <!-- CONTRATISTAS -->
+    <div class="mod-card" onclick="ir('Contratista/ListaContratistas.html')">
       <div class="mod-icon">
         <svg viewBox="0 0 36 36" fill="none">
           <rect x="6" y="8" width="10" height="12" rx="2" stroke="#C8A96E" stroke-width="2"/>
@@ -203,27 +200,20 @@
       <p>Administra empresas y personas externas contratadas: registro, datos de contacto, contratos y estatus activo.</p>
       <div class="divider"></div>
       <div class="crud-list">
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_CONTRATISTAS_NUEVO')">
+        <div class="crud-item" onclick="irCrud(event, 'Contratista/AltaContratista.html')">
           <div class="crud-dot dot-green"></div><span>Registrar contratista</span>
         </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_CONTRATISTAS_LISTA')">
+        <div class="crud-item" onclick="irCrud(event, 'Contratista/ListaContratistas.html')">
           <div class="crud-dot dot-blue"></div><span>Ver lista de contratistas</span>
         </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_CONTRATISTAS_EDITAR')">
+        <div class="crud-item" onclick="irCrud(event, 'Contratista/EditarContratista.html')">
           <div class="crud-dot dot-amber"></div><span>Editar datos del contrato</span>
-        </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_CONTRATISTAS_ELIMINAR')">
-          <div class="crud-dot dot-red"></div><span>Eliminar contratista</span>
         </div>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         TARJETA PROYECTOS
-         ► Clic en la tarjeta  → cambia RUTA_PROYECTOS
-         ► Clic en cada opción → cambia su RUTA_* individual
-    ═══════════════════════════════════════════════════════ -->
-    <div class="mod-card" onclick="ir('RUTA_PROYECTOS')">
+    <!-- PROYECTOS -->
+    <div class="mod-card" onclick="ir('Proyecto/ListaProyectos.html')">
       <div class="mod-icon">
         <svg viewBox="0 0 36 36" fill="none">
           <rect x="6" y="6" width="24" height="24" rx="3" stroke="#C8A96E" stroke-width="2"/>
@@ -235,17 +225,14 @@
       <p>Crea y supervisa proyectos: asigna trabajadores y contratistas, define fechas, avance y estado de cada proyecto.</p>
       <div class="divider"></div>
       <div class="crud-list">
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_PROYECTOS_NUEVO')">
+        <div class="crud-item" onclick="irCrud(event, 'Proyecto/AltaProyecto.html')">
           <div class="crud-dot dot-green"></div><span>Crear nuevo proyecto</span>
         </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_PROYECTOS_LISTA')">
+        <div class="crud-item" onclick="irCrud(event, 'Proyecto/ListaProyectos.html')">
           <div class="crud-dot dot-blue"></div><span>Ver proyectos activos</span>
         </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_PROYECTOS_EDITAR')">
+        <div class="crud-item" onclick="irCrud(event, 'Proyecto/EditarProyecto.html')">
           <div class="crud-dot dot-amber"></div><span>Editar proyecto existente</span>
-        </div>
-        <div class="crud-item" onclick="irCrud(event, 'RUTA_PROYECTOS_ELIMINAR')">
-          <div class="crud-dot dot-red"></div><span>Eliminar proyecto</span>
         </div>
       </div>
     </div>
@@ -262,20 +249,15 @@
 </footer>
 
 <script>
-  /* Navega desde la tarjeta completa (título, ícono, descripción) */
   function ir(ruta) {
     window.location.href = ruta;
   }
-
-  /* Navega desde un CRUD item específico.
-     event.stopPropagation() evita que también dispare el onclick de la tarjeta */
   function irCrud(event, ruta) {
     event.stopPropagation();
     window.location.href = ruta;
   }
-
   function cerrarSesion() {
-    window.location.href = '../../index.html';
+    window.location.href = '../index.html';
   }
 </script>
 
