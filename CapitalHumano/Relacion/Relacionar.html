@@ -21,6 +21,10 @@
       --white:#F8F9FC;
       --muted:#8A9BB5;
       --border:rgba(200,169,110,0.18);
+      --success:#5DCAA5;
+      --warning:#FAC775;
+      --purple:#AFA9EC;
+      --danger:#F09595;
     }
 
     body{
@@ -79,11 +83,7 @@
       gap:6px;
     }
 
-    .nav-link:hover{
-      background:rgba(200,169,110,0.1);
-      color:var(--gold);
-    }
-
+    .nav-link:hover,
     .nav-link.active{
       background:rgba(200,169,110,0.1);
       color:var(--gold);
@@ -145,33 +145,52 @@
       gap:14px;
     }
 
+    /* ===== CARD PRO ===== */
+
     .proj-card{
       background:var(--navy-mid);
-      border:1px solid var(--border);
-      border-radius:12px;
+      border:1px solid rgba(200,169,110,0.15);
+      border-radius:13px;
       padding:16px;
       cursor:pointer;
+      position:relative;
       transition:.25s;
-      animation:fadeIn .4s ease forwards;
+
       opacity:0;
+      transform:translateY(10px);
+      animation:fadeUp .4s ease forwards;
     }
 
     .proj-card:hover{
-      border-color:var(--gold);
+      border-color:rgba(200,169,110,0.4);
+      background:#1a3560;
       transform:translateY(-4px);
-      box-shadow:0 8px 18px rgba(0,0,0,0.35);
+      box-shadow:0 10px 25px rgba(0,0,0,0.25);
     }
 
-    @keyframes fadeIn{
-      from{
-        opacity:0;
-        transform:translateY(10px);
-      }
+    @keyframes fadeUp{
       to{
         opacity:1;
         transform:translateY(0);
       }
     }
+
+    /* línea superior */
+
+    .proj-card::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:3px;
+      border-radius:13px 13px 0 0;
+    }
+
+    .c-en_curso::before{background:linear-gradient(90deg,transparent,var(--success),transparent);}
+    .c-finalizado::before{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+    .c-pausado::before{background:linear-gradient(90deg,transparent,var(--warning),transparent);}
+    .c-planeacion::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
 
     .proj-name{
       font-weight:600;
@@ -184,29 +203,47 @@
       margin-bottom:3px;
     }
 
+    .wrow{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:5px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.wrow i{
+  color:var(--gold);
+  font-size:11px;
+}
+
+    /* ===== BADGE ARRIBA DERECHA ===== */
+
     .status-badge{
-      font-size:11px;
-      padding:3px 8px;
+      position:absolute;
+      top:12px;
+      right:12px;
+      font-size:10px;
+      padding:4px 9px;
       border-radius:20px;
-      display:inline-block;
-      margin-top:6px;
+      text-transform:uppercase;
     }
 
     .s-en_curso{
       background:rgba(93,202,165,0.12);
-      color:#5DCAA5;
+      color:var(--success);
       border:1px solid rgba(93,202,165,0.3);
     }
 
     .s-finalizado{
       background:rgba(175,169,236,0.12);
-      color:#AFA9EC;
+      color:var(--purple);
       border:1px solid rgba(175,169,236,0.3);
     }
 
     .s-pausado{
       background:rgba(250,199,117,0.12);
-      color:#FAC775;
+      color:var(--warning);
       border:1px solid rgba(250,199,117,0.3);
     }
 
@@ -305,37 +342,44 @@
   let proyectos=[
 
     { id:1,nombre:"Planta Industrial Norte",estado:"Hidalgo",municipio:"Tizayuca",estatus:"EN_CURSO",trabajadores:0 },
-
     { id:2,nombre:"Residencial Las Palmas",estado:"Puebla",municipio:"Puebla",estatus:"FINALIZADO",trabajadores:3 },
-
     { id:3,nombre:"Centro Comercial Oriente",estado:"CDMX",municipio:"Iztapalapa",estatus:"PLANEACION",trabajadores:0 },
-
     { id:4,nombre:"Bodega Logística Sur",estado:"Puebla",municipio:"Cholula",estatus:"PAUSADO",trabajadores:2 }
 
   ];
 
   function render(p){
 
-    return `
+  return `
 
-<div class="proj-card" onclick="abrirProyecto(${p.id})">
+<div class="proj-card c-${p.estatus.toLowerCase()}" onclick="abrirProyecto(${p.id})">
 
 <div class="proj-name">${p.nombre}</div>
 
-<div class="wrow">Estado: ${p.estado}</div>
-<div class="wrow">Municipio: ${p.municipio}</div>
+<div class="wrow">
+<i class="fa-solid fa-location-dot"></i>
+${p.estado}
+</div>
+
+<div class="wrow">
+<i class="fa-solid fa-map-pin"></i>
+${p.municipio}
+</div>
+
+<div class="wrow">
+<i class="fa-solid fa-users"></i>
+${p.trabajadores}/8 trabajadores
+</div>
 
 <div class="status-badge s-${p.estatus.toLowerCase()}">
 ${p.estatus.replace("_"," ")}
 </div>
 
-<div class="wrow">Trabajadores: ${p.trabajadores}/8</div>
-
 </div>
 
 `;
 
-  }
+}
 
   function filtrar(){
 
@@ -352,9 +396,7 @@ ${p.estatus.replace("_"," ")}
   }
 
   function abrirProyecto(id){
-
     window.location="FichaRelacion.html?id="+id;
-
   }
 
   function cerrarSesion(){

@@ -100,9 +100,11 @@
       max-width:860px;
     }
 
+    /* ====== CARDS MEJORADAS ====== */
+
     .mod-card{
       background:var(--navy-mid);
-      border:1px solid rgba(200,169,110,0.2);
+      border:1px solid rgba(200,169,110,0.15);
       border-radius:14px;
       padding:1.75rem 1.5rem;
       display:flex;
@@ -110,11 +112,49 @@
       align-items:center;
       text-align:center;
       cursor:pointer;
+      position:relative;
+      transition:.25s;
+      overflow:hidden;
+
+      opacity:0;
+      transform:translateY(12px);
+      animation:fadeUp .45s ease forwards;
     }
 
+    .mod-card:nth-child(1){animation-delay:.05s;}
+    .mod-card:nth-child(2){animation-delay:.1s;}
+    .mod-card:nth-child(3){animation-delay:.15s;}
+
     .mod-card:hover{
-      border-color:rgba(200,169,110,0.5);
+      transform:translateY(-4px) scale(1.02);
+      border-color:rgba(200,169,110,0.4);
       background:#1a3560;
+      box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .mod-card::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:3px;
+      border-radius:14px 14px 0 0;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:.6;
+    }
+
+    .mod-card::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at top,rgba(200,169,110,0.15),transparent 70%);
+      opacity:0;
+      transition:.3s;
+    }
+
+    .mod-card:hover::after{
+      opacity:1;
     }
 
     .mod-icon{
@@ -127,11 +167,22 @@
       align-items:center;
       justify-content:center;
       margin-bottom:1.1rem;
+      transition:.3s;
+    }
+
+    .mod-card:hover .mod-icon{
+      transform:scale(1.1);
+      background:rgba(200,169,110,0.15);
     }
 
     .mod-icon i{
       font-size:32px;
       color:var(--gold);
+      transition:.3s;
+    }
+
+    .mod-card:hover .mod-icon i{
+      transform:scale(1.1);
     }
 
     .mod-card h3{
@@ -145,6 +196,15 @@
       font-size:12px;
       line-height:1.6;
     }
+
+    @keyframes fadeUp{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* ====== FIN CARDS ====== */
 
     footer{
       background:var(--navy-mid);

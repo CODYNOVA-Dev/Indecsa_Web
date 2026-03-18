@@ -202,6 +202,28 @@
       animation:cardFade .45s ease forwards;
     }
 
+    /* ===== LÍNEA SUPERIOR TIPO PROYECTOS ===== */
+
+.worker-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  border-radius:14px 14px 0 0;
+}
+
+/* colores según estado */
+
+.c-activo::before{
+  background:linear-gradient(90deg,transparent,#5DCAA5,transparent);
+}
+
+.c-inactivo::before{
+  background:linear-gradient(90deg,transparent,#F09595,transparent);
+}
+
     /* HOVER */
 
     .worker-card:hover{
@@ -443,7 +465,7 @@
 
     grid.innerHTML=lista.map(t=>`
 
-<div class="worker-card" onclick="verDetalle(${t.id})">
+<div class="worker-card c-${t.estadoLaboral.toLowerCase()}" onclick="verDetalle(${t.id})">
 
 <div class="avatar">
 ${iniciales(t.nombre)}
