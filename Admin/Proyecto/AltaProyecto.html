@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>INDECSA – Registrar Proyecto</title>
+  <title>INDECSA – Nuevo Proyecto</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    :root { --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244; --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5; --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --purple:#AFA9EC; --border:rgba(200,169,110,0.18); }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
+    }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
 
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
@@ -27,6 +32,7 @@
     .scroll-top i { font-size:16px; color:var(--navy); }
 
     main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+
     .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; }
@@ -51,9 +57,14 @@
     .col-2 { grid-template-columns:1fr 1fr; }
     .col-3 { grid-template-columns:1fr 1fr 1fr; }
     .col-1 { grid-template-columns:1fr; }
+
     .field { display:flex; flex-direction:column; gap:7px; }
     .field label { font-size:12px; font-weight:500; color:var(--muted); }
     .field label .req { color:var(--danger); margin-left:2px; }
+    .field-error { font-size:11px; color:var(--danger); display:none; }
+    .field.has-error .field-error { display:block; }
+    .field.has-error input,.field.has-error select,.field.has-error textarea { border-color:var(--danger)!important; box-shadow:0 0 0 3px rgba(240,149,149,0.07)!important; }
+
     .input-wrap { position:relative; }
     .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .input-wrap.top-icon i { top:16px; transform:none; }
@@ -62,7 +73,10 @@
     input:focus,select:focus,textarea:focus { border-color:var(--purple); background:rgba(175,169,236,0.04); box-shadow:0 0 0 3px rgba(175,169,236,0.07); }
     select { cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 14px) center; padding-right:36px; }
     select option { background:#152D50; color:var(--white); }
-    textarea { resize:vertical; min-height:100px; padding-top:12px; line-height:1.6; }
+    textarea { resize:vertical; min-height:110px; padding-top:12px; line-height:1.6; }
+
+    /* date fields don't need left padding trick */
+    input[type="date"] { padding-left:42px; color-scheme:dark; }
 
     .stars-container { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; }
     .stars-wrap { display:flex; align-items:center; gap:2px; padding:9px 14px; }
@@ -71,26 +85,31 @@
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
 
-    .status-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
-    .status-pill input[type="radio"] { display:none; }
-    .status-pill label { display:flex; align-items:center; justify-content:center; gap:6px; padding:10px 6px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:11px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; text-align:center; }
-    .pill-planeacion   input:checked + label { background:rgba(133,183,235,0.12); border-color:#85B7EB; color:#85B7EB; }
-    .pill-en_curso     input:checked + label { background:rgba(93,202,165,0.12);  border-color:#5DCAA5; color:#5DCAA5; }
-    .pill-pausado      input:checked + label { background:rgba(250,199,117,0.12); border-color:#FAC775; color:#FAC775; }
-    .pill-finalizado   input:checked + label { background:rgba(175,169,236,0.12); border-color:#AFA9EC; color:#AFA9EC; }
-    .pill-cancelado    input:checked + label { background:rgba(240,149,149,0.12); border-color:#F09595; color:#F09595; }
-    .status-pill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
-
     .form-divider { height:1px; background:var(--border); }
-    .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:flex-end; gap:12px; }
+
+    .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+    .form-footer-left i { color:var(--purple); }
+    .form-footer-right { display:flex; gap:10px; }
     .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
     .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
     .btn-ghost:hover { border-color:var(--muted); color:var(--white); }
-    .btn-purple { background:linear-gradient(135deg,#AFA9EC,#6b63c7); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(175,169,236,0.2); }
-    .btn-purple:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(175,169,236,0.3); }
+    .btn-primary { background:linear-gradient(135deg,var(--purple),#7a73d4); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(175,169,236,0.2); }
+    .btn-primary:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(175,169,236,0.3); }
+
+    .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
+    .btn.loading .spinner { display:inline-block; }
+    .btn.loading .btn-icon { display:none; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    /* fecha error */
+    .date-error { font-size:11px; color:var(--danger); display:none; margin-top:4px; }
+    .date-error.show { display:block; }
 
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
 
     footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
     .footer-left { font-size:12px; color:var(--muted); }
@@ -98,15 +117,18 @@
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
+
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-    @media(max-width:680px){ .col-2,.col-3{grid-template-columns:1fr} .status-grid{grid-template-columns:1fr 1fr} }
+    @media(max-width:680px) { .col-2,.col-3{grid-template-columns:1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
   </style>
 </head>
 <body>
+
 <header>
   <img src="../../img/logo.png" height="52" alt="INDECSA" />
   <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
 </header>
+
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
@@ -115,13 +137,14 @@
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
+
 <main>
   <div class="page-header">
     <div class="page-header-left">
-      <div class="page-icon"><i class="fa-solid fa-diagram-project"></i></div>
+      <div class="page-icon"><i class="fa-solid fa-plus"></i></div>
       <div>
-        <div class="page-title">Registrar proyecto</div>
-        <div class="page-sub">Completa el formulario para crear un nuevo proyecto</div>
+        <div class="page-title">Nuevo proyecto</div>
+        <div class="page-sub">Registra un proyecto en el sistema</div>
       </div>
     </div>
     <div class="breadcrumb">
@@ -129,38 +152,33 @@
       <i class="fa-solid fa-chevron-right"></i>
       <a href="ListaProyectos.html">Proyectos</a>
       <i class="fa-solid fa-chevron-right"></i>
-      <span>Nuevo proyecto</span>
+      <span>Nuevo registro</span>
     </div>
   </div>
 
   <div class="form-card">
     <div class="form-card-header">
-      <h3><i class="fa-solid fa-folder-plus"></i> Datos del proyecto</h3>
+      <h3><i class="fa-solid fa-diagram-project"></i> Datos del proyecto</h3>
       <span class="required-note">Los campos marcados con <span>*</span> son obligatorios</span>
     </div>
-    <form class="form-body" id="formProyecto" onsubmit="submitForm(event)">
 
+    <form class="form-body" id="formProyecto" novalidate>
+
+      <!-- ── IDENTIFICACIÓN ── -->
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i> Información general</div>
+        <div class="section-label"><i class="fa-solid fa-folder-open" style="color:var(--gold);font-size:11px"></i> Identificación</div>
         <div class="form-row col-2">
-          <div class="field">
+          <div class="field" id="field-nombre">
             <label>Nombre del proyecto <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-folder"></i>
-              <input type="text" name="nombre_proyecto" placeholder="Ej. Construcción Planta Norte" required maxlength="150" />
+            <div class="input-wrap"><i class="fa-solid fa-diagram-project"></i>
+              <input type="text" id="nombreProyecto" placeholder="Ej. Construcción Torre Norte" maxlength="150" />
             </div>
+            <span class="field-error">El nombre es obligatorio (máx. 150 caracteres)</span>
           </div>
           <div class="field">
             <label>Tipo de proyecto</label>
             <div class="input-wrap"><i class="fa-solid fa-tag"></i>
-              <input type="text" name="tipo_proyecto" placeholder="Ej. Industrial, Residencial…" maxlength="80" />
-            </div>
-          </div>
-        </div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Descripción</label>
-            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
-              <textarea name="descripcion_proyecto" placeholder="Describe el alcance y objetivos del proyecto…" maxlength="500"></textarea>
+              <input type="text" id="tipoProyecto" placeholder="Ej. Obra civil, Eléctrico, Hidráulico…" maxlength="80" />
             </div>
           </div>
         </div>
@@ -168,30 +186,32 @@
 
       <div class="form-divider"></div>
 
+      <!-- ── UBICACIÓN ── -->
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-location-dot" style="color:var(--gold);font-size:11px"></i> Ubicación</div>
+        <div class="section-label"><i class="fa-solid fa-map-location-dot" style="color:var(--gold);font-size:11px"></i> Ubicación</div>
         <div class="form-row col-3">
-          <div class="field">
+          <div class="field" id="field-geo">
             <label>Estado <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-map"></i>
-              <select name="estado_proyecto_geo" required>
-                <option value="">Selecciona un estado</option>
+              <select id="estadoProyectoGeo">
+                <option value="" disabled selected>Selecciona…</option>
                 <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="Hidalgo">Hidalgo</option>
-                <option value="Puebla">Puebla</option>
+                <option value="HIDALGO">Hidalgo</option>
+                <option value="PUEBLA">Puebla</option>
               </select>
             </div>
+            <span class="field-error">El estado es obligatorio</span>
           </div>
           <div class="field">
             <label>Municipio</label>
             <div class="input-wrap"><i class="fa-solid fa-city"></i>
-              <input type="text" name="municipio_proyecto" placeholder="Ej. Tizayuca" maxlength="100" />
+              <input type="text" id="municipioProyecto" placeholder="Ej. Pachuca" maxlength="100" />
             </div>
           </div>
           <div class="field">
             <label>Lugar / Dirección</label>
-            <div class="input-wrap"><i class="fa-solid fa-map-pin"></i>
-              <input type="text" name="lugar_proyecto" placeholder="Ej. Av. Industrial 45" maxlength="200" />
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <input type="text" id="lugarProyecto" placeholder="Ej. Av. Reforma 123" maxlength="200" />
             </div>
           </div>
         </div>
@@ -199,58 +219,24 @@
 
       <div class="form-divider"></div>
 
+      <!-- ── FECHAS Y CALIFICACIÓN ── -->
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-calendar" style="color:var(--gold);font-size:11px"></i> Fechas</div>
+        <div class="section-label"><i class="fa-solid fa-calendar-days" style="color:var(--gold);font-size:11px"></i> Plazos y valoración</div>
         <div class="form-row col-2">
           <div class="field">
             <label>Fecha estimada de inicio</label>
-            <div class="input-wrap"><i class="fa-solid fa-calendar-plus"></i>
-              <input type="date" name="fecha_estimada_inicio" id="fechaInicio" onchange="validarFechas()" />
+            <div class="input-wrap"><i class="fa-solid fa-calendar-day"></i>
+              <input type="date" id="fechaEstimadaInicio" onchange="validarFechas()" />
             </div>
           </div>
           <div class="field">
             <label>Fecha estimada de fin</label>
             <div class="input-wrap"><i class="fa-solid fa-calendar-check"></i>
-              <input type="date" name="fecha_estimada_fin" id="fechaFin" onchange="validarFechas()" />
+              <input type="date" id="fechaEstimadaFin" onchange="validarFechas()" />
             </div>
           </div>
         </div>
-        <div id="fechaError" style="font-size:12px;color:var(--danger);display:none;padding-left:2px;">
-          <i class="fa-solid fa-triangle-exclamation"></i> La fecha de fin debe ser posterior a la de inicio.
-        </div>
-      </div>
-
-      <div class="form-divider"></div>
-
-      <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estatus y calificación</div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Estatus del proyecto <span class="req">*</span></label>
-            <div class="status-grid">
-              <div class="status-pill pill-planeacion">
-                <input type="radio" name="estatus_proyecto" id="est-plan" value="PLANEACION" checked />
-                <label for="est-plan"><i class="fa-solid fa-pencil"></i> Planeación</label>
-              </div>
-              <div class="status-pill pill-en_curso">
-                <input type="radio" name="estatus_proyecto" id="est-curso" value="EN_CURSO" />
-                <label for="est-curso"><i class="fa-solid fa-circle-play"></i> En curso</label>
-              </div>
-              <div class="status-pill pill-pausado">
-                <input type="radio" name="estatus_proyecto" id="est-pausa" value="PAUSADO" />
-                <label for="est-pausa"><i class="fa-solid fa-circle-pause"></i> Pausado</label>
-              </div>
-              <div class="status-pill pill-finalizado">
-                <input type="radio" name="estatus_proyecto" id="est-fin" value="FINALIZADO" />
-                <label for="est-fin"><i class="fa-solid fa-circle-check"></i> Finalizado</label>
-              </div>
-              <div class="status-pill pill-cancelado">
-                <input type="radio" name="estatus_proyecto" id="est-cancel" value="CANCELADO" />
-                <label for="est-cancel"><i class="fa-solid fa-circle-xmark"></i> Cancelado</label>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="date-error" id="dateError"><i class="fa-solid fa-circle-exclamation"></i> La fecha de fin no puede ser anterior a la de inicio</div>
         <div class="form-row col-1">
           <div class="field">
             <label>Calificación del proyecto</label>
@@ -264,17 +250,45 @@
                 <span class="star-value-label" id="starLabel">Sin calificar</span>
               </div>
             </div>
-            <input type="hidden" name="calificacion_proyecto" id="calificacion_proyecto" value="" />
+            <input type="hidden" id="calificacionProyecto" />
           </div>
         </div>
       </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── DESCRIPCIÓN ── -->
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-align-left" style="color:var(--gold);font-size:11px"></i> Descripción</div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Descripción del proyecto</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
+              <textarea id="descripcionProyecto" placeholder="Detalla los alcances, objetivos o información relevante del proyecto…" maxlength="500" style="min-height:130px"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </form>
+
     <div class="form-footer">
-      <button class="btn btn-ghost" type="button" onclick="limpiarForm()"><i class="fa-solid fa-rotate-left"></i> Limpiar</button>
-      <button class="btn btn-purple" type="submit" form="formProyecto"><i class="fa-solid fa-folder-plus"></i> Crear proyecto</button>
+      <div class="form-footer-left">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>El proyecto iniciará en estatus <strong style="color:var(--blue)">Planeación</strong></span>
+      </div>
+      <div class="form-footer-right">
+        <button class="btn btn-ghost" type="button" onclick="limpiar()"><i class="fa-solid fa-eraser"></i> Limpiar</button>
+        <button class="btn btn-primary" type="button" id="btnGuardar" onclick="registrar()">
+          <span class="spinner"></span>
+          <i class="fa-solid fa-plus btn-icon"></i>
+          <span class="btn-label">Crear proyecto</span>
+        </button>
+      </div>
     </div>
   </div>
 </main>
+
 <footer>
   <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
   <div class="footer-contact">
@@ -282,19 +296,104 @@
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
-<div class="toast" id="toast"><i class="fa-solid fa-circle-check" id="toastIcon"></i><span id="toastMsg"></span></div>
+
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
 <script>
-  const starLabels=['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
-  let currentStar=0;
-  const stars=document.querySelectorAll('.star-btn');
-  stars.forEach(s=>{ s.addEventListener('click',()=>{ currentStar=parseInt(s.dataset.val); document.getElementById('calificacion_proyecto').value=currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent=starLabels[currentStar]; }); s.addEventListener('mouseenter',()=>paintStars(parseInt(s.dataset.val))); s.addEventListener('mouseleave',()=>paintStars(currentStar)); });
-  function paintStars(n){ stars.forEach(s=>s.classList.toggle('active',parseInt(s.dataset.val)<=n)); }
-  function validarFechas(){ const i=document.getElementById('fechaInicio').value; const f=document.getElementById('fechaFin').value; document.getElementById('fechaError').style.display=(i&&f&&f<=i)?'block':'none'; }
-  function submitForm(e){ e.preventDefault(); const i=document.getElementById('fechaInicio').value; const f=document.getElementById('fechaFin').value; if(i&&f&&f<=i){ showToast('Corrige las fechas antes de guardar',false); return; } showToast('Proyecto creado correctamente',true); }
-  function limpiarForm(){ document.getElementById('formProyecto').reset(); currentStar=0; document.getElementById('calificacion_proyecto').value=''; paintStars(0); document.getElementById('starLabel').textContent='Sin calificar'; document.querySelector('#est-plan').checked=true; document.getElementById('fechaError').style.display='none'; }
-  function showToast(msg,ok){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--danger)'; document.getElementById('toastIcon').style.color=ok?'var(--success)':'var(--danger)'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+  const API_BASE = 'http://localhost:8080/api/v1';
+  const starLabels = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+  let currentStar = 0;
+  let fechasValidas = true;
+
+  /* estrellas */
+  const stars = document.querySelectorAll('.star-btn');
+  stars.forEach(s => {
+    s.addEventListener('click',()=>{ currentStar=parseInt(s.dataset.val); document.getElementById('calificacionProyecto').value=currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent=starLabels[currentStar]; });
+    s.addEventListener('mouseenter',()=>paintStars(parseInt(s.dataset.val)));
+    s.addEventListener('mouseleave',()=>paintStars(currentStar));
+  });
+  function paintStars(n) { stars.forEach(s=>s.classList.toggle('active',parseInt(s.dataset.val)<=n)); }
+
+  /* validar fechas */
+  function validarFechas() {
+    const ini = document.getElementById('fechaEstimadaInicio').value;
+    const fin = document.getElementById('fechaEstimadaFin').value;
+    const err = document.getElementById('dateError');
+    if (ini && fin && fin < ini) {
+      err.classList.add('show'); fechasValidas = false;
+    } else {
+      err.classList.remove('show'); fechasValidas = true;
+    }
+  }
+
+  /* validar campos */
+  function validar() {
+    let ok = true;
+    const nombre = document.getElementById('nombreProyecto').value.trim();
+    const geo    = document.getElementById('estadoProyectoGeo').value;
+    const fn  = document.getElementById('field-nombre');
+    const fg  = document.getElementById('field-geo');
+    if (!nombre || nombre.length > 150) { fn.classList.add('has-error'); ok=false; } else fn.classList.remove('has-error');
+    if (!geo)                           { fg.classList.add('has-error'); ok=false; } else fg.classList.remove('has-error');
+    if (!fechasValidas) ok = false;
+    return ok;
+  }
+
+  document.querySelectorAll('#formProyecto input, #formProyecto select, #formProyecto textarea').forEach(el=>{
+    el.addEventListener('input',  ()=>el.closest('.field')?.classList.remove('has-error'));
+    el.addEventListener('change', ()=>el.closest('.field')?.classList.remove('has-error'));
+  });
+
+  /* registrar */
+  async function registrar() {
+    if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
+    const btn = document.getElementById('btnGuardar');
+    setLoading(btn, true);
+
+    const payload = {
+      nombreProyecto:      document.getElementById('nombreProyecto').value.trim(),
+      tipoProyecto:        document.getElementById('tipoProyecto').value.trim() || null,
+      estadoProyectoGeo:   document.getElementById('estadoProyectoGeo').value,
+      municipioProyecto:   document.getElementById('municipioProyecto').value.trim() || null,
+      lugarProyecto:       document.getElementById('lugarProyecto').value.trim() || null,
+      fechaEstimadaInicio: document.getElementById('fechaEstimadaInicio').value || null,
+      fechaEstimadaFin:    document.getElementById('fechaEstimadaFin').value || null,
+      calificacionProyecto: currentStar > 0 ? currentStar : null,
+      descripcionProyecto: document.getElementById('descripcionProyecto').value.trim() || null,
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/proyectos`, {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+      });
+      if (res.status === 201) {
+        const data = await res.json();
+        showToast(`Proyecto #${data.idProyecto} creado correctamente`, true);
+        limpiar();
+      } else {
+        const err = await res.json().catch(()=>({}));
+        showToast(err.message || `Error ${res.status}`, false);
+      }
+    } catch(e) {
+      console.error(e); showToast('No se pudo conectar con el servidor', false);
+    } finally { setLoading(btn, false); }
+  }
+
+  function limpiar() {
+    document.getElementById('formProyecto').reset();
+    currentStar=0; paintStars(0);
+    document.getElementById('calificacionProyecto').value='';
+    document.getElementById('starLabel').textContent='Sin calificar';
+    document.getElementById('dateError').classList.remove('show');
+    fechasValidas=true;
+    document.querySelectorAll('.field').forEach(f=>f.classList.remove('has-error'));
+  }
+
+  function setLoading(btn,on){ btn.disabled=on; btn.classList.toggle('loading',on); btn.querySelector('.btn-label').textContent=on?'Creando…':'Crear proyecto'; }
+  function showToast(msg,ok){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--danger)'; const icon=document.getElementById('toastIcon'); icon.style.color=ok?'var(--success)':'var(--danger)'; icon.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500); }
   function cerrarSesion(){ window.location.href='../../index.html'; }
+
   let lastScroll=0; const scrollBtn=document.getElementById('scrollTop');
   window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
 </script>

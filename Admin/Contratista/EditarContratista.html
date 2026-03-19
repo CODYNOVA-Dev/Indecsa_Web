@@ -8,7 +8,12 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    :root { --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244; --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5; --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --border:rgba(200,169,110,0.18); }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775;
+      --border:rgba(200,169,110,0.18);
+    }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
 
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
@@ -21,7 +26,6 @@
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
     .nav-hidden nav    { transform:translateY(-72px); }
-
     .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
@@ -29,7 +33,7 @@
 
     main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
 
-    .page-header { max-width:900px; margin:0 auto 2rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
+    .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.25); display:flex; align-items:center; justify-content:center; }
     .page-icon i { font-size:22px; color:var(--warning); }
@@ -39,11 +43,19 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
+    /* badge */
     .worker-badge { max-width:900px; margin:0 auto 1.5rem; background:rgba(250,199,117,0.06); border:1px solid rgba(250,199,117,0.2); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:14px; animation:fadeUp .35s ease both; }
-    .worker-badge > i { color:var(--warning); font-size:16px; flex-shrink:0; }
+    .worker-badge > i { color:var(--warning); font-size:16px; }
     .worker-badge-text { font-size:13px; color:var(--muted); }
     .worker-badge-text strong { color:var(--white); font-weight:500; }
     .worker-badge-id { margin-left:auto; font-size:11px; color:var(--warning); background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.2); border-radius:6px; padding:4px 10px; letter-spacing:1px; text-transform:uppercase; font-weight:500; }
+
+    /* no contratista */
+    .no-banner { max-width:900px; margin:0 auto; background:rgba(240,149,149,0.06); border:1px solid rgba(240,149,149,0.25); border-radius:14px; padding:3rem 2rem; text-align:center; animation:fadeUp .3s ease both; }
+    .no-banner i { font-size:36px; color:rgba(240,149,149,0.4); margin-bottom:1rem; display:block; }
+    .no-banner p { color:var(--muted); font-size:14px; margin-bottom:1.5rem; }
+    .no-banner a { display:inline-flex; align-items:center; gap:7px; padding:10px 22px; border-radius:10px; background:rgba(133,183,235,0.1); border:1px solid rgba(133,183,235,0.25); color:#85B7EB; text-decoration:none; font-size:13px; transition:background .2s; }
+    .no-banner a:hover { background:rgba(133,183,235,0.18); }
 
     .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
     .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(250,199,117,0.05) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
@@ -58,9 +70,11 @@
     .form-row { display:grid; gap:1rem; }
     .col-2 { grid-template-columns:1fr 1fr; }
     .col-1 { grid-template-columns:1fr; }
+
     .field { display:flex; flex-direction:column; gap:7px; }
     .field label { font-size:12px; font-weight:500; color:var(--muted); }
     .field label .req { color:var(--danger); margin-left:2px; }
+
     .input-wrap { position:relative; }
     .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .input-wrap.top-icon i { top:16px; transform:none; }
@@ -78,9 +92,11 @@
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
 
+    /* Estado pills */
     .status-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
     .status-pill input[type="radio"] { display:none; }
     .status-pill label { display:flex; align-items:center; justify-content:center; gap:7px; padding:10px 8px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; }
+    .status-pill label i { font-size:12px; }
     .pill-activo    input:checked + label { background:rgba(93,202,165,0.12);  border-color:#5DCAA5; color:#5DCAA5; }
     .pill-inactivo  input:checked + label { background:rgba(138,155,181,0.12); border-color:var(--muted); color:var(--muted); }
     .pill-suspendido input:checked + label { background:rgba(250,199,117,0.12); border-color:#FAC775; color:#FAC775; }
@@ -93,13 +109,20 @@
     .form-footer-left i { color:var(--warning); }
     .form-footer-right { display:flex; gap:10px; }
     .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
     .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
     .btn-ghost:hover { border-color:var(--muted); color:var(--white); }
     .btn-warning { background:linear-gradient(135deg,#FAC775,#d4963a); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(250,199,117,0.2); }
-    .btn-warning:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(250,199,117,0.3); }
+    .btn-warning:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(250,199,117,0.3); }
+
+    .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
+    .btn.loading .spinner { display:inline-block; }
+    .btn.loading .btn-icon { display:none; }
+    @keyframes spin { to{transform:rotate(360deg)} }
 
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
 
     footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
     .footer-left { font-size:12px; color:var(--muted); }
@@ -107,15 +130,18 @@
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
+
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-    @media(max-width:680px){ .col-2{grid-template-columns:1fr} .status-grid{grid-template-columns:1fr 1fr} .form-footer{flex-direction:column;align-items:stretch} }
+    @media(max-width:680px) { .col-2{grid-template-columns:1fr} .status-grid{grid-template-columns:1fr 1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
   </style>
 </head>
 <body>
+
 <header>
   <img src="../../img/logo.png" height="52" alt="INDECSA" />
   <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
 </header>
+
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
@@ -124,10 +150,12 @@
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
+
 <main>
+
   <div class="page-header">
     <div class="page-header-left">
-      <div class="page-icon"><i class="fa-solid fa-user-pen"></i></div>
+      <div class="page-icon"><i class="fa-solid fa-pen-to-square"></i></div>
       <div>
         <div class="page-title">Editar contratista</div>
         <div class="page-sub">Modifica los datos del contratista seleccionado</div>
@@ -142,37 +170,39 @@
     </div>
   </div>
 
-  <div class="worker-badge">
+  <div class="worker-badge" id="badge">
     <i class="fa-solid fa-circle-info"></i>
-    <div class="worker-badge-text">Editando RFC: <strong id="badgeRfc">—</strong></div>
+    <div class="worker-badge-text">Editando a: <strong id="badgeName">—</strong></div>
     <div class="worker-badge-id">ID #<span id="badgeId">—</span></div>
   </div>
 
-  <div class="form-card">
+  <div class="no-banner" id="noBanner" style="display:none">
+    <i class="fa-solid fa-user-slash"></i>
+    <p>No se ha seleccionado ningún contratista.<br/>Ve a la lista y presiona <strong>Editar</strong>.</p>
+    <a href="ListaContratistas.html"><i class="fa-solid fa-arrow-left"></i> Volver a la lista</a>
+  </div>
+
+  <div class="form-card" id="formCard">
     <div class="form-card-header">
-      <h3><i class="fa-solid fa-pen-to-square"></i> Modificar datos del contratista</h3>
+      <h3><i class="fa-solid fa-pen-to-square"></i> Modificar datos</h3>
       <span class="required-note">Los campos marcados con <span>*</span> son obligatorios</span>
     </div>
-    <form class="form-body" id="formEditar" onsubmit="guardarCambios(event)">
+
+    <form class="form-body" id="formEditar" novalidate>
 
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-building" style="color:var(--gold);font-size:11px"></i> Información general</div>
         <div class="form-row col-2">
           <div class="field">
-            <label>RFC <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i>
-              <input type="text" name="rfc_contratista" id="rfc_contratista" placeholder="Ej. XAXX010101000" required maxlength="15" style="text-transform:uppercase" />
+            <label>Nombre / Razón social <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-user-tie"></i>
+              <input type="text" id="nombreContratista" placeholder="Ej. Constructora García S.A." maxlength="100" />
             </div>
           </div>
           <div class="field">
-            <label>Ubicación <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
-              <select name="ubicacion_contratista" id="ubicacion_contratista" required>
-                <option value="">Selecciona una ubicación</option>
-                <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="Hidalgo">Hidalgo</option>
-                <option value="Puebla">Puebla</option>
-              </select>
+            <label>RFC <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i>
+              <input type="text" id="rfcContratista" placeholder="Ej. XAXX010101000" maxlength="15" style="text-transform:uppercase" />
             </div>
           </div>
         </div>
@@ -180,64 +210,28 @@
           <div class="field">
             <label>Teléfono <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-phone"></i>
-              <input type="tel" name="telefono_contratista" id="telefono_contratista" placeholder="+52 000 000 0000" required maxlength="15" />
+              <input type="tel" id="telefonoContratista" placeholder="+52 000 000 0000" maxlength="15" />
             </div>
           </div>
           <div class="field">
             <label>Correo electrónico <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-envelope"></i>
-              <input type="email" name="correo_contratista" id="correo_contratista" placeholder="correo@empresa.com" required maxlength="100" />
+              <input type="email" id="correoContratista" placeholder="correo@empresa.com" maxlength="100" />
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="form-divider"></div>
-
-      <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Perfil profesional</div>
-        <div class="form-row col-1">
+        <div class="form-row col-2">
           <div class="field">
-            <label>Descripción <span class="req">*</span></label>
-            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
-              <textarea name="descripcion_contratista" id="descripcion_contratista" placeholder="Describe los servicios que ofrece el contratista…" required maxlength="255"></textarea>
+            <label>Ubicación <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="ubicacionContratista">
+                <option value="" disabled>Selecciona…</option>
+                <option value="CDMX">Ciudad de México (CDMX)</option>
+                <option value="HIDALGO">Hidalgo</option>
+                <option value="PUEBLA">Puebla</option>
+              </select>
             </div>
           </div>
-        </div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Experiencia</label>
-            <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
-              <textarea name="experiencia" id="experiencia" placeholder="Años de experiencia, proyectos relevantes…" maxlength="200"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-divider"></div>
-
-      <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estado y calificación</div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Estado del contratista <span class="req">*</span></label>
-            <div class="status-grid">
-              <div class="status-pill pill-activo">
-                <input type="radio" name="estado_contratista" id="est-activo" value="ACTIVO" />
-                <label for="est-activo"><i class="fa-solid fa-circle-check"></i> Activo</label>
-              </div>
-              <div class="status-pill pill-inactivo">
-                <input type="radio" name="estado_contratista" id="est-inactivo" value="INACTIVO" />
-                <label for="est-inactivo"><i class="fa-solid fa-circle-xmark"></i> Inactivo</label>
-              </div>
-              <div class="status-pill pill-suspendido">
-                <input type="radio" name="estado_contratista" id="est-suspendido" value="SUSPENDIDO" />
-                <label for="est-suspendido"><i class="fa-solid fa-ban"></i> Suspendido</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-row col-1">
           <div class="field">
             <label>Calificación</label>
             <div class="stars-container">
@@ -250,10 +244,58 @@
                 <span class="star-value-label" id="starLabel">Sin calificar</span>
               </div>
             </div>
-            <input type="hidden" name="calificacion_contratista" id="calificacion_contratista" value="" />
+            <input type="hidden" id="calificacionContratista" />
           </div>
         </div>
       </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Perfil profesional</div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Descripción <span class="req">*</span></label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
+              <textarea id="descripcionContratista" placeholder="Describe los servicios que ofrece…" maxlength="255"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Experiencia</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
+              <textarea id="experiencia" placeholder="Años de experiencia, proyectos relevantes…" maxlength="200"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estado</div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Estado del contratista <span class="req">*</span></label>
+            <div class="status-grid">
+              <div class="status-pill pill-activo">
+                <input type="radio" name="estadoContratista" id="est-activo" value="ACTIVO" />
+                <label for="est-activo"><i class="fa-solid fa-circle-check"></i> Activo</label>
+              </div>
+              <div class="status-pill pill-inactivo">
+                <input type="radio" name="estadoContratista" id="est-inactivo" value="INACTIVO" />
+                <label for="est-inactivo"><i class="fa-solid fa-circle-xmark"></i> Inactivo</label>
+              </div>
+              <div class="status-pill pill-suspendido">
+                <input type="radio" name="estadoContratista" id="est-suspendido" value="SUSPENDIDO" />
+                <label for="est-suspendido"><i class="fa-solid fa-ban"></i> Suspendido</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </form>
 
     <div class="form-footer">
@@ -262,11 +304,18 @@
         <span id="changesLabel">Sin cambios pendientes</span>
       </div>
       <div class="form-footer-right">
-        <button class="btn btn-ghost" type="button" onclick="descartarCambios()"><i class="fa-solid fa-rotate-left"></i> Descartar cambios</button>
-        <button class="btn btn-warning" type="submit" form="formEditar"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+        <button class="btn btn-ghost" type="button" onclick="descartar()">
+          <i class="fa-solid fa-rotate-left"></i> Descartar
+        </button>
+        <button class="btn btn-warning" type="button" id="btnGuardar" onclick="guardar()">
+          <span class="spinner"></span>
+          <i class="fa-solid fa-floppy-disk btn-icon"></i>
+          <span class="btn-label">Guardar cambios</span>
+        </button>
       </div>
     </div>
   </div>
+
 </main>
 
 <footer>
@@ -276,54 +325,155 @@
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
-<div class="toast" id="toast"><i class="fa-solid fa-circle-check" id="toastIcon"></i><span id="toastMsg"></span></div>
+
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 
 <script>
-  /* ══════════════════════════════════════
-     Reemplaza con fetch('/api/contratistas/${id}')
-  ══════════════════════════════════════ */
-  const contratistaActual = {
-    id_contratista:1, rfc_contratista:'GARL850312AB1',
-    telefono_contratista:'+52 55 1234 5678', correo_contratista:'constructora.gl@gmail.com',
-    descripcion_contratista:'Empresa especializada en obra civil y estructuras metálicas.',
-    experiencia:'15 años en proyectos industriales y comerciales.',
-    calificacion_contratista:5, estado_contratista:'ACTIVO', ubicacion_contratista:'CDMX'
-  };
+  const API_BASE    = 'http://localhost:8080/api/v1';
+  const STORAGE_KEY = 'indecsa_contratista_editar';
+  const starLabels  = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
 
-  const starLabels=['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
-  let currentStar=0, originales={}, camposModificados=0;
+  let contratistaActual = null;
+  let originales        = {};
+  let currentStar       = 0;
 
-  function cargarDatos(d){
-    ['rfc_contratista','telefono_contratista','correo_contratista','descripcion_contratista','experiencia']
-      .forEach(id=>{ const el=document.getElementById(id); if(el&&d[id]!=null) el.value=d[id]; });
-    const sel=document.getElementById('ubicacion_contratista');
-    if(d.ubicacion_contratista) sel.value=d.ubicacion_contratista;
-    const radio=document.querySelector(`input[name="estado_contratista"][value="${d.estado_contratista}"]`);
-    if(radio) radio.checked=true;
-    if(d.calificacion_contratista){ currentStar=d.calificacion_contratista; document.getElementById('calificacion_contratista').value=currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent=starLabels[currentStar]; }
-    document.getElementById('badgeRfc').textContent=d.rfc_contratista;
-    document.getElementById('badgeId').textContent=d.id_contratista;
-    guardarSnapshot(); escucharCambios();
+  /* ════ INIT ════ */
+  function init() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) { mostrarNoBanner(); return; }
+    try { contratistaActual = JSON.parse(raw); } catch { mostrarNoBanner(); return; }
+    cargarDatos(contratistaActual);
   }
 
-  function guardarSnapshot(){ const data=new FormData(document.getElementById('formEditar')); originales=Object.fromEntries(data.entries()); const r=document.querySelector('input[name="estado_contratista"]:checked'); originales.estado_contratista=r?r.value:''; }
-  function escucharCambios(){ document.querySelectorAll('#formEditar input,#formEditar select,#formEditar textarea').forEach(el=>{ el.addEventListener('input',detectarCambios); el.addEventListener('change',detectarCambios); }); }
-  function detectarCambios(){ const data=new FormData(document.getElementById('formEditar')); const actual=Object.fromEntries(data.entries()); const r=document.querySelector('input[name="estado_contratista"]:checked'); actual.estado_contratista=r?r.value:''; camposModificados=Object.keys(originales).filter(k=>(actual[k]||'')!==(originales[k]||'')).length; const lbl=document.getElementById('changesLabel'); lbl.textContent=camposModificados>0?`${camposModificados} campo${camposModificados>1?'s':''} modificado${camposModificados>1?'s':''}`:'Sin cambios pendientes'; lbl.style.color=camposModificados>0?'var(--warning)':''; }
+  function mostrarNoBanner() {
+    document.getElementById('badge').style.display    = 'none';
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('noBanner').style.display = 'block';
+  }
 
-  const stars=document.querySelectorAll('.star-btn');
-  stars.forEach(s=>{ s.addEventListener('click',()=>{ currentStar=parseInt(s.dataset.val); document.getElementById('calificacion_contratista').value=currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent=starLabels[currentStar]; detectarCambios(); }); s.addEventListener('mouseenter',()=>paintStars(parseInt(s.dataset.val))); s.addEventListener('mouseleave',()=>paintStars(currentStar)); });
-  function paintStars(n){ stars.forEach(s=>s.classList.toggle('active',parseInt(s.dataset.val)<=n)); }
+  /* ════ CARGAR DATOS ════ */
+  function cargarDatos(c) {
+    document.getElementById('badgeName').textContent = c.nombreContratista || c.rfcContratista || '—';
+    document.getElementById('badgeId').textContent   = c.idContratista || '—';
+    setVal('nombreContratista',      c.nombreContratista);
+    setVal('rfcContratista',         c.rfcContratista);
+    setVal('telefonoContratista',    c.telefonoContratista);
+    setVal('correoContratista',      c.correoContratista);
+    setVal('descripcionContratista', c.descripcionContratista);
+    setVal('experiencia',            c.experiencia);
+    if (c.ubicacionContratista) document.getElementById('ubicacionContratista').value = c.ubicacionContratista;
+    const radio = document.querySelector(`input[name="estadoContratista"][value="${c.estadoContratista}"]`);
+    if (radio) radio.checked = true;
+    if (c.calificacionContratista) {
+      currentStar = c.calificacionContratista;
+      document.getElementById('calificacionContratista').value = currentStar;
+      paintStars(currentStar);
+      document.getElementById('starLabel').textContent = starLabels[currentStar] || '';
+    }
+    guardarSnapshot();
+    document.querySelectorAll('#formEditar input, #formEditar select, #formEditar textarea')
+      .forEach(el => { el.addEventListener('input', detectar); el.addEventListener('change', detectar); });
+  }
 
-  function guardarCambios(e){ e.preventDefault(); showToast('Cambios guardados correctamente',true); guardarSnapshot(); detectarCambios(); }
-  function descartarCambios(){ cargarDatos(contratistaActual); showToast('Cambios descartados',false); }
-  function showToast(msg,ok){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--warning)'; document.getElementById('toastIcon').style.color=ok?'var(--success)':'var(--warning)'; document.getElementById('toastIcon').className=ok?'fa-solid fa-circle-check':'fa-solid fa-rotate-left'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
-  function cerrarSesion(){ window.location.href='../../index.html'; }
+  function setVal(id, val) { const el = document.getElementById(id); if (el && val != null) el.value = val; }
 
-  let lastScroll=0; const scrollBtn=document.getElementById('scrollTop');
-  window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
+  /* ════ CAMBIOS ════ */
+  function leerForm() {
+    const radio = document.querySelector('input[name="estadoContratista"]:checked');
+    return {
+      nombreContratista:      document.getElementById('nombreContratista').value.trim(),
+      rfcContratista:         document.getElementById('rfcContratista').value.trim().toUpperCase(),
+      telefonoContratista:    document.getElementById('telefonoContratista').value.trim(),
+      correoContratista:      document.getElementById('correoContratista').value.trim(),
+      descripcionContratista: document.getElementById('descripcionContratista').value.trim(),
+      experiencia:            document.getElementById('experiencia').value.trim() || null,
+      calificacionContratista: currentStar > 0 ? currentStar : null,
+      ubicacionContratista:   document.getElementById('ubicacionContratista').value,
+      estadoContratista:      radio ? radio.value : '',
+    };
+  }
+  function guardarSnapshot() { originales = leerForm(); }
+  function detectar() {
+    const actual = leerForm();
+    const mod = Object.keys(originales).filter(k => String(actual[k]??'') !== String(originales[k]??'')).length;
+    const lbl = document.getElementById('changesLabel');
+    lbl.textContent = mod > 0 ? `${mod} campo${mod>1?'s':''} modificado${mod>1?'s':''}` : 'Sin cambios pendientes';
+    lbl.style.color = mod > 0 ? 'var(--warning)' : '';
+  }
 
-  cargarDatos(contratistaActual);
+  /* ════ GUARDAR ════ */
+  async function guardar() {
+    if (!contratistaActual) return;
+    const btn = document.getElementById('btnGuardar');
+    setLoading(btn, true);
+    const payload = leerForm();
+    const { estadoContratista, ...dto } = payload;
+    try {
+      const resPut = await fetch(`${API_BASE}/contratistas/${contratistaActual.idContratista}`, {
+        method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(dto)
+      });
+      if (!resPut.ok) { const e = await resPut.json().catch(()=>({})); throw new Error(e.message||`Error ${resPut.status}`); }
+      const updated = await resPut.json();
+
+      if (estadoContratista && estadoContratista !== contratistaActual.estadoContratista) {
+        const resPatch = await fetch(`${API_BASE}/contratistas/${contratistaActual.idContratista}/estado?estado=${estadoContratista}`, { method:'PATCH' });
+        if (!resPatch.ok) { const e = await resPatch.json().catch(()=>({})); throw new Error(e.message||`Error estado ${resPatch.status}`); }
+      }
+
+      contratistaActual = { ...updated, estadoContratista };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(contratistaActual));
+      document.getElementById('badgeName').textContent = contratistaActual.nombreContratista || contratistaActual.rfcContratista;
+      guardarSnapshot(); detectar();
+      showToast('Cambios guardados correctamente', true);
+    } catch(e) {
+      console.error(e); showToast(e.message || 'Error al guardar', false);
+    } finally { setLoading(btn, false); }
+  }
+
+  function descartar() { if (contratistaActual) { cargarDatos(contratistaActual); showToast('Cambios descartados', false); } }
+
+  /* ════ ESTRELLAS ════ */
+  const stars = document.querySelectorAll('.star-btn');
+  stars.forEach(s => {
+    s.addEventListener('click', () => {
+      currentStar = parseInt(s.dataset.val);
+      document.getElementById('calificacionContratista').value = currentStar;
+      paintStars(currentStar);
+      document.getElementById('starLabel').textContent = starLabels[currentStar];
+      detectar();
+    });
+    s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
+    s.addEventListener('mouseleave', () => paintStars(currentStar));
+  });
+  function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
+
+  /* ── helpers ── */
+  function setLoading(btn, on) {
+    btn.disabled = on; btn.classList.toggle('loading', on);
+    btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios';
+  }
+  function showToast(msg, ok) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
+    const icon = document.getElementById('toastIcon');
+    icon.style.color = ok ? 'var(--success)' : 'var(--danger)';
+    icon.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
+  }
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+
+  let lastScroll = 0;
+  const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    const c = window.scrollY;
+    document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
+    lastScroll = c <= 0 ? 0 : c;
+    scrollBtn.classList.toggle('visible', c > 200);
+  });
+
+  init();
 </script>
 </body>
 </html>

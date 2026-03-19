@@ -8,8 +8,15 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    :root { --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5; --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --purple:#AFA9EC; --blue:#85B7EB; --border:rgba(200,169,110,0.18); }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --purple:#AFA9EC;
+      --border:rgba(200,169,110,0.18);
+    }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
@@ -24,8 +31,10 @@
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
     .scroll-top i { font-size:16px; color:var(--navy); }
+
     main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
-    .page-wrap { max-width:960px; margin:0 auto; }
+    .page-wrap { max-width:1060px; margin:0 auto; }
+
     .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; }
@@ -35,66 +44,160 @@
     .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
-    .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; }
-    .btn-add { display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:linear-gradient(135deg,#AFA9EC,#6b63c7); color:#0B1F3A; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:700; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(175,169,236,0.25); transition:transform .2s,box-shadow .2s; text-decoration:none; white-space:nowrap; }
+
+    /* toolbar */
+    .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; flex-wrap:wrap; }
+    .btn-add { display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:linear-gradient(135deg,var(--purple),#7a73d4); color:#0B1F3A; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:700; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(175,169,236,0.25); transition:transform .2s,box-shadow .2s; text-decoration:none; white-space:nowrap; }
     .btn-add:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(175,169,236,0.35); }
-    .toolbar-right { margin-left:auto; display:flex; align-items:flex-end; gap:10px; }
+    .toolbar-right { margin-left:auto; display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; }
     .filter-group { display:flex; flex-direction:column; gap:5px; }
     .filter-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
-    .filter-select { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 34px 9px 13px; appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; min-width:160px; }
+    .filter-select { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 34px 9px 13px; appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; min-width:140px; transition:border-color .2s; }
     .filter-select:focus { outline:none; border-color:var(--gold); }
     .filter-select option { background:#152D50; }
+    .search-wrap { position:relative; min-width:200px; }
+    .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+    .search-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px 9px 36px; outline:none; transition:border-color .2s; }
+    .search-input::placeholder { color:rgba(138,155,181,0.5); }
+    .search-input:focus { border-color:var(--gold); }
+
     .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
     .results-info strong { color:var(--white); }
-    .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; animation:fadeUp .4s ease both; }
-    .proj-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:16px; position:relative; cursor:pointer; transition:border-color .2s,background .2s; }
+
+    /* skeleton */
+    .skeleton-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.08); border-radius:13px; padding:16px 18px; }
+    .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
+    .sk-line { height:10px; margin-bottom:10px; }
+    .sk-w90{width:90%} .sk-w70{width:70%} .sk-w50{width:50%} .sk-w30{width:30%}
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+    /* cards grid — 1 col para proyectos (más info) */
+    .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:fadeUp .4s ease both; }
+
+    .proj-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:14px; padding:16px 18px; position:relative; transition:border-color .2s,background .2s; animation:fadeUp .4s ease both; }
     .proj-card:hover { border-color:rgba(200,169,110,0.4); background:#1a3560; }
-    .proj-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:13px 13px 0 0; }
-    .proj-card.c-planeacion::before  { background:linear-gradient(90deg,transparent,#85B7EB,transparent); }
-    .proj-card.c-en_curso::before    { background:linear-gradient(90deg,transparent,#5DCAA5,transparent); }
-    .proj-card.c-pausado::before     { background:linear-gradient(90deg,transparent,#FAC775,transparent); }
-    .proj-card.c-finalizado::before  { background:linear-gradient(90deg,transparent,#AFA9EC,transparent); }
-    .proj-card.c-cancelado::before   { background:linear-gradient(90deg,transparent,#F09595,transparent); }
-    .proj-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; padding-right:80px; }
-    .proj-name { font-size:13px; font-weight:500; color:var(--white); margin-bottom:3px; }
-    .proj-type { font-size:11px; color:var(--muted); }
-    .status-badge { position:absolute; top:14px; right:14px; font-size:9px; font-weight:600; padding:3px 9px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; }
-    .s-planeacion  { background:rgba(133,183,235,0.12); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
-    .s-en_curso    { background:rgba(93,202,165,0.12);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
-    .s-pausado     { background:rgba(250,199,117,0.12); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
-    .s-finalizado  { background:rgba(175,169,236,0.12); color:#AFA9EC; border:1px solid rgba(175,169,236,0.3); }
-    .s-cancelado   { background:rgba(240,149,149,0.12); color:#F09595; border:1px solid rgba(240,149,149,0.3); }
-    .wmeta { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
-    .wrow { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
-    .wrow i { font-size:10px; color:var(--gold); width:12px; flex-shrink:0; }
-    .wfooter { display:flex; align-items:center; justify-content:space-between; padding-top:9px; border-top:1px solid rgba(255,255,255,0.06); }
+
+    /* encabezado tarjeta */
+    .pcard-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; padding-right:90px; }
+    .pcard-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pi-purple { background:rgba(175,169,236,0.12); border:1px solid rgba(175,169,236,0.25); }
+    .pi-blue   { background:rgba(133,183,235,0.12); border:1px solid rgba(133,183,235,0.25); }
+    .pi-amber  { background:rgba(250,199,117,0.12); border:1px solid rgba(250,199,117,0.25); }
+    .pi-green  { background:rgba(93,202,165,0.12);  border:1px solid rgba(93,202,165,0.25); }
+    .pi-coral  { background:rgba(240,149,149,0.1);  border:1px solid rgba(240,149,149,0.25); }
+    .pcard-icon i { font-size:16px; }
+    .pcard-name { font-size:13.5px; font-weight:600; color:var(--white); line-height:1.35; margin-bottom:3px; }
+    .pcard-type { font-size:11px; color:var(--muted); }
+
+    /* metadata */
+    .pmeta { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-bottom:12px; }
+    .prow { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .prow i { font-size:10px; color:var(--gold); width:12px; flex-shrink:0; }
+
+    /* desc */
+    .pdesc { font-size:11.5px; color:var(--muted); line-height:1.5; margin-bottom:12px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+
+    /* footer */
+    .pcard-foot { display:flex; align-items:center; justify-content:space-between; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06); }
     .wactions { display:flex; gap:6px; }
-    .wact { font-size:11px; padding:4px 11px; border-radius:7px; cursor:pointer; border:1px solid; text-decoration:none; display:flex; align-items:center; gap:5px; transition:background .15s; }
+    .wact { font-size:11px; padding:4px 11px; border-radius:7px; cursor:pointer; border:1px solid; display:flex; align-items:center; gap:5px; transition:background .15s; background:none; font-family:'DM Sans',sans-serif; }
     .wact i { font-size:10px; }
     .wact.edit { color:var(--warning); border-color:rgba(250,199,117,0.25); background:rgba(250,199,117,0.06); }
     .wact.edit:hover { background:rgba(250,199,117,0.12); }
-    .wact.del  { color:var(--danger);  border-color:rgba(240,149,149,0.25); background:rgba(240,149,149,0.06); }
-    .wact.del:hover  { background:rgba(240,149,149,0.12); }
+    .wact.estatus { color:var(--blue); border-color:rgba(133,183,235,0.25); background:rgba(133,183,235,0.06); }
+    .wact.estatus:hover { background:rgba(133,183,235,0.12); }
+    .wact.elim { color:var(--muted); border-color:rgba(138,155,181,0.2); background:rgba(138,155,181,0.05); }
+    .wact.elim:hover { background:rgba(138,155,181,0.12); color:var(--white); }
+
     .stars-mini { display:flex; gap:1px; }
     .st { font-size:11px; color:rgba(200,169,110,0.2); }
     .st.on { color:var(--gold); }
+
+    /* estatus badge */
+    .estatus-badge { position:absolute; top:13px; right:14px; font-size:9px; font-weight:600; padding:3px 10px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; }
+    .e-planeacion  { background:rgba(133,183,235,0.12); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
+    .e-en-curso    { background:rgba(93,202,165,0.12);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
+    .e-pausado     { background:rgba(250,199,117,0.12); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
+    .e-completado  { background:rgba(175,169,236,0.12); color:#AFA9EC; border:1px solid rgba(175,169,236,0.3); }
+    .e-cancelado   { background:rgba(240,149,149,0.1);  color:#F09595; border:1px solid rgba(240,149,149,0.3); }
+
+    /* empty/error */
     .empty-state { grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--muted); }
     .empty-state i { font-size:36px; color:rgba(200,169,110,0.2); margin-bottom:1rem; display:block; }
+    .empty-state p { font-size:14px; }
+    .retry-btn { display:inline-flex; align-items:center; gap:7px; margin-top:1rem; padding:9px 20px; border-radius:9px; background:rgba(200,169,110,0.1); border:1px solid rgba(200,169,110,0.2); color:var(--gold); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:background .2s; }
+    .retry-btn:hover { background:rgba(200,169,110,0.18); }
+
+    /* ── MODALES ── */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; }
+    .modal-overlay.open { opacity:1; pointer-events:auto; }
+    .modal { background:var(--navy-card); border:1px solid var(--border); border-radius:16px; padding:2rem; max-width:400px; width:90%; transform:translateY(20px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .modal-overlay.open .modal { transform:translateY(0); }
+    .modal-icon { font-size:26px; margin-bottom:1rem; }
+    .modal-title { font-family:'Playfair Display',serif; font-size:18px; margin-bottom:.5rem; }
+    .modal-body { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:1.5rem; }
+    .modal-body strong { color:var(--white); }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .modal-btn { padding:9px 20px; border-radius:9px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; display:flex; align-items:center; gap:7px; transition:all .2s; }
+    .modal-btn.cancel { background:rgba(255,255,255,0.06); color:var(--muted); }
+    .modal-btn.cancel:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+    .modal-btn.confirm { background:linear-gradient(135deg,var(--blue),#3a72b0); color:#0B1F3A; font-weight:600; }
+    .modal-btn.confirm:hover:not(:disabled) { transform:translateY(-1px); }
+    .modal-btn.confirm:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+    /* estatus selector en modal */
+    .estatus-pills { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:1.5rem; }
+    .epill input[type="radio"] { display:none; }
+    .epill label { display:flex; align-items:center; justify-content:center; gap:6px; padding:9px 8px; border-radius:9px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; }
+    .epill label i { font-size:11px; }
+    .ep-plan  input:checked + label { background:rgba(133,183,235,0.12); border-color:#85B7EB; color:#85B7EB; }
+    .ep-curso input:checked + label { background:rgba(93,202,165,0.12);  border-color:#5DCAA5; color:#5DCAA5; }
+    .ep-paus  input:checked + label { background:rgba(250,199,117,0.12); border-color:#FAC775; color:#FAC775; }
+    .ep-comp  input:checked + label { background:rgba(175,169,236,0.12); border-color:#AFA9EC; color:#AFA9EC; }
+    .ep-canc  input:checked + label { background:rgba(240,149,149,0.1);  border-color:#F09595; color:#F09595; }
+    .epill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
+
+    /* modal eliminar */
+    #modalEliminar .modal { border-color:rgba(200,169,110,0.25); max-width:420px; }
+    .code-display { display:flex; align-items:center; justify-content:center; gap:10px; margin:1.2rem 0 1rem; }
+    .code-digit { width:52px; height:64px; background:rgba(200,169,110,0.07); border:1.5px solid rgba(200,169,110,0.3); border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:30px; font-weight:700; color:var(--gold); animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both; }
+    .code-digit:nth-child(2) { animation-delay:.07s; }
+    .code-digit:nth-child(3) { animation-delay:.14s; }
+    @keyframes popIn { from{opacity:0;transform:scale(.5) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .code-input-wrap { display:flex; margin-bottom:.4rem; }
+    .code-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:18px; font-weight:600; letter-spacing:6px; text-align:center; padding:10px 14px; outline:none; transition:border-color .2s,box-shadow .2s; }
+    .code-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,169,110,0.08); }
+    .code-input.wrong { border-color:var(--danger)!important; animation:shake .35s ease; }
+    .code-input.right { border-color:var(--success)!important; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+    .code-hint { font-size:11px; color:var(--muted); text-align:center; margin-bottom:1.2rem; }
+    .modal-btn.elim { background:rgba(200,169,110,0.12); border:1px solid rgba(200,169,110,0.3); color:var(--gold); font-weight:600; }
+    .modal-btn.elim:hover:not(:disabled) { background:rgba(200,169,110,0.2); }
+    .modal-btn.elim:disabled { opacity:.3; cursor:not-allowed; }
+
+    /* toast */
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
+
     footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
     .footer-left { font-size:12px; color:var(--muted); }
     .footer-contact { display:flex; gap:24px; }
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
+
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-    @media(max-width:700px){ .cards-grid{grid-template-columns:1fr} .toolbar{flex-direction:column;align-items:stretch} .toolbar-right{margin-left:0;flex-wrap:wrap} }
+    @media(max-width:750px) { .cards-grid{grid-template-columns:1fr} .toolbar{flex-direction:column;align-items:stretch} .toolbar-right{margin-left:0;flex-wrap:wrap} .page-header{flex-direction:column;align-items:flex-start} .pmeta{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
+
 <header>
   <img src="../../img/logo.png" height="52" alt="INDECSA" />
   <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
 </header>
+
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
@@ -103,14 +206,16 @@
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
+
 <main>
   <div class="page-wrap">
+
     <div class="page-header">
       <div class="page-header-left">
         <div class="page-icon"><i class="fa-solid fa-diagram-project"></i></div>
         <div>
           <div class="page-title">Proyectos registrados</div>
-          <div class="page-sub">Consulta y gestiona todos los proyectos del sistema</div>
+          <div class="page-sub">Consulta, edita o elimina proyectos del sistema</div>
         </div>
       </div>
       <div class="breadcrumb">
@@ -119,35 +224,52 @@
         <span>Proyectos</span>
       </div>
     </div>
+
     <div class="toolbar">
-      <a class="btn-add" href="AltaProyecto.html"><i class="fa-solid fa-folder-plus"></i> Agregar proyecto</a>
+      <a class="btn-add" href="AltaProyecto.html"><i class="fa-solid fa-plus"></i> Nuevo proyecto</a>
       <div class="toolbar-right">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input class="search-input" type="text" id="busqueda" placeholder="Buscar por nombre…" oninput="filtrar()" />
+        </div>
         <div class="filter-group">
           <div class="filter-label">Estatus</div>
           <select class="filter-select" id="filtroEstatus" onchange="filtrar()">
-            <option value="">Todos los estatus</option>
+            <option value="">Todos</option>
             <option value="PLANEACION">Planeación</option>
             <option value="EN_CURSO">En curso</option>
             <option value="PAUSADO">Pausado</option>
-            <option value="FINALIZADO">Finalizado</option>
+            <option value="COMPLETADO">Completado</option>
             <option value="CANCELADO">Cancelado</option>
           </select>
         </div>
         <div class="filter-group">
-          <div class="filter-label">Estado</div>
-          <select class="filter-select" id="filtroEstado" onchange="filtrar()">
-            <option value="">Todos los estados</option>
+          <div class="filter-label">Ubicación</div>
+          <select class="filter-select" id="filtroUbic" onchange="filtrar()">
+            <option value="">Todas</option>
             <option value="CDMX">CDMX</option>
-            <option value="Hidalgo">Hidalgo</option>
-            <option value="Puebla">Puebla</option>
+            <option value="HIDALGO">Hidalgo</option>
+            <option value="PUEBLA">Puebla</option>
           </select>
         </div>
       </div>
     </div>
-    <div class="results-info"><i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i><span id="resultsLabel">Cargando…</span></div>
-    <div class="cards-grid" id="cardsGrid"></div>
+
+    <div class="results-info">
+      <i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i>
+      <span id="resultsLabel">Cargando proyectos…</span>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+    </div>
+
   </div>
 </main>
+
 <footer>
   <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
   <div class="footer-contact">
@@ -155,59 +277,272 @@
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
+
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
+<!-- ── MODAL CAMBIAR ESTATUS ── -->
+<div class="modal-overlay" id="modalEstatus">
+  <div class="modal">
+    <div class="modal-icon" style="color:var(--blue)"><i class="fa-solid fa-rotate"></i></div>
+    <div class="modal-title">Cambiar estatus</div>
+    <div class="modal-body">Selecciona el nuevo estatus para <strong id="estatusNombre">—</strong>.</div>
+    <div class="estatus-pills">
+      <div class="epill ep-plan"><input type="radio" name="nuevoEstatus" id="ep1" value="PLANEACION"/><label for="ep1"><i class="fa-solid fa-pen-ruler"></i> Planeación</label></div>
+      <div class="epill ep-curso"><input type="radio" name="nuevoEstatus" id="ep2" value="EN_CURSO"/><label for="ep2"><i class="fa-solid fa-play"></i> En curso</label></div>
+      <div class="epill ep-paus"><input type="radio" name="nuevoEstatus" id="ep3" value="PAUSADO"/><label for="ep3"><i class="fa-solid fa-pause"></i> Pausado</label></div>
+      <div class="epill ep-comp"><input type="radio" name="nuevoEstatus" id="ep4" value="COMPLETADO"/><label for="ep4"><i class="fa-solid fa-circle-check"></i> Completado</label></div>
+      <div class="epill ep-canc"><input type="radio" name="nuevoEstatus" id="ep5" value="CANCELADO"/><label for="ep5"><i class="fa-solid fa-ban"></i> Cancelado</label></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="cerrarModalEstatus()">Cancelar</button>
+      <button class="modal-btn confirm" id="btnConfirmEstatus" onclick="confirmarEstatus()">
+        <i class="fa-solid fa-rotate"></i> Aplicar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL ELIMINAR ── -->
+<div class="modal-overlay" id="modalEliminar">
+  <div class="modal">
+    <div class="modal-icon" style="color:var(--muted)"><i class="fa-solid fa-diagram-project"></i></div>
+    <div class="modal-title">Eliminar proyecto</div>
+    <div class="modal-body">Se eliminará permanentemente el registro de <strong id="elimNombre">—</strong>. Ingresa el código para confirmar.</div>
+    <div class="code-display">
+      <div class="code-digit" id="cd0">?</div>
+      <div class="code-digit" id="cd1">?</div>
+      <div class="code-digit" id="cd2">?</div>
+    </div>
+    <div class="code-input-wrap">
+      <input class="code-input" type="text" id="elimCodeInput" maxlength="3" placeholder="···" oninput="validarCodigo()" autocomplete="off" />
+    </div>
+    <div class="code-hint">Escribe los 3 dígitos exactamente como aparecen arriba</div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="cerrarModalElim()">Cancelar</button>
+      <button class="modal-btn elim" id="btnConfirmElim" disabled onclick="confirmarEliminar()">
+        <i class="fa-solid fa-trash"></i> Confirmar eliminación
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg">OK</span></div>
+
 <script>
-  const proyectos = [
-    { id_proyecto:1, nombre_proyecto:'Planta Industrial Norte', tipo_proyecto:'Industrial', lugar_proyecto:'Av. Industrial 45', municipio_proyecto:'Tizayuca', estado_proyecto_geo:'Hidalgo', fecha_estimada_inicio:'2024-01-15', fecha_estimada_fin:'2024-12-31', estatus_proyecto:'EN_CURSO', calificacion_proyecto:4, descripcion_proyecto:'Construcción de planta de manufactura de 5,000 m².' },
-    { id_proyecto:2, nombre_proyecto:'Residencial Las Palmas', tipo_proyecto:'Residencial', lugar_proyecto:'Blvd. Las Palmas 120', municipio_proyecto:'Puebla', estado_proyecto_geo:'Puebla', fecha_estimada_inicio:'2023-06-01', fecha_estimada_fin:'2024-05-30', estatus_proyecto:'FINALIZADO', calificacion_proyecto:5, descripcion_proyecto:'Desarrollo de 80 viviendas de interés social.' },
-    { id_proyecto:3, nombre_proyecto:'Centro Comercial Oriente', tipo_proyecto:'Comercial', lugar_proyecto:'Eje 8 Sur 300', municipio_proyecto:'Iztapalapa', estado_proyecto_geo:'CDMX', fecha_estimada_inicio:'2024-03-01', fecha_estimada_fin:'2025-06-30', estatus_proyecto:'PLANEACION', calificacion_proyecto:null, descripcion_proyecto:'Construcción de plaza comercial de 3 niveles.' },
-    { id_proyecto:4, nombre_proyecto:'Bodega Logística Sur', tipo_proyecto:'Logístico', lugar_proyecto:'Carretera Federal 150, km 12', municipio_proyecto:'Cholula', estado_proyecto_geo:'Puebla', fecha_estimada_inicio:'2023-09-01', fecha_estimada_fin:'2024-03-31', estatus_proyecto:'PAUSADO', calificacion_proyecto:2, descripcion_proyecto:'Bodega de 2,000 m² para almacenaje refrigerado.' },
-    { id_proyecto:5, nombre_proyecto:'Remodelación Oficinas CDMX', tipo_proyecto:'Remodelación', lugar_proyecto:'Paseo de la Reforma 250', municipio_proyecto:'Cuauhtémoc', estado_proyecto_geo:'CDMX', fecha_estimada_inicio:'2024-02-01', fecha_estimada_fin:'2024-08-01', estatus_proyecto:'EN_CURSO', calificacion_proyecto:3, descripcion_proyecto:'Remodelación integral de 1,200 m² de oficinas.' },
-    { id_proyecto:6, nombre_proyecto:'Parque Fotovoltaico Hidalgo', tipo_proyecto:'Energía', lugar_proyecto:'Carretera Pachuca-Tulancingo', municipio_proyecto:'Epazoyucan', estado_proyecto_geo:'Hidalgo', fecha_estimada_inicio:'2024-05-01', fecha_estimada_fin:'2025-04-30', estatus_proyecto:'CANCELADO', calificacion_proyecto:1, descripcion_proyecto:'Instalación de 500 paneles solares para generación de 200 kW.' },
-  ];
-  const estatusClase = { PLANEACION:'s-planeacion', EN_CURSO:'s-en_curso', PAUSADO:'s-pausado', FINALIZADO:'s-finalizado', CANCELADO:'s-cancelado' };
-  const estatusLabel = { PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
-  function estrellas(n){ let h=''; for(let i=1;i<=5;i++) h+=`<div class="st${i<=(n||0)?' on':''}"">★</div>`; return h; }
-  function formatFecha(f){ if(!f) return '—'; const[y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
-  function renderCard(p){
-    const sc = estatusClase[p.estatus_proyecto]||'';
-    const sl = estatusLabel[p.estatus_proyecto]||p.estatus_proyecto;
-    const cc = p.estatus_proyecto.toLowerCase().replace('_','_');
-    return `<div class="proj-card c-${p.estatus_proyecto.toLowerCase()}">
-      <div class="proj-header">
-        <div>
-          <div class="proj-name">${p.nombre_proyecto}</div>
-          <div class="proj-type">${p.tipo_proyecto||'Sin tipo'}</div>
-        </div>
-      </div>
-      <div class="wmeta">
-        <div class="wrow"><i class="fa-solid fa-location-dot"></i> ${p.estado_proyecto_geo}${p.municipio_proyecto?', '+p.municipio_proyecto:''}</div>
-        <div class="wrow"><i class="fa-solid fa-map-pin"></i> ${p.lugar_proyecto||'—'}</div>
-        <div class="wrow"><i class="fa-solid fa-calendar-plus"></i> Inicio: ${formatFecha(p.fecha_estimada_inicio)}</div>
-        <div class="wrow"><i class="fa-solid fa-calendar-check"></i> Fin: ${formatFecha(p.fecha_estimada_fin)}</div>
-      </div>
-      <div class="wfooter">
-        <div class="wactions">
-          <a class="wact edit" href="EditarProyecto.html?id=${p.id_proyecto}"><i class="fa-solid fa-pen"></i> Editar</a>
-          <a class="wact del" href="EliminarProyecto.html?id=${p.id_proyecto}"><i class="fa-solid fa-trash"></i> Eliminar</a>
-        </div>
-        <div class="stars-mini">${estrellas(p.calificacion_proyecto)}</div>
-      </div>
-      <div class="status-badge ${sc}">${sl}</div>
-    </div>`;
+  const API_BASE    = 'http://localhost:8080/api/v1';
+  const STORAGE_KEY = 'indecsa_proyecto_editar';
+
+  const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
+  const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
+
+  const estatusClase = {
+    PLANEACION:'e-planeacion', EN_CURSO:'e-en-curso', PAUSADO:'e-pausado',
+    COMPLETADO:'e-completado', CANCELADO:'e-cancelado'
+  };
+  const estatusLabel = {
+    PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado',
+    COMPLETADO:'Completado', CANCELADO:'Cancelado'
+  };
+  const ubicLabel = { CDMX:'CDMX', HIDALGO:'Hidalgo', PUEBLA:'Puebla' };
+
+  let todos = [];
+  let pendingEstatusId = null, pendingEstatusNombre = '';
+  let pendingElimId = null, pendingElimNombre = '', codigoElim = '';
+
+  function fmtFecha(f) { if (!f) return '—'; const [y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
+  function estrellas(n) { return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">★</div>`).join(''); }
+
+  /* ════ CARGAR ════ */
+  async function cargar() {
+    try {
+      const res = await fetch(`${API_BASE}/proyectos`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      todos = await res.json();
+      filtrar();
+    } catch(e) {
+      document.getElementById('cardsGrid').innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <p>No se pudo conectar con el servidor.</p>
+          <button class="retry-btn" onclick="cargar()"><i class="fa-solid fa-rotate-right"></i> Reintentar</button>
+        </div>`;
+      document.getElementById('resultsLabel').textContent = 'Error al cargar datos';
+    }
   }
-  function filtrar(){
-    const estatus = document.getElementById('filtroEstatus').value;
-    const estado  = document.getElementById('filtroEstado').value;
-    const f = proyectos.filter(p => (!estatus||p.estatus_proyecto===estatus)&&(!estado||p.estado_proyecto_geo===estado));
-    const grid=document.getElementById('cardsGrid'); const lbl=document.getElementById('resultsLabel');
-    if(!f.length){ grid.innerHTML=`<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No se encontraron proyectos.</p></div>`; lbl.innerHTML='Sin resultados'; }
-    else{ grid.innerHTML=f.map(p=>renderCard(p)).join(''); lbl.innerHTML=`<strong>${f.length}</strong> proyecto${f.length!==1?'s':''} encontrado${f.length!==1?'s':''}`; }
+
+  /* ════ FILTRAR ════ */
+  function filtrar() {
+    const q    = document.getElementById('busqueda').value.toLowerCase();
+    const est  = document.getElementById('filtroEstatus').value;
+    const ubic = document.getElementById('filtroUbic').value;
+
+    const f = todos.filter(p =>
+      (!q    || (p.nombreProyecto||'').toLowerCase().includes(q)) &&
+      (!est  || p.estatusProyecto === est) &&
+      (!ubic || p.estadoProyectoGeo === ubic)
+    );
+
+    const grid = document.getElementById('cardsGrid');
+    const lbl  = document.getElementById('resultsLabel');
+    if (!f.length) {
+      grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-diagram-project"></i><p>No se encontraron proyectos con los filtros seleccionados.</p></div>`;
+      lbl.innerHTML = 'Sin resultados';
+    } else {
+      grid.innerHTML = f.map((p,i)=>renderCard(p,i)).join('');
+      lbl.innerHTML = `<strong>${f.length}</strong> proyecto${f.length!==1?'s':''} encontrado${f.length!==1?'s':''}`;
+    }
   }
-  let lastScroll=0; const scrollBtn=document.getElementById('scrollTop');
-  window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
-  function cerrarSesion(){ window.location.href='../../index.html'; }
-  filtrar();
+
+  /* ════ RENDER ════ */
+  function renderCard(p, idx) {
+    const ic  = iconColors[idx % iconColors.length];
+    const ico = iconSet[idx % iconSet.length];
+    const ec  = estatusClase[p.estatusProyecto] || '';
+    const el  = estatusLabel[p.estatusProyecto] || p.estatusProyecto;
+    const ub  = ubicLabel[p.estadoProyectoGeo] || p.estadoProyectoGeo || '—';
+    const desc = (p.descripcionProyecto||'').length > 80
+      ? p.descripcionProyecto.substring(0,80)+'…' : (p.descripcionProyecto||'—');
+
+    return `
+      <div class="proj-card">
+        <div class="pcard-head">
+          <div class="pcard-icon ${ic}"><i class="fa-solid ${ico}" style="color:inherit;font-size:16px"></i></div>
+          <div>
+            <div class="pcard-name">${p.nombreProyecto}</div>
+            <div class="pcard-type">${p.tipoProyecto||'Sin tipo'}</div>
+          </div>
+        </div>
+        <div class="pmeta">
+          <div class="prow"><i class="fa-solid fa-location-dot"></i>${ub}${p.municipioProyecto ? ' · '+p.municipioProyecto : ''}</div>
+          <div class="prow"><i class="fa-solid fa-map-pin"></i>${p.lugarProyecto||'—'}</div>
+          <div class="prow"><i class="fa-solid fa-calendar-day"></i>Inicio: ${fmtFecha(p.fechaEstimadaInicio)}</div>
+          <div class="prow"><i class="fa-solid fa-calendar-check"></i>Fin: ${fmtFecha(p.fechaEstimadaFin)}</div>
+        </div>
+        ${p.descripcionProyecto ? `<div class="pdesc">${desc}</div>` : ''}
+        <div class="pcard-foot">
+          <div class="wactions">
+            <button class="wact edit" onclick="irAEditar(${p.idProyecto})"><i class="fa-solid fa-pen"></i> Editar</button>
+            <button class="wact estatus" onclick="abrirModalEstatus(${p.idProyecto},'${(p.nombreProyecto||'').replace(/'/g,"\\'")}','${p.estatusProyecto}')"><i class="fa-solid fa-rotate"></i> Estatus</button>
+            <button class="wact elim" onclick="abrirModalElim(${p.idProyecto},'${(p.nombreProyecto||'').replace(/'/g,"\\'")}')"><i class="fa-solid fa-trash"></i> Eliminar</button>
+          </div>
+          <div class="stars-mini">${estrellas(p.calificacionProyecto)}</div>
+        </div>
+        <div class="estatus-badge ${ec}">${el}</div>
+      </div>`;
+  }
+
+  /* ════ IR A EDITAR ════ */
+  function irAEditar(id) {
+    const p = todos.find(x => x.idProyecto === id);
+    if (!p) return;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+    window.location.href = 'EditarProyecto.html';
+  }
+
+  /* ════ MODAL ESTATUS ════ */
+  function abrirModalEstatus(id, nombre, estatusActual) {
+    pendingEstatusId = id; pendingEstatusNombre = nombre;
+    document.getElementById('estatusNombre').textContent = nombre;
+    const radio = document.querySelector(`input[name="nuevoEstatus"][value="${estatusActual}"]`);
+    if (radio) radio.checked = true;
+    document.getElementById('modalEstatus').classList.add('open');
+  }
+  function cerrarModalEstatus() { document.getElementById('modalEstatus').classList.remove('open'); pendingEstatusId = null; }
+
+  async function confirmarEstatus() {
+    if (!pendingEstatusId) return;
+    const radio = document.querySelector('input[name="nuevoEstatus"]:checked');
+    if (!radio) return;
+    const btn = document.getElementById('btnConfirmEstatus');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Aplicando…';
+    try {
+      const res = await fetch(`${API_BASE}/proyectos/${pendingEstatusId}/estatus?estatus=${radio.value}`, { method:'PATCH' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const idx = todos.findIndex(p => p.idProyecto === pendingEstatusId);
+      if (idx !== -1) todos[idx].estatusProyecto = radio.value;
+      cerrarModalEstatus(); filtrar();
+      showToast(`Estatus actualizado correctamente`, true);
+    } catch(e) {
+      showToast('Error al actualizar el estatus', false);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Aplicar';
+    }
+  }
+
+  /* ════ MODAL ELIMINAR ════ */
+  function abrirModalElim(id, nombre) {
+    pendingElimId = id; pendingElimNombre = nombre;
+    codigoElim = String(Math.floor(Math.random() * 900) + 100);
+    document.getElementById('elimNombre').textContent = nombre;
+    document.getElementById('cd0').textContent = codigoElim[0];
+    document.getElementById('cd1').textContent = codigoElim[1];
+    document.getElementById('cd2').textContent = codigoElim[2];
+    const inp = document.getElementById('elimCodeInput');
+    inp.value = ''; inp.classList.remove('wrong','right');
+    document.getElementById('btnConfirmElim').disabled = true;
+    document.getElementById('modalEliminar').classList.add('open');
+    setTimeout(() => inp.focus(), 300);
+  }
+  function cerrarModalElim() { document.getElementById('modalEliminar').classList.remove('open'); pendingElimId = null; }
+
+  function validarCodigo() {
+    const inp = document.getElementById('elimCodeInput');
+    const val = inp.value.replace(/\D/g,'');
+    inp.value = val; inp.classList.remove('wrong','right');
+    const btn = document.getElementById('btnConfirmElim');
+    if (val.length === 3) {
+      if (val === codigoElim) { inp.classList.add('right'); btn.disabled = false; }
+      else { inp.classList.add('wrong'); btn.disabled = true; }
+    } else { btn.disabled = true; }
+  }
+
+  async function confirmarEliminar() {
+    if (!pendingElimId) return;
+    const btn = document.getElementById('btnConfirmElim');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
+    try {
+      const res = await fetch(`${API_BASE}/proyectos/${pendingElimId}`, { method:'DELETE' });
+      if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
+      todos = todos.filter(p => p.idProyecto !== pendingElimId);
+      cerrarModalElim(); filtrar();
+      showToast(`${pendingElimNombre} eliminado correctamente`, true);
+    } catch(e) {
+      showToast('Error al eliminar el proyecto', false);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-trash"></i> Confirmar eliminación';
+    }
+  }
+
+  /* helpers */
+  function showToast(msg, ok) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
+    const icon = document.getElementById('toastIcon');
+    icon.style.color = ok ? 'var(--success)' : 'var(--danger)';
+    icon.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
+  }
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+
+  document.getElementById('modalEstatus').addEventListener('click', e=>{ if(e.target===e.currentTarget) cerrarModalEstatus(); });
+  document.getElementById('modalEliminar').addEventListener('click', e=>{ if(e.target===e.currentTarget) cerrarModalElim(); });
+
+  let lastScroll=0;
+  const scrollBtn=document.getElementById('scrollTop');
+  window.addEventListener('scroll',()=>{
+    const c=window.scrollY;
+    document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80);
+    lastScroll=c<=0?0:c;
+    scrollBtn.classList.toggle('visible',c>200);
+  });
+
+  cargar();
 </script>
 </body>
 </html>

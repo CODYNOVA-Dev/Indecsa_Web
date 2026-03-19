@@ -29,7 +29,7 @@
       min-height: 100vh;
       display: flex; flex-direction: column;
       color: var(--white);
-      padding-top: 120px; /* header(72) + nav(48) */
+      padding-top: 120px;
     }
 
     /* ── HEADER ── */
@@ -72,7 +72,6 @@
     }
     .nav-logout:hover { background: rgba(226,75,74,0.1); }
 
-    /* ── SMART NAV ── */
     .nav-hidden header { transform: translateY(-72px); }
     .nav-hidden nav    { transform: translateY(-72px); }
 
@@ -96,7 +95,6 @@
       flex: 1; padding: 2.5rem 2rem;
       background: radial-gradient(ellipse at 70% 30%, #1a2e4a 0%, var(--navy) 70%);
     }
-
     .page-wrap { max-width: 960px; margin: 0 auto; }
 
     /* ── PAGE HEADER ── */
@@ -135,14 +133,11 @@
       border: none; cursor: pointer;
       box-shadow: 0 4px 16px rgba(133,183,235,0.25);
       transition: transform .2s, box-shadow .2s;
-      text-decoration: none;
-      white-space: nowrap;
+      text-decoration: none; white-space: nowrap;
     }
     .btn-add:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(133,183,235,0.35); }
-    .btn-add i { font-size: 13px; }
 
     .toolbar-right { margin-left: auto; display: flex; align-items: flex-end; gap: 10px; }
-
     .filter-group { display: flex; flex-direction: column; gap: 5px; }
     .filter-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
     .filter-select {
@@ -153,13 +148,30 @@
       font-size: 13px; padding: 9px 34px 9px 13px;
       appearance: none; cursor: pointer;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: calc(100% - 12px) center;
-      transition: border-color .2s;
-      min-width: 160px;
+      background-repeat: no-repeat; background-position: calc(100% - 12px) center;
+      transition: border-color .2s; min-width: 160px;
     }
     .filter-select:focus { outline: none; border-color: var(--gold); }
     .filter-select option { background: #152D50; }
+
+    /* ── BÚSQUEDA ── */
+    .search-wrap {
+      position: relative; flex: 1; min-width: 200px;
+    }
+    .search-wrap i {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 13px; color: var(--muted); pointer-events: none;
+    }
+    .search-input {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,169,110,0.2);
+      border-radius: 9px; color: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      padding: 9px 13px 9px 36px; outline: none;
+      transition: border-color .2s;
+    }
+    .search-input::placeholder { color: rgba(138,155,181,0.5); }
+    .search-input:focus { border-color: var(--gold); }
 
     /* ── RESULTADOS ── */
     .results-info {
@@ -168,30 +180,45 @@
       display: flex; align-items: center; gap: 6px;
     }
     .results-info strong { color: var(--white); }
-    .results-info .no-results { color: var(--danger); }
 
-    /* ── GRID DE TARJETAS ── */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      animation: fadeUp .4s ease both;
+    /* ── SKELETON LOADER ── */
+    .skeleton-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(200,169,110,0.08);
+      border-radius: 13px; padding: 14px 16px;
+      display: grid; grid-template-columns: 42px 1fr;
+      gap: 12px;
+    }
+    .sk { background: rgba(255,255,255,0.05); border-radius: 6px; animation: pulse 1.5s ease infinite; }
+    .sk-circle { width: 38px; height: 38px; border-radius: 50%; }
+    .sk-line { height: 10px; margin-bottom: 8px; }
+    .sk-w80 { width: 80%; }
+    .sk-w60 { width: 60%; }
+    .sk-w40 { width: 40%; }
+    @keyframes pulse {
+      0%, 100% { opacity: .5; }
+      50%       { opacity: 1; }
     }
 
-    /* ── TARJETA TRABAJADOR ── */
+    /* ── GRID ── */
+    .cards-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; animation: fadeUp .4s ease both;
+    }
+
+    /* ── TARJETA ── */
     .worker-card {
       background: var(--navy-mid);
       border: 1px solid rgba(200,169,110,0.15);
       border-radius: 13px; padding: 14px 16px;
       display: grid; grid-template-columns: 42px 1fr;
       gap: 12px; align-items: start;
-      position: relative; cursor: pointer;
+      position: relative;
       transition: border-color .2s, background .2s;
       animation: fadeUp .4s ease both;
     }
     .worker-card:hover { border-color: rgba(200,169,110,0.4); background: #1a3560; }
 
-    /* Avatar con iniciales */
     .avatar {
       width: 38px; height: 38px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
@@ -204,8 +231,7 @@
     .av-coral  { background: rgba(240,149,149,0.12); color: #F09595; border: 1px solid rgba(240,149,149,0.3); }
     .av-teal   { background: rgba(93,202,165,0.1);  color: #5DCAA5; border: 1px solid rgba(93,202,165,0.25); }
 
-    .wname { font-size: 13px; font-weight: 500; color: var(--white); margin-bottom: 6px; padding-right: 68px; }
-
+    .wname { font-size: 13px; font-weight: 500; color: var(--white); margin-bottom: 6px; padding-right: 74px; }
     .wmeta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
     .wrow { font-size: 11.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
     .wrow i { font-size: 10px; color: var(--gold); width: 12px; flex-shrink: 0; }
@@ -219,19 +245,21 @@
       font-size: 11px; padding: 4px 11px; border-radius: 7px;
       cursor: pointer; border: 1px solid; text-decoration: none;
       display: flex; align-items: center; gap: 5px;
-      transition: background .15s;
+      transition: background .15s; background: none;
+      font-family: 'DM Sans', sans-serif;
     }
     .wact i { font-size: 10px; }
-    .wact.edit  { color: var(--warning); border-color: rgba(250,199,117,0.25); background: rgba(250,199,117,0.06); }
-    .wact.edit:hover  { background: rgba(250,199,117,0.12); }
-    .wact.del   { color: var(--danger);  border-color: rgba(240,149,149,0.25); background: rgba(240,149,149,0.06); }
-    .wact.del:hover   { background: rgba(240,149,149,0.12); }
+    .wact.edit { color: var(--warning); border-color: rgba(250,199,117,0.25); background: rgba(250,199,117,0.06); }
+    .wact.edit:hover { background: rgba(250,199,117,0.12); }
+    .wact.del  { color: var(--danger);  border-color: rgba(240,149,149,0.25); background: rgba(240,149,149,0.06); }
+    .wact.del:hover  { background: rgba(240,149,149,0.12); }
+    .wact.elim { color: var(--muted); border-color: rgba(138,155,181,0.2); background: rgba(138,155,181,0.05); }
+    .wact.elim:hover { background: rgba(138,155,181,0.12); color: var(--white); }
 
     .stars-mini { display: flex; gap: 1px; }
     .st { font-size: 11px; color: rgba(200,169,110,0.2); }
     .st.on { color: var(--gold); }
 
-    /* Badge de estado — esquina superior derecha */
     .status-badge {
       position: absolute; top: 13px; right: 14px;
       font-size: 9px; font-weight: 600;
@@ -243,14 +271,126 @@
     .s-vacaciones { background: rgba(250,199,117,0.12); color: #FAC775; border: 1px solid rgba(250,199,117,0.3); }
     .s-baja       { background: rgba(240,149,149,0.12); color: #F09595; border: 1px solid rgba(240,149,149,0.3); }
 
-    /* ── EMPTY STATE ── */
+    /* ── ERROR / EMPTY ── */
     .empty-state {
-      grid-column: 1 / -1;
-      text-align: center; padding: 3rem 1rem;
-      color: var(--muted);
+      grid-column: 1 / -1; text-align: center;
+      padding: 3rem 1rem; color: var(--muted);
     }
     .empty-state i { font-size: 36px; color: rgba(200,169,110,0.2); margin-bottom: 1rem; display: block; }
     .empty-state p { font-size: 14px; }
+    .empty-state .retry-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      margin-top: 1rem; padding: 9px 20px; border-radius: 9px;
+      background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.2);
+      color: var(--gold); font-family: 'DM Sans', sans-serif;
+      font-size: 13px; cursor: pointer; transition: background .2s;
+    }
+    .empty-state .retry-btn:hover { background: rgba(200,169,110,0.18); }
+
+    /* ── MODAL CONFIRMACIÓN BAJA ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--navy-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem; max-width: 400px; width: 90%;
+      transform: translateY(20px); transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-icon { font-size: 32px; color: var(--danger); margin-bottom: 1rem; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: .5rem; }
+    .modal-body { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+    .modal-body strong { color: var(--white); }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .modal-btn {
+      padding: 9px 20px; border-radius: 9px; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 7px; transition: all .2s;
+    }
+    .modal-btn.cancel { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .modal-btn.cancel:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+    .modal-btn.confirm {
+      background: linear-gradient(135deg, var(--danger) 0%, #c44f4f 100%);
+      color: var(--white);
+    }
+    .modal-btn.confirm:hover { transform: translateY(-1px); }
+    .modal-btn.confirm:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* ── MODAL ELIMINAR ── */
+    #modalEliminar .modal { border-color: rgba(200,169,110,0.25); max-width: 420px; }
+    #modalEliminar .modal-icon { color: var(--muted); font-size: 26px; }
+    .code-display {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin: 1.2rem 0 1rem;
+    }
+    .code-digit {
+      width: 52px; height: 64px;
+      background: rgba(200,169,110,0.07);
+      border: 1.5px solid rgba(200,169,110,0.3);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 30px; font-weight: 700; color: var(--gold);
+      animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .code-digit:nth-child(2) { animation-delay: .07s; }
+    .code-digit:nth-child(3) { animation-delay: .14s; }
+    @keyframes popIn {
+      from { opacity:0; transform: scale(.5) translateY(10px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .code-input-wrap {
+      display: flex; align-items: center; gap: 10px; margin-bottom: .4rem;
+    }
+    .code-input {
+      flex: 1; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 9px;
+      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 18px;
+      font-weight: 600; letter-spacing: 6px; text-align: center;
+      padding: 10px 14px; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .code-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,169,110,0.08); }
+    .code-input.wrong {
+      border-color: var(--danger) !important;
+      animation: shake .35s ease;
+    }
+    .code-input.right { border-color: var(--success) !important; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+    .code-hint { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 1.2rem; }
+    .modal-btn.elim {
+      background: rgba(200,169,110,0.12);
+      border: 1px solid rgba(200,169,110,0.3);
+      color: var(--gold); font-weight: 600;
+    }
+    .modal-btn.elim:hover:not(:disabled) { background: rgba(200,169,110,0.2); }
+    .modal-btn.elim:disabled { opacity: .3; cursor: not-allowed; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy-mid); border: 1px solid var(--success);
+      border-radius: 12px; padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; color: var(--white);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      opacity: 0; transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+      z-index: 999; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast i { font-size: 16px; }
 
     /* ── FOOTER ── */
     footer {
@@ -271,7 +411,6 @@
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     @media (max-width: 700px) {
       .cards-grid { grid-template-columns: 1fr; }
       .toolbar { flex-direction: column; align-items: stretch; }
@@ -282,33 +421,22 @@
 </head>
 <body>
 
-<!-- ══════════ HEADER ══════════ -->
 <header>
   <img src="../../img/logo.png" height="52" alt="INDECSA" />
   <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
 </header>
 
-<!-- ══════════ NAVBAR ══════════ -->
 <nav>
-  <a class="nav-link" href="../Paginaprincipal.html">
-    <i class="fa-solid fa-house"></i> Inicio
-  </a>
-  <a class="nav-link active" href="AltaTrabajador.html">
-    <i class="fa-solid fa-user"></i> Trabajadores
-  </a>
-  <a class="nav-link" href="../Contratistas/index.html">
-    <i class="fa-solid fa-people-group"></i> Contratistas
-  </a>
-  <a class="nav-link" href="../Proyectos/index.html">
-    <i class="fa-solid fa-diagram-project"></i> Proyectos
-  </a>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link active" href="AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratistas/index.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyectos/index.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()">
     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
   </button>
 </nav>
 
-<!-- ══════════ MAIN ══════════ -->
 <main>
   <div class="page-wrap">
 
@@ -333,10 +461,15 @@
         <i class="fa-solid fa-user-plus"></i> Agregar trabajador
       </a>
       <div class="toolbar-right">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input class="search-input" type="text" id="busqueda"
+                 placeholder="Buscar por nombre…" oninput="filtrar()" />
+        </div>
         <div class="filter-group">
           <div class="filter-label">Estado</div>
           <select class="filter-select" id="filtroEstado" onchange="filtrar()">
-            <option value="">Todos los estados</option>
+            <option value="">Todos</option>
             <option value="ACTIVO">Activo</option>
             <option value="INACTIVO">Inactivo</option>
             <option value="VACACIONES">Vacaciones</option>
@@ -346,155 +479,170 @@
         <div class="filter-group">
           <div class="filter-label">Especialidad</div>
           <select class="filter-select" id="filtroEspecialidad" onchange="filtrar()">
-            <option value="">Todas las especialidades</option>
+            <option value="">Todas</option>
           </select>
         </div>
       </div>
     </div>
 
-    <!-- ── RESULTADO ── -->
     <div class="results-info">
       <i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i>
       <span id="resultsLabel">Cargando trabajadores…</span>
     </div>
 
-    <!-- ── GRID ── -->
-    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="cards-grid" id="cardsGrid">
+      <!-- skeletons -->
+      ${[...Array(4)].map(() => `
+      <div class="skeleton-card">
+        <div class="sk sk-circle"></div>
+        <div>
+          <div class="sk sk-line sk-w80"></div>
+          <div class="sk sk-line sk-w60"></div>
+          <div class="sk sk-line sk-w40"></div>
+        </div>
+      </div>`).join('')}
+    </div>
 
   </div>
 </main>
 
-<!-- ══════════ FOOTER ══════════ -->
 <footer>
   <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
   <div class="footer-contact">
-    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
+    <a href="/cdn-cgi/l/email-protection#8fece0e1fbeeecfbe0cfecf6ebeafceea1ece0e2"><i class="fa-solid fa-envelope"></i><span class="__cf_email__" data-cfemail="bcdfd3d2c8dddfc8d3fcdfc5d8d9cfdd92dfd3d1">[email&#160;protected]</span></a>
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
 
-<!-- ══════════ SCROLL TOP ══════════ -->
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <i class="fa-solid fa-chevron-up"></i>
 </button>
 
-<script>
-  /* ════════════════════════════════════════════
-     DATOS DE TRABAJADORES
-     Reemplaza este array con tu fetch a la API:
-     fetch('/api/trabajadores')
-       .then(r => r.json())
-       .then(data => { trabajadores = data; init(); })
-  ════════════════════════════════════════════ */
-  const trabajadores = [
-    {
-      id_trabajador: 1, nombre_trabajador: 'Juan García López',
-      especialidad_trabajador: 'Soldador', telefono_trabajador: '+52 555 123 4567',
-      correo_trabajador: 'juan.garcia@indecsa.com', nss_trabajador: '12345678901',
-      fecha_ingreso: '2022-03-15', estado_trabajador: 'ACTIVO', calificacion_trabajador: 4
-    },
-    {
-      id_trabajador: 2, nombre_trabajador: 'María López Sánchez',
-      especialidad_trabajador: 'Electricista', telefono_trabajador: '+52 555 987 6543',
-      correo_trabajador: 'm.lopez@indecsa.com', nss_trabajador: '98765432109',
-      fecha_ingreso: '2021-07-01', estado_trabajador: 'VACACIONES', calificacion_trabajador: 5
-    },
-    {
-      id_trabajador: 3, nombre_trabajador: 'Carlos Ramírez Torres',
-      especialidad_trabajador: 'Albañil', telefono_trabajador: '+52 555 444 3322',
-      correo_trabajador: 'c.ramirez@indecsa.com', nss_trabajador: '11223344556',
-      fecha_ingreso: '2023-11-20', estado_trabajador: 'INACTIVO', calificacion_trabajador: 3
-    },
-    {
-      id_trabajador: 4, nombre_trabajador: 'Ana Pérez Vega',
-      especialidad_trabajador: 'Plomero', telefono_trabajador: '+52 555 001 2233',
-      correo_trabajador: 'a.perez@indecsa.com', nss_trabajador: '66778899001',
-      fecha_ingreso: '2020-02-05', estado_trabajador: 'BAJA', calificacion_trabajador: 2
-    },
-    {
-      id_trabajador: 5, nombre_trabajador: 'Luis Hernández Mora',
-      especialidad_trabajador: 'Soldador', telefono_trabajador: '+52 555 321 0987',
-      correo_trabajador: 'l.hernandez@indecsa.com', nss_trabajador: '55443322110',
-      fecha_ingreso: '2019-06-10', estado_trabajador: 'ACTIVO', calificacion_trabajador: 5
-    },
-    {
-      id_trabajador: 6, nombre_trabajador: 'Rosa Martínez Cruz',
-      especialidad_trabajador: 'Electricista', telefono_trabajador: '+52 555 765 4321',
-      correo_trabajador: 'r.martinez@indecsa.com', nss_trabajador: '99887766554',
-      fecha_ingreso: '2022-09-01', estado_trabajador: 'ACTIVO', calificacion_trabajador: 4
-    }
-  ];
+<!-- ── MODAL BAJA ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="modal-title">¿Dar de baja al trabajador?</div>
+    <div class="modal-body">
+      Estás a punto de cambiar el estado de <strong id="modalNombre">—</strong> a
+      <strong style="color:var(--danger)">BAJA</strong>. Esta acción puede revertirse
+      desde la pantalla de edición.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="modal-btn confirm" id="btnConfirmBaja" onclick="confirmarBaja()">
+        <i class="fa-solid fa-user-slash"></i> Confirmar baja
+      </button>
+    </div>
+  </div>
+</div>
 
+<!-- ── MODAL ELIMINAR (con código de confirmación) ── -->
+<div class="modal-overlay" id="modalEliminar">
+  <div class="modal">
+    <div class="modal-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+    <div class="modal-title">Eliminar registro</div>
+    <div class="modal-body">
+      Se eliminará permanentemente el registro de <strong id="elimNombre">—</strong>
+      del sistema. Ingresa el código para confirmar.
+    </div>
+
+    <!-- Código visual -->
+    <div class="code-display">
+      <div class="code-digit" id="cd0">?</div>
+      <div class="code-digit" id="cd1">?</div>
+      <div class="code-digit" id="cd2">?</div>
+    </div>
+
+    <!-- Input del usuario -->
+    <div class="code-input-wrap">
+      <input class="code-input" type="text" id="elimCodeInput"
+             maxlength="3" placeholder="···"
+             oninput="validarCodigoElim()" autocomplete="off" />
+    </div>
+    <div class="code-hint">Escribe los 3 dígitos exactamente como aparecen arriba</div>
+
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="cerrarModalEliminar()">Cancelar</button>
+      <button class="modal-btn elim" id="btnConfirmElim" disabled onclick="confirmarEliminar()">
+        <i class="fa-solid fa-trash"></i> Confirmar eliminación
+      </button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">
+  <i id="toastIcon" class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg">OK</span>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* ══════════════════════════════════════
+     CONFIG – ajusta si tu backend usa otro
+     puerto o dominio
+  ══════════════════════════════════════ */
+  const API_BASE = 'http://localhost:8080/api/v1';
+
+  /* ────────────────────── helpers visuales ── */
   const avatarColors = ['av-blue','av-green','av-amber','av-purple','av-coral','av-teal'];
   const estadoClase  = { ACTIVO:'s-activo', INACTIVO:'s-inactivo', VACACIONES:'s-vacaciones', BAJA:'s-baja' };
   const estadoLabel  = { ACTIVO:'Activo', INACTIVO:'Inactivo', VACACIONES:'Vacaciones', BAJA:'Baja' };
 
-  function iniciales(nombre) {
-    const p = nombre.trim().split(' ');
+  function iniciales(n) {
+    const p = n.trim().split(' ');
     return (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase();
   }
-
   function estrellas(n) {
-    let h = '';
-    for (let i = 1; i <= 5; i++) h += `<div class="st${i <= n ? ' on' : ''}">★</div>`;
-    return h;
+    return [1,2,3,4,5].map(i => `<div class="st${i<=(n||0)?' on':''}">★</div>`).join('');
   }
-
-  function formatFecha(f) {
+  function fmtFecha(f) {
     if (!f) return '—';
-    const [y, m, d] = f.split('-');
+    const [y,m,d] = f.split('-');
     return `${d}/${m}/${y}`;
   }
 
-  function renderCard(t, idx) {
-    const av = avatarColors[idx % avatarColors.length];
-    const cl = estadoClase[t.estado_trabajador] || '';
-    const lb = estadoLabel[t.estado_trabajador] || t.estado_trabajador;
-    return `
-      <div class="worker-card">
-        <div class="avatar ${av}">${iniciales(t.nombre_trabajador)}</div>
-        <div>
-          <div class="wname">${t.nombre_trabajador}</div>
-          <div class="wmeta">
-            <div class="wrow"><i class="fa-solid fa-helmet-safety"></i> ${t.especialidad_trabajador}</div>
-            <div class="wrow"><i class="fa-solid fa-phone"></i> ${t.telefono_trabajador}</div>
-            <div class="wrow"><i class="fa-solid fa-envelope"></i> ${t.correo_trabajador}</div>
-            <div class="wrow"><i class="fa-solid fa-calendar-day"></i> Alta: ${formatFecha(t.fecha_ingreso)}</div>
-            <div class="wrow"><i class="fa-solid fa-id-badge"></i> NSS: ${t.nss_trabajador || '—'}</div>
-          </div>
-          <div class="wfooter">
-            <div class="wactions">
-              <a class="wact edit" href="EditarTrabajador.html?id=${t.id_trabajador}">
-                <i class="fa-solid fa-pen"></i> Editar
-              </a>
-              <a class="wact del" href="BajaTrabajador.html?id=${t.id_trabajador}">
-                <i class="fa-solid fa-user-slash"></i> Dar de baja
-              </a>
-            </div>
-            <div class="stars-mini">${estrellas(t.calificacion_trabajador || 0)}</div>
-          </div>
-        </div>
-        <div class="status-badge ${cl}">${lb}</div>
-      </div>`;
+  /* ────────────────────── estado global ── */
+  let todos   = [];   // todos los trabajadores cargados de la API
+  let pendingBajaId   = null;
+  let pendingBajaNombre = '';
+
+  /* ════════════════════════════════════════
+     1. CARGAR DESDE LA API
+  ════════════════════════════════════════ */
+  async function cargarTrabajadores() {
+    try {
+      const res = await fetch(`${API_BASE}/trabajadores`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      todos = await res.json();
+      poblarEspecialidades();
+      filtrar();
+    } catch (e) {
+      console.error(e);
+      document.getElementById('cardsGrid').innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <p>No se pudo conectar con el servidor.<br/>Verifica que el backend esté corriendo.</p>
+          <button class="retry-btn" onclick="cargarTrabajadores()">
+            <i class="fa-solid fa-rotate-right"></i> Reintentar
+          </button>
+        </div>`;
+      document.getElementById('resultsLabel').textContent = 'Error al cargar datos';
+    }
   }
 
-  function poblarEspecialidades() {
-    const sel = document.getElementById('filtroEspecialidad');
-    const esp = [...new Set(trabajadores.map(t => t.especialidad_trabajador))].sort();
-    esp.forEach(e => {
-      const o = document.createElement('option');
-      o.value = e; o.textContent = e;
-      sel.appendChild(o);
-    });
-  }
-
+  /* ════════════════════════════════════════
+     2. FILTRAR + RENDERIZAR
+  ════════════════════════════════════════ */
   function filtrar() {
+    const q      = document.getElementById('busqueda').value.toLowerCase();
     const estado = document.getElementById('filtroEstado').value;
     const esp    = document.getElementById('filtroEspecialidad').value;
-    const filtrados = trabajadores.filter(t =>
-      (!estado || t.estado_trabajador === estado) &&
-      (!esp    || t.especialidad_trabajador === esp)
+
+    const filtrados = todos.filter(t =>
+      (!q      || (t.nombreTrabajador || '').toLowerCase().includes(q)) &&
+      (!estado || t.estadoTrabajador === estado) &&
+      (!esp    || t.especialidadTrabajador === esp)
     );
+
     const grid = document.getElementById('cardsGrid');
     const lbl  = document.getElementById('resultsLabel');
 
@@ -504,28 +652,227 @@
           <i class="fa-solid fa-user-slash"></i>
           <p>No se encontraron trabajadores con los filtros seleccionados.</p>
         </div>`;
-      lbl.innerHTML = '<span class="no-results">Sin resultados</span>';
+      lbl.innerHTML = 'Sin resultados';
     } else {
       grid.innerHTML = filtrados.map((t, i) => renderCard(t, i)).join('');
       lbl.innerHTML = `<strong>${filtrados.length}</strong> trabajador${filtrados.length !== 1 ? 'es' : ''} encontrado${filtrados.length !== 1 ? 's' : ''}`;
     }
   }
 
+  /* ════════════════════════════════════════
+     3. RENDER TARJETA
+  ════════════════════════════════════════ */
+  function renderCard(t, idx) {
+    const av = avatarColors[idx % avatarColors.length];
+    const cl = estadoClase[t.estadoTrabajador] || '';
+    const lb = estadoLabel[t.estadoTrabajador]  || t.estadoTrabajador;
+    return `
+      <div class="worker-card">
+        <div class="avatar ${av}">${iniciales(t.nombreTrabajador || '?')}</div>
+        <div>
+          <div class="wname">${t.nombreTrabajador}</div>
+          <div class="wmeta">
+            <div class="wrow"><i class="fa-solid fa-helmet-safety"></i>${t.especialidadTrabajador || '—'}</div>
+            <div class="wrow"><i class="fa-solid fa-phone"></i>${t.telefonoTrabajador || '—'}</div>
+            <div class="wrow"><i class="fa-solid fa-envelope"></i>${t.correoTrabajador || '—'}</div>
+            <div class="wrow"><i class="fa-solid fa-calendar-day"></i>Alta: ${fmtFecha(t.fechaIngreso)}</div>
+            <div class="wrow"><i class="fa-solid fa-id-badge"></i>NSS: ${t.nssTrabajador || '—'}</div>
+          </div>
+          <div class="wfooter">
+            <div class="wactions">
+              <button class="wact edit" onclick="irAEditar(${t.idTrabajador})">
+                <i class="fa-solid fa-pen"></i> Editar
+              </button>
+              <button class="wact del" onclick="abrirModalBaja(${t.idTrabajador}, '${(t.nombreTrabajador||'').replace(/'/g,"\\'")}')">
+                <i class="fa-solid fa-user-slash"></i> Dar de baja
+              </button>
+              <button class="wact elim" onclick="abrirModalEliminar(${t.idTrabajador}, '${(t.nombreTrabajador||'').replace(/'/g,"\\'")}')">
+                <i class="fa-solid fa-trash"></i> Eliminar
+              </button>
+            </div>
+            <div class="stars-mini">${estrellas(t.calificacionTrabajador)}</div>
+          </div>
+        </div>
+        <div class="status-badge ${cl}">${lb}</div>
+      </div>`;
+  }
+
+  /* ════════════════════════════════════════
+     4. IR A EDITAR
+     Guarda el objeto completo en localStorage
+     para que EditTrabajador.html lo lea
+  ════════════════════════════════════════ */
+  function irAEditar(id) {
+    const trabajador = todos.find(t => t.idTrabajador === id);
+    if (!trabajador) return;
+    // Guardamos el objeto en localStorage con clave fija
+    localStorage.setItem('indecsa_trabajador_editar', JSON.stringify(trabajador));
+    window.location.href = 'EditTrabajador.html';
+  }
+
+  /* ════════════════════════════════════════
+     5. MODAL BAJA
+  ════════════════════════════════════════ */
+  function abrirModalBaja(id, nombre) {
+    pendingBajaId    = id;
+    pendingBajaNombre = nombre;
+    document.getElementById('modalNombre').textContent = nombre;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function cerrarModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    pendingBajaId = null;
+  }
+
+  async function confirmarBaja() {
+    if (!pendingBajaId) return;
+    const btn = document.getElementById('btnConfirmBaja');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando…';
+
+    try {
+      const res = await fetch(
+        `${API_BASE}/trabajadores/${pendingBajaId}/estado?estado=BAJA`,
+        { method: 'PATCH' }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      // Actualizar en el array local para no recargar toda la lista
+      const idx = todos.findIndex(t => t.idTrabajador === pendingBajaId);
+      if (idx !== -1) todos[idx].estadoTrabajador = 'BAJA';
+
+      cerrarModal();
+      filtrar();
+      showToast(`${pendingBajaNombre} dado de baja correctamente`, true);
+    } catch (e) {
+      console.error(e);
+      showToast('Error al procesar la baja', false);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-user-slash"></i> Confirmar baja';
+    }
+  }
+
+  /* ════════════════════════════════════════
+     6. MODAL ELIMINAR — con código aleatorio
+  ════════════════════════════════════════ */
+  let pendingElimId     = null;
+  let pendingElimNombre = '';
+  let codigoElim        = '';
+
+  function abrirModalEliminar(id, nombre) {
+    pendingElimId     = id;
+    pendingElimNombre = nombre;
+    // Código aleatorio de 3 dígitos (100-999)
+    codigoElim = String(Math.floor(Math.random() * 900) + 100);
+    document.getElementById('elimNombre').textContent = nombre;
+    document.getElementById('cd0').textContent = codigoElim[0];
+    document.getElementById('cd1').textContent = codigoElim[1];
+    document.getElementById('cd2').textContent = codigoElim[2];
+    const inp = document.getElementById('elimCodeInput');
+    inp.value = '';
+    inp.classList.remove('wrong','right');
+    document.getElementById('btnConfirmElim').disabled = true;
+    document.getElementById('modalEliminar').classList.add('open');
+    setTimeout(() => inp.focus(), 300);
+  }
+
+  function cerrarModalEliminar() {
+    document.getElementById('modalEliminar').classList.remove('open');
+    pendingElimId = null;
+  }
+
+  function validarCodigoElim() {
+    const inp = document.getElementById('elimCodeInput');
+    const val = inp.value.replace(/\D/g,'');   // solo dígitos
+    inp.value = val;
+    inp.classList.remove('wrong','right');
+    const btn = document.getElementById('btnConfirmElim');
+    if (val.length === 3) {
+      if (val === codigoElim) {
+        inp.classList.add('right');
+        btn.disabled = false;
+      } else {
+        inp.classList.add('wrong');
+        btn.disabled = true;
+      }
+    } else {
+      btn.disabled = true;
+    }
+  }
+
+  async function confirmarEliminar() {
+    if (!pendingElimId) return;
+    const btn = document.getElementById('btnConfirmElim');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
+
+    try {
+      const res = await fetch(`${API_BASE}/trabajadores/${pendingElimId}`, { method: 'DELETE' });
+      if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
+
+      // Quitar del array local
+      todos = todos.filter(t => t.idTrabajador !== pendingElimId);
+      poblarEspecialidades();
+      cerrarModalEliminar();
+      filtrar();
+      showToast(`${pendingElimNombre} eliminado permanentemente`, false);
+    } catch (e) {
+      console.error(e);
+      showToast('Error al eliminar el trabajador', false);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-trash"></i> Confirmar eliminación';
+    }
+  }
+
+  /* ════════════════════════════════════════
+     7. HELPERS
+  ════════════════════════════════════════ */
+  function poblarEspecialidades() {
+    const sel = document.getElementById('filtroEspecialidad');
+    // limpia opciones previas menos la primera
+    while (sel.options.length > 1) sel.remove(1);
+    const esp = [...new Set(todos.map(t => t.especialidadTrabajador).filter(Boolean))].sort();
+    esp.forEach(e => {
+      const o = document.createElement('option');
+      o.value = e; o.textContent = e; sel.appendChild(o);
+    });
+  }
+
+  function showToast(msg, ok) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
+    const icon = document.getElementById('toastIcon');
+    icon.style.color   = ok ? 'var(--success)' : 'var(--danger)';
+    icon.className     = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+
   /* ── Smart navbar ── */
   let lastScroll = 0;
   const scrollBtn = document.getElementById('scrollTop');
   window.addEventListener('scroll', () => {
-    const cur = window.scrollY;
-    document.body.classList.toggle('nav-hidden', cur > lastScroll && cur > 80);
-    lastScroll = cur <= 0 ? 0 : cur;
-    scrollBtn.classList.toggle('visible', cur > 200);
+    const c = window.scrollY;
+    document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
+    lastScroll = c <= 0 ? 0 : c;
+    scrollBtn.classList.toggle('visible', c > 200);
   });
 
-  function cerrarSesion() { window.location.href = '../../index.html'; }
+  /* Cerrar modales al click fuera */
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) cerrarModal();
+  });
+  document.getElementById('modalEliminar').addEventListener('click', e => {
+    if (e.target === e.currentTarget) cerrarModalEliminar();
+  });
 
-  /* ── Init ── */
-  poblarEspecialidades();
-  filtrar();
+  /* ── INIT ── */
+  cargarTrabajadores();
 </script>
 
 </body>
