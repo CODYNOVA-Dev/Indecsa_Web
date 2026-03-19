@@ -22,6 +22,7 @@
       --danger:#F09595;
       --warning:#FAC775;
       --purple:#AFA9EC;
+      --blue:#6FA8FF; /* 🔵 nuevo */
       --border:rgba(200,169,110,0.18);
     }
 
@@ -178,6 +179,13 @@
       border:1px solid rgba(240,149,149,0.3);
     }
 
+    /* 🔵 NUEVO: planeación */
+    .s-planeacion{
+      background:rgba(111,168,255,0.12);
+      color:#6FA8FF;
+      border:1px solid rgba(111,168,255,0.3);
+    }
+
     .workers-count{
       font-size:12px;
       color:var(--muted);
@@ -314,74 +322,56 @@
 
 <script>
 
-  const proyectos=[
-
-    {
-      id:1,
-      nombre:"Planta Industrial Norte",
-      estado:"Hidalgo",
-      municipio:"Tizayuca",
-      estatus:"EN_CURSO",
-      fecha:"12 Marzo 2026",
-      trabajadores:[
-        {nombre:"Juan García",especialidad:"Soldador"},
-        {nombre:"Pedro López",especialidad:"Electricista"}
-      ],
-      contratista:"Constructora Atlas"
-    }
-
-  ];
+  const API = "http://localhost:8080/api/v1/proyectos";
 
   function obtenerID(){
-    const params=new URLSearchParams(window.location.search);
-    return parseInt(params.get("id"));
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
   }
 
-  function cargarProyecto(){
+  function formatearFecha(fecha){
+    if(!fecha) return "N/A";
+    return new Date(fecha).toLocaleDateString("es-MX", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
 
-    const id=obtenerID();
+  async function cargarProyecto(){
 
-    const proyecto=proyectos.find(p=>p.id===id);
+    const id = obtenerID();
 
-    if(!proyecto){
-      document.body.innerHTML="<h2 style='padding:40px'>Proyecto no encontrado</h2>";
-      return;
-    }
+    try{
 
-    document.getElementById("nombreProyecto").innerText=proyecto.nombre;
-    document.getElementById("estado").innerText=proyecto.estado;
-    document.getElementById("municipio").innerText=proyecto.municipio;
-    document.getElementById("fechaInicio").innerText="Inicio: "+proyecto.fecha;
+      const res = await fetch(`${API}/${id}`);
+      const proyecto = await res.json();
 
-    document.getElementById("estatus").innerHTML=
-      `<span class="status-badge s-${proyecto.estatus.toLowerCase()}">
-${proyecto.estatus.replace("_"," ")}
-</span>`;
+      document.getElementById("nombreProyecto").innerText = proyecto.nombreProyecto;
+      document.getElementById("estado").innerText = proyecto.estadoProyectoGeo;
+      document.getElementById("municipio").innerText = proyecto.municipioProyecto || "N/A";
 
-    const total = proyecto.trabajadores.length;
-    const maximo = 8;
+      document.getElementById("fechaInicio").innerText =
+        "Inicio: " + formatearFecha(proyecto.fechaEstimadaInicio);
 
-    document.getElementById("contadorTrabajadores").innerText =
-      total+" / "+maximo+" trabajadores asignados";
+      document.getElementById("estatus").innerHTML =
+        `<span class="status-badge s-${proyecto.estatusProyecto.toLowerCase()}">
+          ${proyecto.estatusProyecto.replace("_"," ")}
+        </span>`;
 
-    if(total===0){
-      document.getElementById("listaTrabajadores").innerHTML=
+      document.getElementById("contadorTrabajadores").innerText =
+        "0 / 8 trabajadores asignados";
+
+      document.getElementById("listaTrabajadores").innerHTML =
         "<div class='empty'>No hay trabajadores asignados</div>";
-    }else{
 
-      document.getElementById("listaTrabajadores").innerHTML=
-        proyecto.trabajadores.map(t=>`
+      document.getElementById("contratista").innerText =
+        "No disponible";
 
-<div class="worker-card">
-<span>${t.nombre}</span>
-<span>${t.especialidad}</span>
-</div>
-
-`).join("");
-
+    }catch(e){
+      console.error(e);
+      document.body.innerHTML="<h2 style='padding:40px'>Error cargando proyecto</h2>";
     }
-
-    document.getElementById("contratista").innerText=proyecto.contratista;
 
   }
 

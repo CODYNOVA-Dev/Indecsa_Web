@@ -25,6 +25,7 @@
       --warning:#FAC775;
       --purple:#AFA9EC;
       --danger:#F09595;
+      --blue:#6FA8FF; /* 🔵 nuevo */
     }
 
     body{
@@ -37,99 +38,23 @@
       padding-top:120px;
     }
 
-    header{
-      background:var(--navy-mid);
-      border-bottom:1px solid var(--border);
-      height:72px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 2rem;
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-    }
+    header{background:var(--navy-mid);border-bottom:1px solid var(--border);height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:fixed;top:0;left:0;right:0;}
+    .header-tag{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
 
-    .header-tag{
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:1.5px;
-      text-transform:uppercase;
-    }
+    nav{background:var(--navy-dark);border-bottom:1px solid rgba(200,169,110,0.12);height:48px;display:flex;align-items:center;padding:0 2rem;gap:8px;position:fixed;top:72px;left:0;right:0;}
 
-    nav{
-      background:var(--navy-dark);
-      border-bottom:1px solid rgba(200,169,110,0.12);
-      height:48px;
-      display:flex;
-      align-items:center;
-      padding:0 2rem;
-      gap:8px;
-      position:fixed;
-      top:72px;
-      left:0;
-      right:0;
-    }
-
-    .nav-link{
-      color:var(--muted);
-      text-decoration:none;
-      font-size:13px;
-      padding:6px 14px;
-      border-radius:6px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-
-    .nav-link:hover,
-    .nav-link.active{
-      background:rgba(200,169,110,0.1);
-      color:var(--gold);
-    }
-
+    .nav-link{color:var(--muted);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;display:flex;align-items:center;gap:6px;}
+    .nav-link:hover,.nav-link.active{background:rgba(200,169,110,0.1);color:var(--gold);}
     .nav-sep{flex:1;}
 
-    .nav-logout{
-      display:flex;
-      align-items:center;
-      gap:7px;
-      padding:6px 16px;
-      border-radius:6px;
-      font-size:13px;
-      color:#F09595;
-      cursor:pointer;
-      border:1px solid rgba(226,75,74,0.25);
-      background:none;
-    }
+    .nav-logout{display:flex;align-items:center;gap:7px;padding:6px 16px;border-radius:6px;font-size:13px;color:#F09595;cursor:pointer;border:1px solid rgba(226,75,74,0.25);background:none;}
 
-    main{
-      flex:1;
-      padding:40px;
-      background:radial-gradient(
-        ellipse at 70% 30%,
-        #1a2e4a 0%,
-        var(--navy) 70%
-      );
-    }
+    main{flex:1;padding:40px;background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);}
 
-    .page-wrap{
-      max-width:900px;
-      margin:auto;
-    }
+    .page-wrap{max-width:900px;margin:auto;}
+    .page-title{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:20px;}
 
-    .page-title{
-      font-family:'Playfair Display',serif;
-      font-size:26px;
-      margin-bottom:20px;
-    }
-
-    .toolbar{
-      display:flex;
-      gap:10px;
-      margin-bottom:20px;
-    }
+    .toolbar{display:flex;gap:10px;margin-bottom:20px;}
 
     input,select{
       background:#0f2747;
@@ -139,13 +64,7 @@
       border-radius:8px;
     }
 
-    .cards-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
-
-    /* ===== CARD PRO ===== */
+    .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 
     .proj-card{
       background:var(--navy-mid);
@@ -155,7 +74,6 @@
       cursor:pointer;
       position:relative;
       transition:.25s;
-
       opacity:0;
       transform:translateY(10px);
       animation:fadeUp .4s ease forwards;
@@ -168,14 +86,7 @@
       box-shadow:0 10px 25px rgba(0,0,0,0.25);
     }
 
-    @keyframes fadeUp{
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    /* línea superior */
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
 
     .proj-card::before{
       content:'';
@@ -190,34 +101,12 @@
     .c-en_curso::before{background:linear-gradient(90deg,transparent,var(--success),transparent);}
     .c-finalizado::before{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
     .c-pausado::before{background:linear-gradient(90deg,transparent,var(--warning),transparent);}
-    .c-planeacion::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+    .c-planeacion::before{background:linear-gradient(90deg,transparent,var(--blue),transparent);} /* 🔵 */
 
-    .proj-name{
-      font-weight:600;
-      margin-bottom:6px;
-    }
+    .proj-name{font-weight:600;margin-bottom:6px;}
 
-    .wrow{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:3px;
-    }
-
-    .wrow{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:5px;
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.wrow i{
-  color:var(--gold);
-  font-size:11px;
-}
-
-    /* ===== BADGE ARRIBA DERECHA ===== */
+    .wrow{font-size:12px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+    .wrow i{color:var(--gold);font-size:11px;}
 
     .status-badge{
       position:absolute;
@@ -229,44 +118,13 @@
       text-transform:uppercase;
     }
 
-    .s-en_curso{
-      background:rgba(93,202,165,0.12);
-      color:var(--success);
-      border:1px solid rgba(93,202,165,0.3);
-    }
+    .s-en_curso{background:rgba(93,202,165,0.12);color:var(--success);border:1px solid rgba(93,202,165,0.3);}
+    .s-finalizado{background:rgba(175,169,236,0.12);color:var(--purple);border:1px solid rgba(175,169,236,0.3);}
+    .s-pausado{background:rgba(250,199,117,0.12);color:var(--warning);border:1px solid rgba(250,199,117,0.3);}
+    .s-planeacion{background:rgba(111,168,255,0.12);color:var(--blue);border:1px solid rgba(111,168,255,0.3);} /* 🔵 */
 
-    .s-finalizado{
-      background:rgba(175,169,236,0.12);
-      color:var(--purple);
-      border:1px solid rgba(175,169,236,0.3);
-    }
-
-    .s-pausado{
-      background:rgba(250,199,117,0.12);
-      color:var(--warning);
-      border:1px solid rgba(250,199,117,0.3);
-    }
-
-    .s-planeacion{
-      background:rgba(200,169,110,0.12);
-      color:var(--gold);
-      border:1px solid rgba(200,169,110,0.3);
-    }
-
-    footer{
-      background:var(--navy-mid);
-      border-top:1px solid var(--border);
-      height:56px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 2rem;
-    }
-
-    .footer-left{
-      font-size:12px;
-      color:var(--muted);
-    }
+    footer{background:var(--navy-mid);border-top:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 2rem;}
+    .footer-left{font-size:12px;color:var(--muted);}
 
   </style>
 </head>
@@ -279,40 +137,30 @@
 </header>
 
 <nav>
-
-  <a class="nav-link" href="../Paginaprincipal.html">
-    <i class="fa-solid fa-house"></i> Inicio
-  </a>
-
-  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
-    <i class="fa-solid fa-user"></i> Trabajadores
-  </a>
-
-  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
-    <i class="fa-solid fa-diagram-project"></i> Proyectos
-  </a>
-
-  <a class="nav-link active">
-    <i class="fa-solid fa-link"></i> Relacionar
-  </a>
-
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link active"><i class="fa-solid fa-link"></i> Relacionar</a>
   <div class="nav-sep"></div>
-
-  <button class="nav-logout" onclick="cerrarSesion()">
-    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-  </button>
-
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
 <main>
-
   <div class="page-wrap">
-
     <h2 class="page-title">Relacionar personal con proyectos</h2>
 
     <div class="toolbar">
-
       <input id="busqueda" placeholder="Buscar proyecto..." oninput="filtrar()">
+
+      <!-- 🆕 filtro estatus -->
+      <select id="filtroEstatus" onchange="filtrar()">
+        <option value="">Todos</option>
+        <option value="PLANEACION">Planeación</option>
+        <option value="EN_CURSO">En curso</option>
+        <option value="PAUSADO">Pausado</option>
+        <option value="FINALIZADO">Finalizado</option>
+        <option value="CANCELADO">Cancelado</option>
+      </select>
 
       <select id="filtroEstado" onchange="filtrar()">
         <option value="">Todos</option>
@@ -320,90 +168,76 @@
         <option value="Hidalgo">Hidalgo</option>
         <option value="Puebla">Puebla</option>
       </select>
-
     </div>
 
     <div class="cards-grid" id="cardsGrid"></div>
-
   </div>
-
 </main>
 
 <footer>
-
-  <div class="footer-left">
-    © 2025 INDECSA — Todos los derechos reservados
-  </div>
-
+  <div class="footer-left">© 2025 INDECSA</div>
 </footer>
 
 <script>
 
-  let proyectos=[
+  const API = "http://localhost:8080/api/v1/proyectos";
+  let proyectos = [];
 
-    { id:1,nombre:"Planta Industrial Norte",estado:"Hidalgo",municipio:"Tizayuca",estatus:"EN_CURSO",trabajadores:0 },
-    { id:2,nombre:"Residencial Las Palmas",estado:"Puebla",municipio:"Puebla",estatus:"FINALIZADO",trabajadores:3 },
-    { id:3,nombre:"Centro Comercial Oriente",estado:"CDMX",municipio:"Iztapalapa",estatus:"PLANEACION",trabajadores:0 },
-    { id:4,nombre:"Bodega Logística Sur",estado:"Puebla",municipio:"Cholula",estatus:"PAUSADO",trabajadores:2 }
+  async function cargarProyectos(){
+    const res = await fetch(API);
+    const data = await res.json();
 
-  ];
+    proyectos = data.map(p => ({
+      id: p.idProyecto,
+      nombre: p.nombreProyecto,
+      estado: p.estadoProyectoGeo,
+      municipio: p.municipioProyecto || "N/A",
+      estatus: p.estatusProyecto,
+      trabajadores: 0
+    }));
+
+    filtrar();
+  }
 
   function render(p){
+    return `
+  <div class="proj-card c-${p.estatus.toLowerCase()}" onclick="abrirProyecto(${p.id})">
+  <div class="proj-name">${p.nombre}</div>
 
-  return `
+  <div class="wrow"><i class="fa-solid fa-location-dot"></i>${p.estado}</div>
+  <div class="wrow"><i class="fa-solid fa-map-pin"></i>${p.municipio}</div>
+  <div class="wrow"><i class="fa-solid fa-users"></i>${p.trabajadores}/8 trabajadores</div>
 
-<div class="proj-card c-${p.estatus.toLowerCase()}" onclick="abrirProyecto(${p.id})">
+  <div class="status-badge s-${p.estatus.toLowerCase()}">
+  ${p.estatus.replace("_"," ")}
+  </div>
 
-<div class="proj-name">${p.nombre}</div>
-
-<div class="wrow">
-<i class="fa-solid fa-location-dot"></i>
-${p.estado}
-</div>
-
-<div class="wrow">
-<i class="fa-solid fa-map-pin"></i>
-${p.municipio}
-</div>
-
-<div class="wrow">
-<i class="fa-solid fa-users"></i>
-${p.trabajadores}/8 trabajadores
-</div>
-
-<div class="status-badge s-${p.estatus.toLowerCase()}">
-${p.estatus.replace("_"," ")}
-</div>
-
-</div>
-
-`;
-
-}
+  </div>`;
+  }
 
   function filtrar(){
+    const estado = document.getElementById("filtroEstado").value;
+    const estatus = document.getElementById("filtroEstatus").value;
+    const busqueda = document.getElementById("busqueda").value.toLowerCase();
 
-    const estado=document.getElementById("filtroEstado").value;
-    const busqueda=document.getElementById("busqueda").value.toLowerCase();
-
-    const f=proyectos.filter(p=>
-      (!estado||p.estado===estado)&&
+    const f = proyectos.filter(p =>
+      (!estado || p.estado === estado) &&
+      (!estatus || p.estatus === estatus) &&
       p.nombre.toLowerCase().includes(busqueda)
     );
 
-    document.getElementById("cardsGrid").innerHTML=f.map(render).join("");
-
+    document.getElementById("cardsGrid").innerHTML = f.map(render).join("");
   }
 
   function abrirProyecto(id){
-    window.location="FichaRelacion.html?id="+id;
+    window.location = "FichaRelacion.html?id=" + id;
   }
 
   function cerrarSesion(){
     window.location.href='../../index.html';
   }
 
-  filtrar();
+  cargarProyectos();
 
 </script>
 
