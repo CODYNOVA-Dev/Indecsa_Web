@@ -31,9 +31,26 @@
       background: var(--navy-dark);
       border-bottom: 1px solid rgba(200,169,110,0.15);
       display: flex; align-items: center;
-      padding: 0 2rem; height: 48px;
+      padding: 0 2rem; height: 52px; gap: 12px;
     }
     .nav-sep { flex: 1; }
+    .profile-pill {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 14px; border-radius: 8px;
+      border: 1px solid rgba(200,169,110,0.2);
+      background: rgba(200,169,110,0.05);
+    }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(200,169,110,0.15);
+      border: 1px solid rgba(200,169,110,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: var(--gold); font-weight: 500;
+    }
+    .profile-info { display: flex; flex-direction: column; }
+    .profile-name { font-size: 13px; color: var(--white); font-weight: 500; line-height: 1.2; }
+    .profile-role { font-size: 10px; color: var(--gold); letter-spacing: 0.5px; line-height: 1.4; }
+    .nav-div { width: 1px; height: 24px; background: rgba(200,169,110,0.2); }
     .nav-logout {
       display: flex; align-items: center; gap: 7px;
       padding: 6px 16px; border-radius: 6px;
@@ -43,7 +60,6 @@
       transition: background 0.2s;
     }
     .nav-logout:hover { background: rgba(226,75,74,0.1); }
-    .nav-logout i { font-size: 13px; }
 
     main {
       flex: 1; padding: 2.5rem 2rem;
@@ -55,20 +71,19 @@
     .top h2 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 26px; margin-bottom: 6px; }
     .top p { color: var(--muted); font-size: 13px; }
 
-    .stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 12px; width: 100%; max-width: 860px; margin-bottom: 2rem;
-    }
-    .stat {
-      background: var(--navy-mid); border: 1px solid rgba(200,169,110,0.15);
-      border-radius: 12px; padding: 18px; text-align: center;
-    }
-    .stat-num { font-size: 28px; font-weight: 500; color: var(--gold); }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
+    /* ── ÚNICA CAMBIO: 4 columnas en una sola fila ── */
     .cards-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 14px; width: 100%; max-width: 860px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      width: 100%;
+      max-width: 1400px;
+    }
+    @media (max-width: 960px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .cards-grid { grid-template-columns: 1fr; }
     }
 
     .mod-card {
@@ -84,6 +99,13 @@
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
     .mod-card:hover { border-color: rgba(200,169,110,0.5); background: #1a3560; }
+
+    .new-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3);
+      border-radius: 4px; font-size: 9px; color: var(--gold);
+      padding: 2px 7px; letter-spacing: 1px;
+    }
 
     .mod-icon {
       width: 76px; height: 76px; border-radius: 50%;
@@ -134,6 +156,14 @@
 
 <nav>
   <div class="nav-sep"></div>
+  <div class="profile-pill">
+    <div class="avatar" id="avatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="profileNombre">Cargando...</span>
+      <span class="profile-role" id="profileRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()">
     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
   </button>
@@ -143,21 +173,6 @@
   <div class="top">
     <h2>Panel de administración</h2>
     <p>Bienvenido de nuevo — selecciona un módulo para comenzar</p>
-  </div>
-
-  <div class="stats-row">
-    <div class="stat">
-      <div class="stat-num">24</div>
-      <div class="stat-label">Trabajadores activos</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">8</div>
-      <div class="stat-label">Contratistas registrados</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">5</div>
-      <div class="stat-label">Proyectos en curso</div>
-    </div>
   </div>
 
   <div class="cards-grid">
@@ -171,7 +186,7 @@
         </svg>
       </div>
       <h3>Trabajadores</h3>
-      <p>Gestiona el personal registrado: altas, consultas, modificaciones y bajas de empleados dentro del sistema.</p>
+      <p>Gestiona el personal registrado: altas, consultas, modificaciones y bajas.</p>
       <div class="divider"></div>
       <div class="crud-list">
         <div class="crud-item" onclick="irCrud(event, 'Trabajador/AltaTrabajador.html')">
@@ -197,7 +212,7 @@
         </svg>
       </div>
       <h3>Contratistas</h3>
-      <p>Administra empresas y personas externas contratadas: registro, datos de contacto, contratos y estatus activo.</p>
+      <p>Administra empresas y personas externas: registro, contratos y estatus activo.</p>
       <div class="divider"></div>
       <div class="crud-list">
         <div class="crud-item" onclick="irCrud(event, 'Contratista/AltaContratista.html')">
@@ -222,7 +237,7 @@
         </svg>
       </div>
       <h3>Proyectos</h3>
-      <p>Crea y supervisa proyectos: asigna trabajadores y contratistas, define fechas, avance y estado de cada proyecto.</p>
+      <p>Crea y supervisa proyectos: asigna trabajadores, contratistas y fechas.</p>
       <div class="divider"></div>
       <div class="crud-list">
         <div class="crud-item" onclick="irCrud(event, 'Proyecto/AltaProyecto.html')">
@@ -237,26 +252,61 @@
       </div>
     </div>
 
+    <!-- CAPITAL HUMANO -->
+    <div class="mod-card" onclick="ir('CapHumano/ListaCap.html')">
+      <div class="new-badge">NUEVO</div>
+      <div class="mod-icon">
+        <svg viewBox="0 0 36 36" fill="none">
+          <circle cx="12" cy="10" r="4" stroke="#C8A96E" stroke-width="2"/>
+          <circle cx="24" cy="10" r="4" stroke="#C8A96E" stroke-width="2"/>
+          <path d="M4 28c0-4.418 3.582-8 8-8" stroke="#C8A96E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M20 20h8a4 4 0 0 1 4 4v4H16v-4a4 4 0 0 1 4-4z" stroke="#C8A96E" stroke-width="2"/>
+        </svg>
+      </div>
+      <h3>Capital Humano</h3>
+      <p>Gestiona usuarios de capital humano: altas, consultas y permisos de acceso.</p>
+      <div class="divider"></div>
+      <div class="crud-list">
+        <div class="crud-item" onclick="irCrud(event, 'CapHumano/AltaCap.html')">
+          <div class="crud-dot dot-green"></div><span>Registrar usuario CH</span>
+        </div>
+        <div class="crud-item" onclick="irCrud(event, 'CapHumano/ListaCap.html')">
+          <div class="crud-dot dot-blue"></div><span>Ver lista de usuarios</span>
+        </div>
+        <div class="crud-item" onclick="irCrud(event, 'CapHumano/EditarCap.html')">
+          <div class="crud-dot dot-amber"></div><span>Editar permisos y datos</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </main>
 
 <footer>
   <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
   <div class="footer-contact">
-    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
+    <a href="mailto:contacto@indecsa.com"><i class="fa-solid fa-envelope"></i>contacto@indecsa.com</a>
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
 
 <script>
-  function ir(ruta) {
-    window.location.href = ruta;
+  const empleado = JSON.parse(sessionStorage.getItem('empleado'));
+  if (!empleado) {
+    window.location.href = '../index.html';
+  } else {
+    const iniciales = empleado.nombreEmpleado
+      .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+    document.getElementById('avatar').textContent = iniciales;
+    document.getElementById('profileNombre').textContent = empleado.nombreEmpleado;
+    document.getElementById('profileRol').textContent =
+      empleado.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
   }
-  function irCrud(event, ruta) {
-    event.stopPropagation();
-    window.location.href = ruta;
-  }
+
+  function ir(ruta) { window.location.href = ruta; }
+  function irCrud(event, ruta) { event.stopPropagation(); window.location.href = ruta; }
   function cerrarSesion() {
+    sessionStorage.removeItem('empleado');
     window.location.href = '../index.html';
   }
 </script>
