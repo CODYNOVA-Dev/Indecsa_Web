@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INDECSA – Editar Empleado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775;
+      --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:13px; }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+
+    main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+
+    .page-header { max-width:860px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.25); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .page-icon i { font-size:22px; color:var(--warning); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
+
+    .emp-banner { max-width:860px; margin:0 auto 1.5rem; background:rgba(175,169,236,0.07); border:1px solid rgba(175,169,236,0.2); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:14px; animation:fadeUp .35s ease both; }
+    .emp-banner-avatar { width:44px; height:44px; border-radius:50%; background:rgba(175,169,236,0.15); border:1px solid rgba(175,169,236,0.3); color:var(--purple); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; flex-shrink:0; }
+    .emp-banner-info strong { font-size:14px; color:var(--white); display:block; }
+    .emp-banner-info span   { font-size:12px; color:var(--muted); }
+    .emp-banner-id { margin-left:auto; font-size:11px; color:var(--muted); background:rgba(175,169,236,0.08); border:1px solid rgba(175,169,236,0.15); padding:4px 10px; border-radius:8px; }
+
+    .form-card { max-width:860px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
+    .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(250,199,117,0.05) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .form-card-header h3 { font-size:14px; font-weight:500; color:var(--warning); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+    .required-note { font-size:11px; color:var(--muted); }
+    .required-note span { color:var(--danger); }
+
+    .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
+    .form-section { display:flex; flex-direction:column; gap:1.25rem; }
+    .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .form-row { display:grid; gap:1rem; }
+    .col-2 { grid-template-columns:1fr 1fr; }
+    .form-divider { height:1px; background:var(--border); }
+
+    .field { display:flex; flex-direction:column; gap:7px; }
+    .field label { font-size:12px; font-weight:500; color:var(--muted); }
+    .field label .req { color:var(--danger); margin-left:2px; }
+    .field-error { font-size:11px; color:var(--danger); display:none; margin-top:2px; }
+    .field.has-error .field-error { display:block; }
+    .field.has-error input { border-color:var(--danger)!important; box-shadow:0 0 0 3px rgba(240,149,149,0.07)!important; }
+    .input-wrap { position:relative; }
+    .input-wrap > i.ico { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+    input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px 11px 42px; transition:border-color .2s,background .2s,box-shadow .2s; outline:none; -webkit-appearance:none; appearance:none; }
+    input::placeholder { color:rgba(138,155,181,0.5); }
+    input:focus { border-color:var(--warning); background:rgba(250,199,117,0.03); box-shadow:0 0 0 3px rgba(250,199,117,0.07); }
+    .pass-toggle { position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); cursor:pointer; background:none; border:none; padding:0; transition:color .2s; z-index:1; }
+    .pass-toggle:hover { color:var(--warning); }
+    .pass-hint { font-size:11px; color:var(--muted); margin-top:4px; display:flex; align-items:center; gap:5px; }
+    .pass-hint i { font-size:10px; color:var(--warning); }
+
+    .rol-display { width:100%; background:rgba(175,169,236,0.06); border:1px solid rgba(175,169,236,0.2); border-radius:10px; color:var(--purple); font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px 11px 42px; font-weight:500; }
+
+    .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+    .form-footer-left i { color:var(--warning); }
+    .form-footer-right { display:flex; gap:10px; }
+    .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
+    .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); text-decoration:none; }
+    .btn-ghost:hover:not(:disabled) { border-color:var(--muted); color:var(--white); }
+    .btn-warning { background:linear-gradient(135deg,var(--warning) 0%,#d4973a 100%); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(250,199,117,0.2); }
+    .btn-warning:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(250,199,117,0.3); }
+
+    .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
+    .btn.loading .spinner { display:inline-block; }
+    .btn.loading .btn-icon { display:none; }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .no-data { max-width:860px; margin:0 auto; text-align:center; padding:4rem 2rem; }
+    .no-data i { font-size:40px; color:rgba(200,169,110,0.2); margin-bottom:1rem; display:block; }
+    .no-data p { font-size:14px; color:var(--muted); margin-bottom:1.5rem; }
+    .no-data a { display:inline-flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); color:var(--purple); text-decoration:none; font-size:13px; transition:background .2s; }
+    .no-data a:hover { background:rgba(175,169,236,0.18); }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
+
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:680px){.col-2{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}.emp-banner{flex-wrap:wrap}.emp-banner-id{margin-left:0}}
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52" alt="INDECSA" />
+  <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
+</header>
+
+<nav>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link active" href="ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <div class="nav-sep"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+</nav>
+
+<main id="mainContent"></main>
+
+<footer>
+  <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
+  <div class="footer-contact">
+    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
+    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+  <span id="toastMsg">Empleado actualizado correctamente</span>
+</div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<script>
+  var API_BASE = 'http://localhost:8080/api/v1';
+  function gid(id) { return document.getElementById(id); }
+
+  var empleado = null;
+  var capRolId = null;
+  var capRolNombre = null;
+
+  function init() {
+    var raw = localStorage.getItem('indecsa_empleado_editar');
+    if (!raw) { renderNoData(); return; }
+    try { empleado = JSON.parse(raw); renderForm(); }
+    catch(e) { renderNoData(); }
+  }
+
+  function renderNoData() {
+    gid('mainContent').innerHTML =
+      '<div class="no-data">' +
+      '<i class="fa-solid fa-triangle-exclamation"></i>' +
+      '<p>No se encontró ningún empleado para editar.<br/>Selecciona uno desde la lista de Cap. Humano.</p>' +
+      '<a href="ListaCap.html"><i class="fa-solid fa-arrow-left"></i> Volver a la lista</a>' +
+      '</div>';
+  }
+
+  function renderForm() {
+    var nombre = empleado.nombreEmpleado || '';
+    var partes = nombre.trim().split(' ');
+    var iniciales = (partes[0][0] + (partes[1] ? partes[1][0] : '')).toUpperCase();
+    var correo = empleado.correoEmpleado || '';
+    var rolNombre = (empleado.rol && empleado.rol.nombreRol) ? empleado.rol.nombreRol : '—';
+    var nombreEsc = nombre.replace(/"/g, '&quot;');
+    var correoEsc = correo.replace(/"/g, '&quot;');
+
+    gid('mainContent').innerHTML =
+      '<div class="page-header">' +
+      '<div class="page-header-left">' +
+      '<div class="page-icon"><i class="fa-solid fa-user-pen"></i></div>' +
+      '<div>' +
+      '<div class="page-title">Editar empleado</div>' +
+      '<div class="page-sub">Modifica los datos del empleado seleccionado</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="breadcrumb">' +
+      '<a href="ListaCap.html">Cap. Humano</a>' +
+      '<i class="fa-solid fa-chevron-right"></i>' +
+      '<span>Editar</span>' +
+      '</div>' +
+      '</div>' +
+
+      '<div class="emp-banner">' +
+      '<div class="emp-banner-avatar">' + iniciales + '</div>' +
+      '<div class="emp-banner-info">' +
+      '<strong>' + nombre + '</strong>' +
+      '<span>' + correo + ' &middot; ' + rolNombre + '</span>' +
+      '</div>' +
+      '<div class="emp-banner-id">ID #' + empleado.idEmpleado + '</div>' +
+      '</div>' +
+
+      '<div class="form-card">' +
+      '<div class="form-card-header">' +
+      '<h3><i class="fa-solid fa-user-pen"></i> Editar empleado</h3>' +
+      '<span class="required-note">Los campos marcados con <span>*</span> son obligatorios</span>' +
+      '</div>' +
+
+      '<div class="form-body">' +
+      '<div class="form-section">' +
+      '<div class="section-label">Información personal</div>' +
+      '<div class="form-row col-2">' +
+      '<div class="field" id="field-nombre">' +
+      '<label>Nombre completo <span class="req">*</span></label>' +
+      '<div class="input-wrap">' +
+      '<i class="fa-solid fa-user ico"></i>' +
+      '<input type="text" id="nombreEmpleado" maxlength="100" value="' + nombreEsc + '" />' +
+      '</div>' +
+      '<span class="field-error">El nombre es obligatorio (máx. 100 caracteres)</span>' +
+      '</div>' +
+      '<div class="field" id="field-correo">' +
+      '<label>Correo electrónico <span class="req">*</span></label>' +
+      '<div class="input-wrap">' +
+      '<i class="fa-solid fa-envelope ico"></i>' +
+      '<input type="email" id="correoEmpleado" maxlength="100" value="' + correoEsc + '" />' +
+      '</div>' +
+      '<span class="field-error">Ingresa un correo válido</span>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      '<div class="form-divider"></div>' +
+
+      '<div class="form-section">' +
+      '<div class="section-label">Acceso al sistema</div>' +
+      '<div class="form-row col-2">' +
+      '<div class="field" id="field-pass">' +
+      '<label>Nueva contraseña <span class="req">*</span></label>' +
+      '<div class="input-wrap">' +
+      '<i class="fa-solid fa-key ico"></i>' +
+      '<input type="password" id="contrasena" placeholder="Mínimo 8 caracteres" maxlength="255" style="padding-right:44px" />' +
+      '<button type="button" class="pass-toggle" onclick="togglePass()">' +
+      '<i id="iconPass" class="fa-solid fa-eye"></i>' +
+      '</button>' +
+      '</div>' +
+      '<div class="pass-hint"><i class="fa-solid fa-triangle-exclamation"></i>Debes ingresar la contraseña aunque no la cambies</div>' +
+      '<span class="field-error">La contraseña es obligatoria (mín. 8 caracteres)</span>' +
+      '</div>' +
+      '<div class="field">' +
+      '<label>Rol asignado</label>' +
+      '<div class="input-wrap">' +
+      '<i class="fa-solid fa-user-tag ico"></i>' +
+      '<div class="rol-display" id="rolDisplay">Cargando…</div>' +
+      '<input type="hidden" id="idRol" value="" />' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      '<div class="form-footer">' +
+      '<div class="form-footer-left">' +
+      '<i class="fa-solid fa-circle-info"></i>' +
+      '<span>Los cambios se guardarán y la contraseña se <strong style="color:var(--warning)">re-cifrará</strong></span>' +
+      '</div>' +
+      '<div class="form-footer-right">' +
+      '<a class="btn btn-ghost" href="ListaCap.html"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>' +
+      '<button class="btn btn-warning" type="button" id="btnGuardar" onclick="guardarCambios()">' +
+      '<span class="spinner"></span>' +
+      '<i class="fa-solid fa-floppy-disk btn-icon"></i>' +
+      '<span class="btn-label">Guardar cambios</span>' +
+      '</button>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
+    /* eventos inline-validation */
+    var inputs = document.querySelectorAll('#mainContent input');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].addEventListener('input', function() {
+        var f = this.closest('.field');
+        if (f) f.classList.remove('has-error');
+      });
+    }
+
+    cargarRol();
+  }
+
+  /* Carga roles, filtra Cap Humano y lo fija */
+  async function cargarRol() {
+    try {
+      var res = await fetch(API_BASE + '/roles');
+      if (!res.ok) throw new Error();
+      var roles = await res.json();
+      var cap = null;
+      for (var i = 0; i < roles.length; i++) {
+        if ((roles[i].nombreRol + '').toUpperCase().indexOf('CAP') !== -1) {
+          cap = roles[i]; break;
+        }
+      }
+      if (cap) {
+        capRolId = cap.idRol;
+        capRolNombre = cap.nombreRol;
+        gid('rolDisplay').textContent = cap.nombreRol;
+        gid('idRol').value = cap.idRol;
+      } else {
+        gid('rolDisplay').textContent = 'Rol no encontrado';
+      }
+    } catch {
+      gid('rolDisplay').textContent = 'Error al cargar rol';
+    }
+  }
+
+  function togglePass() {
+    var inp = gid('contrasena'), ico = gid('iconPass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    ico.className = inp.type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+  }
+
+  function validar() {
+    var ok = true;
+    var reglas = [
+      { id:'nombreEmpleado', fid:'field-nombre', check: function(v){ return v.trim().length > 0 && v.length <= 100; } },
+      { id:'correoEmpleado', fid:'field-correo', check: function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); } },
+      { id:'contrasena',     fid:'field-pass',   check: function(v){ return v.length >= 8; } }
+    ];
+    for (var i = 0; i < reglas.length; i++) {
+      var r = reglas[i];
+      var el = gid(r.id), fe = gid(r.fid);
+      if (!fe) continue;
+      if (!r.check(el ? el.value : '')) { fe.classList.add('has-error'); ok = false; }
+      else fe.classList.remove('has-error');
+    }
+    return ok;
+  }
+
+  async function guardarCambios() {
+    if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
+    var idRolVal = parseInt(gid('idRol').value);
+    if (!idRolVal) { showToast('Rol de Cap. Humano no disponible', false); return; }
+    var btn = gid('btnGuardar');
+    setLoading(btn, true);
+    var payload = {
+      nombreEmpleado: gid('nombreEmpleado').value.trim(),
+      correoEmpleado: gid('correoEmpleado').value.trim(),
+      contrasena:     gid('contrasena').value,
+      idRol:          idRolVal
+    };
+    try {
+      var res = await fetch(API_BASE + '/empleados/' + empleado.idEmpleado, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        showToast('Empleado actualizado correctamente', true);
+        setTimeout(function(){ window.location.href = 'ListaCap.html'; }, 1400);
+      } else {
+        var err = await res.json().catch(function(){ return {}; });
+        showToast(err.message || err.error || 'Error ' + res.status, false);
+      }
+    } catch(e) { showToast('No se pudo conectar con el servidor', false); }
+    finally { setLoading(btn, false); }
+  }
+
+  function setLoading(btn, on) {
+    btn.disabled = on;
+    btn.classList.toggle('loading', on);
+    btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios';
+  }
+
+  function showToast(msg, ok) {
+    var t = gid('toast');
+    gid('toastMsg').textContent = msg;
+    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
+    var ic = gid('toastIcon');
+    ic.style.color = ok ? 'var(--success)' : 'var(--danger)';
+    ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 3500);
+  }
+
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+
+  var lastScroll = 0;
+  var scrollBtn = gid('scrollTop');
+  window.addEventListener('scroll', function() {
+    var c = window.scrollY;
+    document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
+    lastScroll = c <= 0 ? 0 : c;
+    scrollBtn.classList.toggle('visible', c > 200);
+  });
+
+  init();
+</script>
+</body>
+</html>

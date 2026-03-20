@@ -15,12 +15,12 @@
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
     }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
-
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
@@ -30,9 +30,7 @@
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
     .scroll-top i { font-size:16px; color:var(--navy); }
-
     main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
-
     .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; }
@@ -42,13 +40,11 @@
     .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
-
     .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
     .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(175,169,236,0.06) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
     .form-card-header h3 { font-size:14px; font-weight:500; color:var(--purple); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
     .required-note { font-size:11px; color:var(--muted); }
     .required-note span { color:var(--danger); }
-
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
     .form-section { display:flex; flex-direction:column; gap:1.25rem; }
     .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
@@ -57,14 +53,12 @@
     .col-2 { grid-template-columns:1fr 1fr; }
     .col-3 { grid-template-columns:1fr 1fr 1fr; }
     .col-1 { grid-template-columns:1fr; }
-
     .field { display:flex; flex-direction:column; gap:7px; }
     .field label { font-size:12px; font-weight:500; color:var(--muted); }
     .field label .req { color:var(--danger); margin-left:2px; }
     .field-error { font-size:11px; color:var(--danger); display:none; }
     .field.has-error .field-error { display:block; }
     .field.has-error input,.field.has-error select,.field.has-error textarea { border-color:var(--danger)!important; box-shadow:0 0 0 3px rgba(240,149,149,0.07)!important; }
-
     .input-wrap { position:relative; }
     .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .input-wrap.top-icon i { top:16px; transform:none; }
@@ -74,19 +68,16 @@
     select { cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 14px) center; padding-right:36px; }
     select option { background:#152D50; color:var(--white); }
     textarea { resize:vertical; min-height:110px; padding-top:12px; line-height:1.6; }
-
-    /* date fields don't need left padding trick */
     input[type="date"] { padding-left:42px; color-scheme:dark; }
-
     .stars-container { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; }
     .stars-wrap { display:flex; align-items:center; gap:2px; padding:9px 14px; }
     .star-btn { font-size:22px; cursor:pointer; color:rgba(138,155,181,0.3); transition:color .15s,transform .1s; background:none; border:none; }
     .star-btn.active { color:var(--gold); }
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
-
     .form-divider { height:1px; background:var(--border); }
-
+    .date-error { font-size:11px; color:var(--danger); display:none; margin-top:4px; }
+    .date-error.show { display:block; }
     .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
     .form-footer-left i { color:var(--purple); }
@@ -94,30 +85,22 @@
     .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
     .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
     .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
-    .btn-ghost:hover { border-color:var(--muted); color:var(--white); }
+    .btn-ghost:hover:not(:disabled) { border-color:var(--muted); color:var(--white); }
     .btn-primary { background:linear-gradient(135deg,var(--purple),#7a73d4); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(175,169,236,0.2); }
     .btn-primary:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(175,169,236,0.3); }
-
     .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
     .btn.loading .spinner { display:inline-block; }
     .btn.loading .btn-icon { display:none; }
     @keyframes spin { to{transform:rotate(360deg)} }
-
-    /* fecha error */
-    .date-error { font-size:11px; color:var(--danger); display:none; margin-top:4px; }
-    .date-error.show { display:block; }
-
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     .toast i { font-size:16px; }
-
     footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
     .footer-left { font-size:12px; color:var(--muted); }
     .footer-contact { display:flex; gap:24px; }
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
-
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     @media(max-width:680px) { .col-2,.col-3{grid-template-columns:1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
   </style>
@@ -131,9 +114,10 @@
 
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link" href="../Contratistas/AltaContratista.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
-  <a class="nav-link active" href="AltaProyecto.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link active" href="ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
@@ -164,7 +148,6 @@
 
     <form class="form-body" id="formProyecto" novalidate>
 
-      <!-- ── IDENTIFICACIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-folder-open" style="color:var(--gold);font-size:11px"></i> Identificación</div>
         <div class="form-row col-2">
@@ -186,18 +169,21 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── UBICACIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-map-location-dot" style="color:var(--gold);font-size:11px"></i> Ubicación</div>
         <div class="form-row col-3">
           <div class="field" id="field-geo">
             <label>Estado <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-map"></i>
+              <!--
+                Values EXACTOS del enum UbicacionGeo en Java:
+                CDMX | Hidalgo | Puebla
+              -->
               <select id="estadoProyectoGeo">
                 <option value="" disabled selected>Selecciona…</option>
                 <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="HIDALGO">Hidalgo</option>
-                <option value="PUEBLA">Puebla</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Puebla">Puebla</option>
               </select>
             </div>
             <span class="field-error">El estado es obligatorio</span>
@@ -219,7 +205,6 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── FECHAS Y CALIFICACIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-calendar-days" style="color:var(--gold);font-size:11px"></i> Plazos y valoración</div>
         <div class="form-row col-2">
@@ -257,7 +242,6 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── DESCRIPCIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-align-left" style="color:var(--gold);font-size:11px"></i> Descripción</div>
         <div class="form-row col-1">
@@ -306,96 +290,104 @@
   let currentStar = 0;
   let fechasValidas = true;
 
-  /* estrellas */
+  /*
+    Normaliza ubicación al valor EXACTO del enum Java UbicacionGeo:
+    CDMX | Hidalgo | Puebla
+  */
+  function normalizarUbicacion(val) {
+    const mapa = {
+      'CDMX'    : 'CDMX',
+      'cdmx'    : 'CDMX',
+      'HIDALGO' : 'Hidalgo',
+      'hidalgo' : 'Hidalgo',
+      'Hidalgo' : 'Hidalgo',
+      'PUEBLA'  : 'Puebla',
+      'puebla'  : 'Puebla',
+      'Puebla'  : 'Puebla'
+    };
+    return mapa[val] !== undefined ? mapa[val] : val;
+  }
+
   const stars = document.querySelectorAll('.star-btn');
   stars.forEach(s => {
-    s.addEventListener('click',()=>{ currentStar=parseInt(s.dataset.val); document.getElementById('calificacionProyecto').value=currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent=starLabels[currentStar]; });
-    s.addEventListener('mouseenter',()=>paintStars(parseInt(s.dataset.val)));
-    s.addEventListener('mouseleave',()=>paintStars(currentStar));
+    s.addEventListener('click', () => { currentStar = parseInt(s.dataset.val); document.getElementById('calificacionProyecto').value = currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent = starLabels[currentStar]; });
+    s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
+    s.addEventListener('mouseleave', () => paintStars(currentStar));
   });
-  function paintStars(n) { stars.forEach(s=>s.classList.toggle('active',parseInt(s.dataset.val)<=n)); }
+  function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
 
-  /* validar fechas */
   function validarFechas() {
     const ini = document.getElementById('fechaEstimadaInicio').value;
     const fin = document.getElementById('fechaEstimadaFin').value;
     const err = document.getElementById('dateError');
-    if (ini && fin && fin < ini) {
-      err.classList.add('show'); fechasValidas = false;
-    } else {
-      err.classList.remove('show'); fechasValidas = true;
-    }
+    if (ini && fin && fin < ini) { err.classList.add('show'); fechasValidas = false; }
+    else { err.classList.remove('show'); fechasValidas = true; }
   }
 
-  /* validar campos */
   function validar() {
     let ok = true;
     const nombre = document.getElementById('nombreProyecto').value.trim();
     const geo    = document.getElementById('estadoProyectoGeo').value;
-    const fn  = document.getElementById('field-nombre');
-    const fg  = document.getElementById('field-geo');
-    if (!nombre || nombre.length > 150) { fn.classList.add('has-error'); ok=false; } else fn.classList.remove('has-error');
-    if (!geo)                           { fg.classList.add('has-error'); ok=false; } else fg.classList.remove('has-error');
+    const fn = document.getElementById('field-nombre'), fg = document.getElementById('field-geo');
+    if (!nombre || nombre.length > 150) { fn.classList.add('has-error'); ok = false; } else fn.classList.remove('has-error');
+    if (!geo) { fg.classList.add('has-error'); ok = false; } else fg.classList.remove('has-error');
     if (!fechasValidas) ok = false;
     return ok;
   }
 
-  document.querySelectorAll('#formProyecto input, #formProyecto select, #formProyecto textarea').forEach(el=>{
-    el.addEventListener('input',  ()=>el.closest('.field')?.classList.remove('has-error'));
-    el.addEventListener('change', ()=>el.closest('.field')?.classList.remove('has-error'));
+  document.querySelectorAll('#formProyecto input,#formProyecto select,#formProyecto textarea').forEach(el => {
+    el.addEventListener('input',  () => el.closest('.field')?.classList.remove('has-error'));
+    el.addEventListener('change', () => el.closest('.field')?.classList.remove('has-error'));
   });
 
-  /* registrar */
   async function registrar() {
     if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
     const btn = document.getElementById('btnGuardar');
     setLoading(btn, true);
-
     const payload = {
-      nombreProyecto:      document.getElementById('nombreProyecto').value.trim(),
-      tipoProyecto:        document.getElementById('tipoProyecto').value.trim() || null,
-      estadoProyectoGeo:   document.getElementById('estadoProyectoGeo').value,
-      municipioProyecto:   document.getElementById('municipioProyecto').value.trim() || null,
-      lugarProyecto:       document.getElementById('lugarProyecto').value.trim() || null,
-      fechaEstimadaInicio: document.getElementById('fechaEstimadaInicio').value || null,
-      fechaEstimadaFin:    document.getElementById('fechaEstimadaFin').value || null,
+      nombreProyecto:       document.getElementById('nombreProyecto').value.trim(),
+      tipoProyecto:         document.getElementById('tipoProyecto').value.trim() || null,
+      /* Normalizado: CDMX | Hidalgo | Puebla — coincide con enum UbicacionGeo */
+      estadoProyectoGeo:    normalizarUbicacion(document.getElementById('estadoProyectoGeo').value),
+      municipioProyecto:    document.getElementById('municipioProyecto').value.trim() || null,
+      lugarProyecto:        document.getElementById('lugarProyecto').value.trim() || null,
+      fechaEstimadaInicio:  document.getElementById('fechaEstimadaInicio').value || null,
+      fechaEstimadaFin:     document.getElementById('fechaEstimadaFin').value || null,
       calificacionProyecto: currentStar > 0 ? currentStar : null,
-      descripcionProyecto: document.getElementById('descripcionProyecto').value.trim() || null,
+      descripcionProyecto:  document.getElementById('descripcionProyecto').value.trim() || null,
     };
-
     try {
       const res = await fetch(`${API_BASE}/proyectos`, {
-        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
       if (res.status === 201) {
         const data = await res.json();
         showToast(`Proyecto #${data.idProyecto} creado correctamente`, true);
         limpiar();
       } else {
-        const err = await res.json().catch(()=>({}));
-        showToast(err.message || `Error ${res.status}`, false);
+        const err = await res.json().catch(() => ({}));
+        showToast(err.message || err.error || `Error ${res.status}`, false);
       }
-    } catch(e) {
-      console.error(e); showToast('No se pudo conectar con el servidor', false);
-    } finally { setLoading(btn, false); }
+    } catch(e) { showToast('No se pudo conectar con el servidor', false); }
+    finally { setLoading(btn, false); }
   }
 
   function limpiar() {
     document.getElementById('formProyecto').reset();
-    currentStar=0; paintStars(0);
-    document.getElementById('calificacionProyecto').value='';
-    document.getElementById('starLabel').textContent='Sin calificar';
+    currentStar = 0; paintStars(0);
+    document.getElementById('calificacionProyecto').value = '';
+    document.getElementById('starLabel').textContent = 'Sin calificar';
     document.getElementById('dateError').classList.remove('show');
-    fechasValidas=true;
-    document.querySelectorAll('.field').forEach(f=>f.classList.remove('has-error'));
+    fechasValidas = true;
+    document.querySelectorAll('.field').forEach(f => f.classList.remove('has-error'));
   }
-
-  function setLoading(btn,on){ btn.disabled=on; btn.classList.toggle('loading',on); btn.querySelector('.btn-label').textContent=on?'Creando…':'Crear proyecto'; }
-  function showToast(msg,ok){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--danger)'; const icon=document.getElementById('toastIcon'); icon.style.color=ok?'var(--success)':'var(--danger)'; icon.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500); }
-  function cerrarSesion(){ window.location.href='../../index.html'; }
-
-  let lastScroll=0; const scrollBtn=document.getElementById('scrollTop');
-  window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
+  function setLoading(btn, on) { btn.disabled = on; btn.classList.toggle('loading', on); btn.querySelector('.btn-label').textContent = on ? 'Creando…' : 'Crear proyecto'; }
+  function showToast(msg, ok) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; const icon = document.getElementById('toastIcon'); icon.style.color = ok ? 'var(--success)' : 'var(--danger)'; icon.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+  let lastScroll = 0; const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => { const c = window.scrollY; document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80); lastScroll = c <= 0 ? 0 : c; scrollBtn.classList.toggle('visible', c > 200); });
 </script>
 </body>
 </html>

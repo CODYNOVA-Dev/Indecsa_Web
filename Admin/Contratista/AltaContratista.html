@@ -21,11 +21,13 @@
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
     .nav-hidden nav    { transform:translateY(-72px); }
+
     .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
@@ -90,7 +92,7 @@
     .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
     .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
     .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
-    .btn-ghost:hover { border-color:var(--muted); color:var(--white); }
+    .btn-ghost:hover:not(:disabled) { border-color:var(--muted); color:var(--white); }
     .btn-primary { background:linear-gradient(135deg,var(--success),#2a9a72); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(93,202,165,0.2); }
     .btn-primary:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(93,202,165,0.3); }
 
@@ -123,9 +125,10 @@
 
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link active" href="AltaContratista.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
-  <a class="nav-link" href="../Proyectos/AltaProyecto.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link active" href="ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
@@ -156,9 +159,11 @@
 
     <form class="form-body" id="formContratista" novalidate>
 
-      <!-- ── INFO GENERAL ── -->
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-building" style="color:var(--gold);font-size:11px"></i> Información general</div>
+        <div class="section-label">
+          <i class="fa-solid fa-building" style="color:var(--gold);font-size:11px"></i>
+          Información general
+        </div>
         <div class="form-row col-2">
           <div class="field" id="field-nombre">
             <label>Nombre / Razón social <span class="req">*</span></label>
@@ -195,11 +200,15 @@
           <div class="field" id="field-ubicacion">
             <label>Ubicación <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <!--
+                Values EXACTOS del enum Ubicacion en Java:
+                CDMX | Hidalgo | Puebla
+              -->
               <select id="ubicacionContratista">
                 <option value="" disabled selected>Selecciona una ubicación…</option>
                 <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="HIDALGO">Hidalgo</option>
-                <option value="PUEBLA">Puebla</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Puebla">Puebla</option>
               </select>
             </div>
             <span class="field-error">La ubicación es obligatoria</span>
@@ -223,9 +232,11 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── PERFIL PROFESIONAL ── -->
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Perfil profesional</div>
+        <div class="section-label">
+          <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i>
+          Perfil profesional
+        </div>
         <div class="form-row col-1">
           <div class="field" id="field-desc">
             <label>Descripción <span class="req">*</span></label>
@@ -253,7 +264,9 @@
         <span>El contratista se registrará con estado <strong style="color:var(--success)">Activo</strong> por defecto</span>
       </div>
       <div class="form-footer-right">
-        <button class="btn btn-ghost" type="button" onclick="limpiar()"><i class="fa-solid fa-eraser"></i> Limpiar</button>
+        <button class="btn btn-ghost" type="button" onclick="limpiar()">
+          <i class="fa-solid fa-eraser"></i> Limpiar
+        </button>
         <button class="btn btn-primary" type="button" id="btnGuardar" onclick="registrar()">
           <span class="spinner"></span>
           <i class="fa-solid fa-user-plus btn-icon"></i>
@@ -272,11 +285,35 @@
   </div>
 </footer>
 
-<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+<div class="toast" id="toast">
+  <i id="toastIcon" class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg"></span>
+</div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
 
 <script>
   const API_BASE = 'http://localhost:8080/api/v1';
+
+  /*
+    Normaliza el valor de ubicación para que coincida EXACTAMENTE
+    con el enum Java:  CDMX | Hidalgo | Puebla
+    Cubre casos donde la API devuelva HIDALGO/PUEBLA en mayúsculas.
+  */
+  function normalizarUbicacion(val) {
+    const mapa = {
+      'CDMX'    : 'CDMX',
+      'cdmx'    : 'CDMX',
+      'HIDALGO' : 'Hidalgo',
+      'hidalgo' : 'Hidalgo',
+      'Hidalgo' : 'Hidalgo',
+      'PUEBLA'  : 'Puebla',
+      'puebla'  : 'Puebla',
+      'Puebla'  : 'Puebla'
+    };
+    return mapa[val] !== undefined ? mapa[val] : val;
+  }
 
   /* ── Estrellas ── */
   const starLabels = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
@@ -297,24 +334,23 @@
   /* ── Validación ── */
   function validar() {
     let ok = true;
-    const campos = [
-      { id:'nombreContratista',    fieldId:'field-nombre',    check: v => v.trim().length > 0 && v.length <= 100 },
-      { id:'rfcContratista',       fieldId:'field-rfc',       check: v => v.trim().length > 0 && v.length <= 15 },
-      { id:'telefonoContratista',  fieldId:'field-telefono',  check: v => v.trim().length > 0 && v.length <= 15 },
-      { id:'correoContratista',    fieldId:'field-correo',    check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
-      { id:'ubicacionContratista', fieldId:'field-ubicacion', check: v => v.trim().length > 0 },
-      { id:'descripcionContratista', fieldId:'field-desc',   check: v => v.trim().length > 0 },
-    ];
-    campos.forEach(({ id, fieldId, check }) => {
+    [
+      { id:'nombreContratista',      fid:'field-nombre',    check: v => v.trim().length > 0 && v.length <= 100 },
+      { id:'rfcContratista',         fid:'field-rfc',       check: v => v.trim().length > 0 && v.length <= 15 },
+      { id:'telefonoContratista',    fid:'field-telefono',  check: v => v.trim().length > 0 && v.length <= 15 },
+      { id:'correoContratista',      fid:'field-correo',    check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      { id:'ubicacionContratista',   fid:'field-ubicacion', check: v => v.trim().length > 0 },
+      { id:'descripcionContratista', fid:'field-desc',      check: v => v.trim().length > 0 },
+    ].forEach(({ id, fid, check }) => {
       const el = document.getElementById(id);
-      const fe = document.getElementById(fieldId);
+      const fe = document.getElementById(fid);
       if (!check(el ? el.value : '')) { fe.classList.add('has-error'); ok = false; }
       else fe.classList.remove('has-error');
     });
     return ok;
   }
 
-  document.querySelectorAll('#formContratista input, #formContratista select, #formContratista textarea').forEach(el => {
+  document.querySelectorAll('#formContratista input,#formContratista select,#formContratista textarea').forEach(el => {
     el.addEventListener('input',  () => el.closest('.field')?.classList.remove('has-error'));
     el.addEventListener('change', () => el.closest('.field')?.classList.remove('has-error'));
   });
@@ -326,20 +362,21 @@
     setLoading(btn, true);
 
     const payload = {
-      nombreContratista:      document.getElementById('nombreContratista').value.trim(),
-      rfcContratista:         document.getElementById('rfcContratista').value.trim().toUpperCase(),
-      telefonoContratista:    document.getElementById('telefonoContratista').value.trim(),
-      correoContratista:      document.getElementById('correoContratista').value.trim(),
-      descripcionContratista: document.getElementById('descripcionContratista').value.trim(),
-      experiencia:            document.getElementById('experiencia').value.trim() || null,
+      nombreContratista:       document.getElementById('nombreContratista').value.trim(),
+      rfcContratista:          document.getElementById('rfcContratista').value.trim().toUpperCase(),
+      telefonoContratista:     document.getElementById('telefonoContratista').value.trim(),
+      correoContratista:       document.getElementById('correoContratista').value.trim(),
+      descripcionContratista:  document.getElementById('descripcionContratista').value.trim(),
+      experiencia:             document.getElementById('experiencia').value.trim() || null,
       calificacionContratista: currentStar > 0 ? currentStar : null,
-      ubicacionContratista:   document.getElementById('ubicacionContratista').value,
+      /* Normalizado para coincidir con enum Java: CDMX | Hidalgo | Puebla */
+      ubicacionContratista:    normalizarUbicacion(document.getElementById('ubicacionContratista').value)
     };
 
     try {
       const res = await fetch(`${API_BASE}/contratistas`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       if (res.status === 201) {
@@ -348,10 +385,9 @@
         limpiar();
       } else {
         const err = await res.json().catch(() => ({}));
-        showToast(err.message || `Error ${res.status}`, false);
+        showToast(err.message || err.error || `Error ${res.status}`, false);
       }
     } catch(e) {
-      console.error(e);
       showToast('No se pudo conectar con el servidor', false);
     } finally {
       setLoading(btn, false);

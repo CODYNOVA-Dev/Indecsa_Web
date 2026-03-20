@@ -15,12 +15,12 @@
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
     }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
-
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
@@ -30,9 +30,7 @@
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
     .scroll-top i { font-size:16px; color:var(--navy); }
-
     main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
-
     .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.25); display:flex; align-items:center; justify-content:center; }
@@ -42,25 +40,21 @@
     .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
-
     .worker-badge { max-width:900px; margin:0 auto 1.5rem; background:rgba(250,199,117,0.06); border:1px solid rgba(250,199,117,0.2); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:14px; animation:fadeUp .35s ease both; }
     .worker-badge > i { color:var(--warning); font-size:16px; }
     .worker-badge-text { font-size:13px; color:var(--muted); }
     .worker-badge-text strong { color:var(--white); font-weight:500; }
     .worker-badge-id { margin-left:auto; font-size:11px; color:var(--warning); background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.2); border-radius:6px; padding:4px 10px; letter-spacing:1px; text-transform:uppercase; font-weight:500; }
-
     .no-banner { max-width:900px; margin:0 auto; background:rgba(240,149,149,0.06); border:1px solid rgba(240,149,149,0.25); border-radius:14px; padding:3rem 2rem; text-align:center; animation:fadeUp .3s ease both; }
     .no-banner i { font-size:36px; color:rgba(240,149,149,0.4); margin-bottom:1rem; display:block; }
     .no-banner p { color:var(--muted); font-size:14px; margin-bottom:1.5rem; }
     .no-banner a { display:inline-flex; align-items:center; gap:7px; padding:10px 22px; border-radius:10px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); color:var(--purple); text-decoration:none; font-size:13px; transition:background .2s; }
     .no-banner a:hover { background:rgba(175,169,236,0.18); }
-
     .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
     .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(250,199,117,0.05) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
     .form-card-header h3 { font-size:14px; font-weight:500; color:var(--warning); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
     .required-note { font-size:11px; color:var(--muted); }
     .required-note span { color:var(--danger); }
-
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
     .form-section { display:flex; flex-direction:column; gap:1.25rem; }
     .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
@@ -69,11 +63,12 @@
     .col-2 { grid-template-columns:1fr 1fr; }
     .col-3 { grid-template-columns:1fr 1fr 1fr; }
     .col-1 { grid-template-columns:1fr; }
-
     .field { display:flex; flex-direction:column; gap:7px; }
     .field label { font-size:12px; font-weight:500; color:var(--muted); }
     .field label .req { color:var(--danger); margin-left:2px; }
-
+    .field-error { font-size:11px; color:var(--danger); display:none; margin-top:2px; }
+    .field.has-error .field-error { display:block; }
+    .field.has-error input,.field.has-error select,.field.has-error textarea { border-color:var(--danger)!important; box-shadow:0 0 0 3px rgba(240,149,149,0.07)!important; }
     .input-wrap { position:relative; }
     .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .input-wrap.top-icon i { top:16px; transform:none; }
@@ -84,15 +79,12 @@
     select option { background:#152D50; color:var(--white); }
     textarea { resize:vertical; min-height:110px; padding-top:12px; line-height:1.6; }
     input[type="date"] { color-scheme:dark; }
-
     .stars-container { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; }
     .stars-wrap { display:flex; align-items:center; gap:2px; padding:9px 14px; }
     .star-btn { font-size:22px; cursor:pointer; color:rgba(138,155,181,0.3); transition:color .15s,transform .1s; background:none; border:none; }
     .star-btn.active { color:var(--gold); }
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
-
-    /* estatus pills */
     .estatus-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
     .epill input[type="radio"] { display:none; }
     .epill label { display:flex; align-items:center; justify-content:center; gap:5px; padding:9px 6px; border-radius:9px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:11px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; }
@@ -103,39 +95,32 @@
     .ep-comp  input:checked + label { background:rgba(175,169,236,0.12); border-color:#AFA9EC; color:#AFA9EC; }
     .ep-canc  input:checked + label { background:rgba(240,149,149,0.1);  border-color:#F09595; color:#F09595; }
     .epill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
-
     .date-error { font-size:11px; color:var(--danger); display:none; margin-top:4px; }
     .date-error.show { display:block; }
-
     .form-divider { height:1px; background:var(--border); }
-
     .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
     .form-footer-left i { color:var(--warning); }
     .form-footer-right { display:flex; gap:10px; }
-    .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
+    .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; text-decoration:none; }
     .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
     .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
-    .btn-ghost:hover { border-color:var(--muted); color:var(--white); }
+    .btn-ghost:hover:not(:disabled) { border-color:var(--muted); color:var(--white); }
     .btn-warning { background:linear-gradient(135deg,#FAC775,#d4963a); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(250,199,117,0.2); }
     .btn-warning:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(250,199,117,0.3); }
-
     .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
     .btn.loading .spinner { display:inline-block; }
     .btn.loading .btn-icon { display:none; }
     @keyframes spin { to{transform:rotate(360deg)} }
-
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     .toast i { font-size:16px; }
-
     footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
     .footer-left { font-size:12px; color:var(--muted); }
     .footer-contact { display:flex; gap:24px; }
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
-
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     @media(max-width:680px) { .col-2,.col-3{grid-template-columns:1fr} .estatus-grid{grid-template-columns:1fr 1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
   </style>
@@ -149,15 +134,15 @@
 
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link" href="../Trabajador/AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link" href="../Contratistas/AltaContratista.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
-  <a class="nav-link active" href="AltaProyecto.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link active" href="ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
 <main>
-
   <div class="page-header">
     <div class="page-header-left">
       <div class="page-icon"><i class="fa-solid fa-pen-to-square"></i></div>
@@ -195,20 +180,26 @@
 
     <form class="form-body" id="formEditar" novalidate>
 
-      <!-- ── IDENTIFICACIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-folder-open" style="color:var(--gold);font-size:11px"></i> Identificación</div>
         <div class="form-row col-2">
-          <div class="field">
+          <div class="field" id="field-nombre">
             <label>Nombre del proyecto <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-diagram-project"></i>
               <input type="text" id="nombreProyecto" placeholder="Ej. Construcción Torre Norte" maxlength="150" />
             </div>
+            <span class="field-error">El nombre es obligatorio (máx. 150 caracteres)</span>
           </div>
           <div class="field">
             <label>Tipo de proyecto</label>
             <div class="input-wrap"><i class="fa-solid fa-tag"></i>
-              <input type="text" id="tipoProyecto" placeholder="Ej. Obra civil, Eléctrico…" maxlength="80" />
+              <select id="tipoProyecto">
+                <option value="">Sin tipo especificado</option>
+                <option value="Obra">Obra</option>
+                <option value="Remodelacion">Remodelación</option>
+                <option value="Instalacion de mobiliario">Instalación de mobiliario</option>
+                <option value="Venta de mobiliario">Venta de mobiliario</option>
+              </select>
             </div>
           </div>
         </div>
@@ -216,20 +207,24 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── UBICACIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-map-location-dot" style="color:var(--gold);font-size:11px"></i> Ubicación</div>
         <div class="form-row col-3">
-          <div class="field">
+          <div class="field" id="field-geo">
             <label>Estado <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-map"></i>
+              <!--
+                Values EXACTOS del enum UbicacionGeo en Java:
+                CDMX | Hidalgo | Puebla
+              -->
               <select id="estadoProyectoGeo">
                 <option value="" disabled>Selecciona…</option>
                 <option value="CDMX">CDMX</option>
-                <option value="HIDALGO">Hidalgo</option>
-                <option value="PUEBLA">Puebla</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Puebla">Puebla</option>
               </select>
             </div>
+            <span class="field-error">El estado es obligatorio</span>
           </div>
           <div class="field">
             <label>Municipio</label>
@@ -248,7 +243,6 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── FECHAS Y CALIFICACIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-calendar-days" style="color:var(--gold);font-size:11px"></i> Plazos y valoración</div>
         <div class="form-row col-2">
@@ -286,17 +280,16 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── ESTATUS ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estatus</div>
         <div class="form-row col-1">
           <div class="field">
-            <label>Estatus del proyecto <span class="req">*</span></label>
+            <label>Estatus del proyecto</label>
             <div class="estatus-grid">
               <div class="epill ep-plan"><input type="radio" name="estatusProyecto" id="ep1" value="PLANEACION"/><label for="ep1"><i class="fa-solid fa-pen-ruler"></i> Planeación</label></div>
               <div class="epill ep-curso"><input type="radio" name="estatusProyecto" id="ep2" value="EN_CURSO"/><label for="ep2"><i class="fa-solid fa-play"></i> En curso</label></div>
               <div class="epill ep-paus"><input type="radio" name="estatusProyecto" id="ep3" value="PAUSADO"/><label for="ep3"><i class="fa-solid fa-pause"></i> Pausado</label></div>
-              <div class="epill ep-comp"><input type="radio" name="estatusProyecto" id="ep4" value="COMPLETADO"/><label for="ep4"><i class="fa-solid fa-circle-check"></i> Completado</label></div>
+              <div class="epill ep-comp"><input type="radio" name="estatusProyecto" id="ep4" value="FINALIZADO"/><label for="ep4"><i class="fa-solid fa-circle-check"></i> Completado</label></div>
               <div class="epill ep-canc"><input type="radio" name="estatusProyecto" id="ep5" value="CANCELADO"/><label for="ep5"><i class="fa-solid fa-ban"></i> Cancelado</label></div>
             </div>
           </div>
@@ -305,7 +298,6 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── DESCRIPCIÓN ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-align-left" style="color:var(--gold);font-size:11px"></i> Descripción</div>
         <div class="form-row col-1">
@@ -326,6 +318,7 @@
         <span id="changesLabel">Sin cambios pendientes</span>
       </div>
       <div class="form-footer-right">
+        <a class="btn btn-ghost" href="ListaProyectos.html"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
         <button class="btn btn-ghost" type="button" onclick="descartar()"><i class="fa-solid fa-rotate-left"></i> Descartar</button>
         <button class="btn btn-warning" type="button" id="btnGuardar" onclick="guardar()">
           <span class="spinner"></span>
@@ -335,7 +328,6 @@
       </div>
     </div>
   </div>
-
 </main>
 
 <footer>
@@ -352,14 +344,31 @@
 <script>
   const API_BASE    = 'http://localhost:8080/api/v1';
   const STORAGE_KEY = 'indecsa_proyecto_editar';
-  const starLabels  = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+  const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+  const $ = id => document.getElementById(id);
 
-  let proyectoActual = null;
-  let originales     = {};
-  let currentStar    = 0;
-  let fechasValidas  = true;
+  let proyectoActual = null, originales = {}, currentStar = 0, fechasValidas = true;
 
-  /* ════ INIT ════ */
+  /*
+    Normaliza ubicación al valor EXACTO del enum Java UbicacionGeo:
+    CDMX | Hidalgo | Puebla
+    Corrige también el bug previo: ($(...).value || '').value que devolvía undefined.
+  */
+  function normalizarUbicacion(val) {
+    const mapa = {
+      'CDMX'    : 'CDMX',
+      'cdmx'    : 'CDMX',
+      'HIDALGO' : 'Hidalgo',
+      'hidalgo' : 'Hidalgo',
+      'Hidalgo' : 'Hidalgo',
+      'PUEBLA'  : 'Puebla',
+      'puebla'  : 'Puebla',
+      'Puebla'  : 'Puebla'
+    };
+    return mapa[val] !== undefined ? mapa[val] : val;
+  }
+
+  /* ══ INIT ══ */
   function init() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) { mostrarNoBanner(); return; }
@@ -368,124 +377,184 @@
   }
 
   function mostrarNoBanner() {
-    document.getElementById('badge').style.display    = 'none';
-    document.getElementById('formCard').style.display = 'none';
-    document.getElementById('noBanner').style.display = 'block';
+    $('badge').style.display    = 'none';
+    $('formCard').style.display = 'none';
+    $('noBanner').style.display = 'block';
   }
 
-  /* ════ CARGAR ════ */
+  /* ══ CARGAR DATOS ══ */
   function cargarDatos(p) {
-    document.getElementById('badgeName').textContent = p.nombreProyecto || '—';
-    document.getElementById('badgeId').textContent   = p.idProyecto     || '—';
+    $('badgeName').textContent = p.nombreProyecto || '—';
+    $('badgeId').textContent   = p.idProyecto     || '—';
+
     setVal('nombreProyecto',      p.nombreProyecto);
-    setVal('tipoProyecto',        p.tipoProyecto);
-    setVal('estadoProyectoGeo',   p.estadoProyectoGeo);
     setVal('municipioProyecto',   p.municipioProyecto);
     setVal('lugarProyecto',       p.lugarProyecto);
     setVal('fechaEstimadaInicio', p.fechaEstimadaInicio);
     setVal('fechaEstimadaFin',    p.fechaEstimadaFin);
     setVal('descripcionProyecto', p.descripcionProyecto);
-    if (p.calificacionProyecto) {
-      currentStar = p.calificacionProyecto;
-      document.getElementById('calificacionProyecto').value = currentStar;
-      paintStars(currentStar);
-      document.getElementById('starLabel').textContent = starLabels[currentStar] || '';
+
+    /* tipoProyecto */
+    if (p.tipoProyecto) {
+      const sel = $('tipoProyecto');
+      const exists = [...sel.options].some(o => o.value === p.tipoProyecto);
+      if (exists) {
+        sel.value = p.tipoProyecto;
+      } else {
+        const o = document.createElement('option');
+        o.value = p.tipoProyecto; o.textContent = p.tipoProyecto;
+        sel.appendChild(o); sel.value = p.tipoProyecto;
+      }
     }
+
+    /* estadoProyectoGeo — normalizar al casing exacto del enum */
+    const geo = normalizarUbicacion((p.estadoProyectoGeo || '').toString());
+    if (geo) $('estadoProyectoGeo').value = geo;
+
+    /* calificación */
+    currentStar = p.calificacionProyecto || 0;
+    $('calificacionProyecto').value = currentStar || '';
+    paintStars(currentStar);
+    $('starLabel').textContent = currentStar > 0 ? STAR_LABELS[currentStar] : 'Sin calificar';
+
+    /* estatus */
     const radio = document.querySelector(`input[name="estatusProyecto"][value="${p.estatusProyecto}"]`);
     if (radio) radio.checked = true;
+
     guardarSnapshot();
-    document.querySelectorAll('#formEditar input, #formEditar select, #formEditar textarea')
-      .forEach(el => { el.addEventListener('input',detectar); el.addEventListener('change',detectar); });
+    document.querySelectorAll('#formEditar input,#formEditar select,#formEditar textarea')
+      .forEach(el => { el.addEventListener('input', detectar); el.addEventListener('change', detectar); });
   }
 
-  function setVal(id, val) { const el=document.getElementById(id); if(el && val!=null) el.value=val; }
+  function setVal(id, val) { const el = $(id); if (el && val != null) el.value = val; }
 
-  /* ════ FECHAS ════ */
+  /* ══ FECHAS ══ */
   function validarFechas() {
-    const ini = document.getElementById('fechaEstimadaInicio').value;
-    const fin = document.getElementById('fechaEstimadaFin').value;
-    const err = document.getElementById('dateError');
-    if (ini && fin && fin < ini) { err.classList.add('show'); fechasValidas=false; }
-    else { err.classList.remove('show'); fechasValidas=true; }
+    const ini = $('fechaEstimadaInicio').value, fin = $('fechaEstimadaFin').value;
+    if (ini && fin && fin < ini) { $('dateError').classList.add('show'); fechasValidas = false; }
+    else { $('dateError').classList.remove('show'); fechasValidas = true; }
     detectar();
   }
 
-  /* ════ CAMBIOS ════ */
+  /* ══ LEER FORMULARIO ══
+     CORRECCIÓN PRINCIPAL: la línea original tenía un bug:
+       const geo = ($('estadoProyectoGeo').value || '').value || null;
+     .value de un string devuelve undefined → estadoProyectoGeo siempre era null → 400.
+     Ahora usa normalizarUbicacion() directamente sobre el string.
+  ══ */
   function leerForm() {
-    const radio = document.querySelector('input[name="estatusProyecto"]:checked');
     return {
-      nombreProyecto:      document.getElementById('nombreProyecto').value.trim(),
-      tipoProyecto:        document.getElementById('tipoProyecto').value.trim() || null,
-      estadoProyectoGeo:   document.getElementById('estadoProyectoGeo').value,
-      municipioProyecto:   document.getElementById('municipioProyecto').value.trim() || null,
-      lugarProyecto:       document.getElementById('lugarProyecto').value.trim() || null,
-      fechaEstimadaInicio: document.getElementById('fechaEstimadaInicio').value || null,
-      fechaEstimadaFin:    document.getElementById('fechaEstimadaFin').value || null,
-      calificacionProyecto: currentStar > 0 ? currentStar : null,
-      descripcionProyecto: document.getElementById('descripcionProyecto').value.trim() || null,
-      estatusProyecto:     radio ? radio.value : '',
+      nombreProyecto:       $('nombreProyecto').value.trim()       || null,
+      tipoProyecto:         $('tipoProyecto').value                || null,
+      /* FIX: leer directamente el value del select y normalizarlo */
+      estadoProyectoGeo:    normalizarUbicacion($('estadoProyectoGeo').value || '') || null,
+      municipioProyecto:    $('municipioProyecto').value.trim()    || null,
+      lugarProyecto:        $('lugarProyecto').value.trim()        || null,
+      fechaEstimadaInicio:  $('fechaEstimadaInicio').value         || null,
+      fechaEstimadaFin:     $('fechaEstimadaFin').value            || null,
+      calificacionProyecto: currentStar > 0 ? currentStar         : null,
+      descripcionProyecto:  $('descripcionProyecto').value.trim()  || null,
     };
   }
-  function guardarSnapshot() { originales = leerForm(); }
-  function detectar() {
-    const actual = leerForm();
-    const mod = Object.keys(originales).filter(k=>String(actual[k]??'')!==String(originales[k]??'')).length;
-    const lbl = document.getElementById('changesLabel');
-    lbl.textContent = mod>0 ? `${mod} campo${mod>1?'s':''} modificado${mod>1?'s':''}` : 'Sin cambios pendientes';
-    lbl.style.color = mod>0 ? 'var(--warning)' : '';
+
+  function leerEstatus() {
+    const r = document.querySelector('input[name="estatusProyecto"]:checked');
+    return r ? r.value : null;
   }
 
-  /* ════ GUARDAR ════ */
+  function guardarSnapshot() { originales = { ...leerForm(), estatusProyecto: leerEstatus() }; }
+
+  function detectar() {
+    const actual = { ...leerForm(), estatusProyecto: leerEstatus() };
+    const mod = Object.keys(originales).filter(k => String(actual[k] ?? '') !== String(originales[k] ?? '')).length;
+    const lbl = $('changesLabel');
+    lbl.textContent = mod > 0 ? `${mod} campo${mod > 1 ? 's' : ''} modificado${mod > 1 ? 's' : ''}` : 'Sin cambios pendientes';
+    lbl.style.color = mod > 0 ? 'var(--warning)' : '';
+  }
+
+  /* ══ GUARDAR ══ */
   async function guardar() {
     if (!proyectoActual) return;
     if (!fechasValidas) { showToast('Corrige las fechas antes de guardar', false); return; }
-    const form = leerForm();
-    if (!form.nombreProyecto || !form.estadoProyectoGeo) { showToast('Nombre y estado son obligatorios', false); return; }
 
-    const btn = document.getElementById('btnGuardar');
+    const dto = leerForm();
+
+    if (!dto.nombreProyecto) {
+      $('field-nombre').classList.add('has-error');
+      showToast('El nombre del proyecto es obligatorio', false); return;
+    }
+    if (!dto.estadoProyectoGeo) {
+      $('field-geo').classList.add('has-error');
+      showToast('El estado/ubicación es obligatorio', false); return;
+    }
+
+    const estatus = leerEstatus();
+    const btn = $('btnGuardar');
     setLoading(btn, true);
-    const { estatusProyecto, ...dto } = form;
 
     try {
-      const resPut = await fetch(`${API_BASE}/proyectos/${proyectoActual.idProyecto}`, {
-        method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(dto)
-      });
-      if (!resPut.ok) { const e=await resPut.json().catch(()=>{}); throw new Error(e?.message||`Error ${resPut.status}`); }
+      /* 1. PUT datos (sin estatusProyecto) */
+      const resPut = await fetch(
+        `${API_BASE}/proyectos/${proyectoActual.idProyecto}`,
+        { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(dto) }
+      );
+      if (!resPut.ok) {
+        const errBody = await resPut.json().catch(() => ({}));
+        throw new Error(errBody.message || errBody.error || `Error ${resPut.status}`);
+      }
       const updated = await resPut.json();
 
-      if (estatusProyecto && estatusProyecto !== proyectoActual.estatusProyecto) {
-        const resPatch = await fetch(`${API_BASE}/proyectos/${proyectoActual.idProyecto}/estatus?estatus=${estatusProyecto}`, { method:'PATCH' });
-        if (!resPatch.ok) { const e=await resPatch.json().catch(()=>{}); throw new Error(e?.message||`Error estatus ${resPatch.status}`); }
+      /* 2. PATCH estatus solo si cambió */
+      if (estatus && estatus !== proyectoActual.estatusProyecto) {
+        const resPatch = await fetch(
+          `${API_BASE}/proyectos/${proyectoActual.idProyecto}/estatus?estatus=${estatus}`,
+          { method:'PATCH' }
+        );
+        if (!resPatch.ok) {
+          const e = await resPatch.json().catch(() => ({}));
+          throw new Error(e?.message || `Error estatus ${resPatch.status}`);
+        }
       }
 
-      proyectoActual = { ...updated, estatusProyecto };
+      /* 3. Actualizar estado local */
+      proyectoActual = { ...updated, estatusProyecto: estatus || updated.estatusProyecto };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(proyectoActual));
-      document.getElementById('badgeName').textContent = proyectoActual.nombreProyecto;
+      $('badgeName').textContent = proyectoActual.nombreProyecto;
       guardarSnapshot(); detectar();
       showToast('Cambios guardados correctamente', true);
-    } catch(e) {
-      console.error(e); showToast(e.message||'Error al guardar', false);
-    } finally { setLoading(btn,false); }
+
+    } catch (e) {
+      showToast(e.message || 'Error al guardar', false);
+    } finally {
+      setLoading(btn, false);
+    }
   }
 
-  function descartar() { if(proyectoActual){ cargarDatos(proyectoActual); showToast('Cambios descartados',false); } }
+  function descartar() {
+    if (proyectoActual) { cargarDatos(proyectoActual); showToast('Cambios descartados', false); }
+  }
 
-  /* ════ ESTRELLAS ════ */
+  /* ══ ESTRELLAS ══ */
   const stars = document.querySelectorAll('.star-btn');
-  stars.forEach(s=>{
-    s.addEventListener('click',()=>{ currentStar=parseInt(s.dataset.val); document.getElementById('calificacionProyecto').value=currentStar; paintStars(currentStar); document.getElementById('starLabel').textContent=starLabels[currentStar]; detectar(); });
-    s.addEventListener('mouseenter',()=>paintStars(parseInt(s.dataset.val)));
-    s.addEventListener('mouseleave',()=>paintStars(currentStar));
+  stars.forEach(s => {
+    s.addEventListener('click', () => { currentStar = parseInt(s.dataset.val); $('calificacionProyecto').value = currentStar; paintStars(currentStar); $('starLabel').textContent = STAR_LABELS[currentStar]; detectar(); });
+    s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
+    s.addEventListener('mouseleave', () => paintStars(currentStar));
   });
-  function paintStars(n){ stars.forEach(s=>s.classList.toggle('active',parseInt(s.dataset.val)<=n)); }
+  function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
 
-  /* helpers */
-  function setLoading(btn,on){ btn.disabled=on; btn.classList.toggle('loading',on); btn.querySelector('.btn-label').textContent=on?'Guardando…':'Guardar cambios'; }
-  function showToast(msg,ok){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--danger)'; const icon=document.getElementById('toastIcon'); icon.style.color=ok?'var(--success)':'var(--danger)'; icon.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500); }
-  function cerrarSesion(){ window.location.href='../../index.html'; }
+  /* ══ HELPERS ══ */
+  function setLoading(btn, on) { btn.disabled = on; btn.classList.toggle('loading', on); btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios'; }
+  function showToast(msg, ok) { const t = $('toast'); $('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; const ic = $('toastIcon'); ic.style.color = ok ? 'var(--success)' : 'var(--danger)'; ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
+  function cerrarSesion() { window.location.href = '../../index.html'; }
 
-  let lastScroll=0; const scrollBtn=document.getElementById('scrollTop');
-  window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
+  document.querySelectorAll('#formEditar input,#formEditar select,#formEditar textarea').forEach(el => {
+    el.addEventListener('input',  () => el.closest('.field')?.classList.remove('has-error'));
+    el.addEventListener('change', () => el.closest('.field')?.classList.remove('has-error'));
+  });
+
+  let lastScroll = 0; const scrollBtn = $('scrollTop');
+  window.addEventListener('scroll', () => { const c = window.scrollY; document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80); lastScroll = c <= 0 ? 0 : c; scrollBtn.classList.toggle('visible', c > 200); });
 
   init();
 </script>

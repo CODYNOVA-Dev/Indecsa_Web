@@ -7,349 +7,114 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
-      --navy:       #0B1F3A;
-      --navy-mid:   #152D50;
-      --navy-dark:  #0a1828;
-      --navy-card:  #112244;
-      --gold:       #C8A96E;
-      --gold-light: #E0C890;
-      --gold-dim:   rgba(200,169,110,0.15);
-      --white:      #F8F9FC;
-      --muted:      #8A9BB5;
-      --success:    #5DCAA5;
-      --danger:     #F09595;
-      --warning:    #FAC775;
-      --border:     rgba(200,169,110,0.18);
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --border:rgba(200,169,110,0.18);
     }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--navy);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      color: var(--white);
-      padding-top: 162px;
-    }
-
-    /* ── HEADER ── */
-    header {
-      background: var(--navy-mid);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem; height: 72px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-    }
-    .header-tag { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-
-    /* ── NAVBAR ── */
-    nav {
-      background: var(--navy-dark);
-      border-bottom: 1px solid rgba(200,169,110,0.12);
-      display: flex; align-items: center;
-      padding: 0 2rem; height: 48px; gap: 4px;
-      position: fixed; top: 72px; left: 0; right: 0; z-index: 99;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-    }
-    .nav-link {
-      display: flex; align-items: center; gap: 7px;
-      padding: 6px 16px; border-radius: 6px;
-      font-size: 13px; color: var(--muted);
-      text-decoration: none; transition: background .2s, color .2s;
-    }
-    .nav-link:hover, .nav-link.active { background: rgba(200,169,110,0.1); color: var(--gold); }
-    .nav-link i { font-size: 13px; }
-    .nav-sep { flex: 1; }
-    .nav-logout {
-      display: flex; align-items: center; gap: 7px;
-      padding: 6px 16px; border-radius: 6px;
-      font-size: 13px; color: var(--danger); cursor: pointer;
-      border: 1px solid rgba(226,75,74,0.25);
-      background: none; font-family: 'DM Sans', sans-serif;
-      transition: background .2s;
-    }
-    .nav-logout:hover { background: rgba(226,75,74,0.1); }
-
-    /* ── SUBNAV ── */
-    .subnav {
-      background: var(--navy-mid);
-      border-bottom: 1px solid rgba(200,169,110,0.1);
-      display: flex; align-items: center;
-      padding: 0 2rem; height: 42px; gap: 4px;
-      position: fixed; top: 120px; left: 0; right: 0; z-index: 98;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-    }
-    .subnav-link {
-      display: flex; align-items: center; gap: 6px;
-      padding: 5px 14px; border-radius: 6px;
-      font-size: 12px; color: var(--muted);
-      text-decoration: none; font-weight: 500;
-      transition: background .2s, color .2s; white-space: nowrap;
-    }
-    .subnav-link i { font-size: 11px; }
-    .subnav-link.green:hover, .subnav-link.green.active { background: rgba(93,202,165,0.1);  color: #5DCAA5; }
-    .subnav-link.blue:hover,  .subnav-link.blue.active  { background: rgba(133,183,235,0.1); color: #85B7EB; }
-    .subnav-link.amber:hover, .subnav-link.amber.active { background: rgba(250,199,117,0.1); color: #FAC775; }
-    .subnav-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .subnav-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.07); margin: 0 4px; }
-
-    .nav-hidden header  { transform: translateY(-72px); }
-    .nav-hidden nav     { transform: translateY(-72px); }
-    .nav-hidden .subnav { transform: translateY(-72px); }
-
-    /* ── SCROLL TOP ── */
-    .scroll-top {
-      position: fixed; bottom: 28px; right: 28px;
-      width: 46px; height: 46px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold) 0%, #a8844a 100%);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 20px rgba(200,169,110,0.35);
-      transition: transform .2s, opacity .3s, box-shadow .2s;
-      opacity: 0; pointer-events: none; z-index: 997;
-    }
-    .scroll-top.visible { opacity: 1; pointer-events: auto; }
-    .scroll-top:hover { transform: translateY(-3px); }
-    .scroll-top i { font-size: 16px; color: var(--navy); }
-
-    /* ── MAIN ── */
-    main {
-      flex: 1; padding: 3rem 2rem;
-      background: radial-gradient(ellipse at 70% 30%, #1a2e4a 0%, var(--navy) 70%);
-    }
-
-    .page-header {
-      max-width: 900px; margin: 0 auto 2.5rem;
-      display: flex; align-items: flex-end;
-      justify-content: space-between; gap: 1rem;
-      animation: fadeUp .3s ease both;
-    }
-    .page-header-left { display: flex; align-items: center; gap: 1rem; }
-    .page-icon {
-      width: 54px; height: 54px; border-radius: 14px;
-      background: rgba(250,199,117,0.1);
-      border: 1px solid rgba(250,199,117,0.25);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .page-icon i { font-size: 22px; color: var(--warning); }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--white); }
-    .page-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
-    .breadcrumb { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-    .breadcrumb a { color: var(--gold); text-decoration: none; }
-    .breadcrumb i { font-size: 10px; }
-
-    /* ── BADGE ID ── */
-    .worker-badge {
-      max-width: 900px; margin: 0 auto 1.5rem;
-      background: rgba(250,199,117,0.06);
-      border: 1px solid rgba(250,199,117,0.2);
-      border-radius: 12px; padding: 14px 20px;
-      display: flex; align-items: center; gap: 14px;
-      animation: fadeUp .35s ease both;
-    }
-    .worker-badge > i { color: var(--warning); font-size: 16px; flex-shrink: 0; }
-    .worker-badge-text { font-size: 13px; color: var(--muted); }
-    .worker-badge-text strong { color: var(--white); font-weight: 500; }
-    .worker-badge-id {
-      margin-left: auto; font-size: 11px; color: var(--warning);
-      background: rgba(250,199,117,0.1); border: 1px solid rgba(250,199,117,0.2);
-      border-radius: 6px; padding: 4px 10px;
-      letter-spacing: 1px; text-transform: uppercase; font-weight: 500;
-    }
-
-    /* ── NO WORKER BANNER ── */
-    .no-worker-banner {
-      max-width: 900px; margin: 0 auto;
-      background: rgba(240,149,149,0.06); border: 1px solid rgba(240,149,149,0.25);
-      border-radius: 14px; padding: 3rem 2rem; text-align: center;
-      animation: fadeUp .3s ease both;
-    }
-    .no-worker-banner i { font-size: 36px; color: rgba(240,149,149,0.4); margin-bottom: 1rem; display: block; }
-    .no-worker-banner p { color: var(--muted); font-size: 14px; margin-bottom: 1.5rem; }
-    .no-worker-banner a {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 10px 22px; border-radius: 10px;
-      background: rgba(133,183,235,0.1); border: 1px solid rgba(133,183,235,0.25);
-      color: #85B7EB; text-decoration: none; font-size: 13px;
-      transition: background .2s;
-    }
-    .no-worker-banner a:hover { background: rgba(133,183,235,0.18); }
-
-    /* ── FORM CARD ── */
-    .form-card {
-      max-width: 900px; margin: 0 auto;
-      background: var(--navy-card);
-      border: 1px solid var(--border);
-      border-radius: 18px; overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
-      animation: fadeUp .45s ease both;
-    }
-    .form-card-header {
-      padding: 1.5rem 2rem;
-      background: linear-gradient(90deg, rgba(250,199,117,0.05) 0%, transparent 100%);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .form-card-header h3 {
-      font-size: 14px; font-weight: 500; color: var(--warning);
-      letter-spacing: .5px; text-transform: uppercase;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .required-note { font-size: 11px; color: var(--muted); }
-    .required-note span { color: var(--danger); }
-
-    /* ── SECCIONES ── */
-    .form-body { padding: 2rem; display: flex; flex-direction: column; gap: 2rem; }
-    .form-section { display: flex; flex-direction: column; gap: 1.25rem; }
-    .section-label {
-      font-size: 11px; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 1.5px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .form-row { display: grid; gap: 1rem; }
-    .col-2 { grid-template-columns: 1fr 1fr; }
-    .col-1 { grid-template-columns: 1fr; }
-
-    /* ── CAMPO ── */
-    .field { display: flex; flex-direction: column; gap: 7px; }
-    .field label { font-size: 12px; font-weight: 500; color: var(--muted); }
-    .field label .req { color: var(--danger); margin-left: 2px; }
-    .input-wrap { position: relative; }
-    .input-wrap i {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      font-size: 13px; color: var(--muted); pointer-events: none;
-    }
-    .input-wrap.top-icon i { top: 16px; transform: none; }
-    input, select, textarea {
-      width: 100%; background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
-      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 13.5px;
-      padding: 11px 14px 11px 42px;
-      transition: border-color .2s, background .2s, box-shadow .2s;
-      outline: none; -webkit-appearance: none; appearance: none;
-    }
-    input::placeholder, textarea::placeholder { color: rgba(138,155,181,0.5); }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--warning); background: rgba(250,199,117,0.04);
-      box-shadow: 0 0 0 3px rgba(250,199,117,0.07);
-    }
-    select {
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: calc(100% - 14px) center; padding-right: 36px;
-    }
-    select option { background: #152D50; color: var(--white); }
-    textarea { resize: vertical; min-height: 100px; padding-top: 12px; line-height: 1.6; }
-
-    /* ── ESTRELLAS ── */
-    .stars-container {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px; display: flex; align-items: center;
-    }
-    .stars-wrap { display: flex; align-items: center; gap: 2px; padding: 9px 14px; }
-    .star-btn {
-      font-size: 22px; cursor: pointer; color: rgba(138,155,181,0.3);
-      transition: color .15s, transform .1s; background: none; border: none;
-    }
-    .star-btn.active { color: var(--gold); }
-    .star-btn:hover { color: var(--gold); transform: scale(1.15); }
-    .star-value-label { font-size: 12px; color: var(--muted); margin-left: 8px; min-width: 60px; }
-
-    /* ── ESTADO PILLS ── */
-    .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .status-pill input[type="radio"] { display: none; }
-    .status-pill label {
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 10px 8px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03);
-      font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer;
-      transition: all .2s;
-    }
-    .status-pill label i { font-size: 12px; }
-    .pill-activo    input:checked + label { background: rgba(93,202,165,0.12);  border-color: #5DCAA5; color: #5DCAA5; }
-    .pill-inactivo  input:checked + label { background: rgba(138,155,181,0.12); border-color: var(--muted); color: var(--muted); }
-    .pill-vacaciones input:checked + label { background: rgba(250,199,117,0.12); border-color: #FAC775; color: #FAC775; }
-    .pill-baja      input:checked + label { background: rgba(240,149,149,0.12); border-color: var(--danger); color: var(--danger); }
-    .status-pill label:hover { background: rgba(200,169,110,0.06); border-color: var(--gold); color: var(--gold); }
-
-    .form-divider { height: 1px; background: var(--border); }
-
-    /* ── FOOTER FORM ── */
-    .form-footer {
-      padding: 1.5rem 2rem; border-top: 1px solid var(--border);
-      background: rgba(0,0,0,0.15);
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    }
-    .form-footer-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
-    .form-footer-left i { color: var(--warning); }
-    .form-footer-right { display: flex; gap: 10px; }
-    .btn {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 22px; border-radius: 10px;
-      font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500;
-      cursor: pointer; border: none; transition: all .2s;
-    }
-    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
-    .btn-ghost { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); }
-    .btn-ghost:hover { border-color: var(--muted); color: var(--white); }
-    .btn-warning {
-      background: linear-gradient(135deg, #FAC775 0%, #d4963a 100%);
-      color: #0B1F3A; font-weight: 600;
-      box-shadow: 0 4px 20px rgba(250,199,117,0.2);
-    }
-    .btn-warning:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(250,199,117,0.3); }
-
-    /* ── SPINNER ── */
-    .spinner {
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 2px solid rgba(11,31,58,0.3); border-top-color: #0B1F3A;
-      animation: spin .7s linear infinite; display: none;
-    }
-    .btn.loading .spinner { display: inline-block; }
-    .btn.loading .btn-icon { display: none; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: var(--navy-mid); border: 1px solid var(--success);
-      border-radius: 12px; padding: 14px 20px;
-      display: flex; align-items: center; gap: 12px;
-      font-size: 13px; color: var(--white);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      opacity: 0; transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
-      z-index: 999; pointer-events: none; white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    .toast i { font-size: 16px; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy-mid); border-top: 1px solid var(--border);
-      height: 56px; display: flex; align-items: center;
-      justify-content: space-between; padding: 0 2rem;
-    }
-    .footer-left { font-size: 12px; color: var(--muted); }
-    .footer-contact { display: flex; gap: 24px; }
-    .footer-contact a {
-      font-size: 12px; color: var(--muted); text-decoration: none;
-      display: flex; align-items: center; gap: 6px; transition: color .2s;
-    }
-    .footer-contact a:hover { color: var(--gold); }
-    .footer-contact a i { font-size: 13px; color: var(--gold); }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 680px) {
-      .col-2 { grid-template-columns: 1fr; }
-      .status-grid { grid-template-columns: 1fr 1fr; }
-      .page-header { flex-direction: column; align-items: flex-start; }
-      .form-footer { flex-direction: column; align-items: stretch; }
-    }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:13px; }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+    main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+    .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.25); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .page-icon i { font-size:22px; color:var(--warning); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
+    .worker-badge { max-width:900px; margin:0 auto 1.5rem; background:rgba(250,199,117,0.06); border:1px solid rgba(250,199,117,0.2); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:14px; animation:fadeUp .35s ease both; }
+    .worker-badge > i { color:var(--warning); font-size:16px; flex-shrink:0; }
+    .worker-badge-text { font-size:13px; color:var(--muted); }
+    .worker-badge-text strong { color:var(--white); font-weight:500; }
+    .worker-badge-id { margin-left:auto; font-size:11px; color:var(--warning); background:rgba(250,199,117,0.1); border:1px solid rgba(250,199,117,0.2); border-radius:6px; padding:4px 10px; letter-spacing:1px; text-transform:uppercase; font-weight:500; }
+    .no-worker-banner { max-width:900px; margin:0 auto; background:rgba(240,149,149,0.06); border:1px solid rgba(240,149,149,0.25); border-radius:14px; padding:3rem 2rem; text-align:center; animation:fadeUp .3s ease both; }
+    .no-worker-banner i { font-size:36px; color:rgba(240,149,149,0.4); margin-bottom:1rem; display:block; }
+    .no-worker-banner p { color:var(--muted); font-size:14px; margin-bottom:1.5rem; }
+    .no-worker-banner a { display:inline-flex; align-items:center; gap:7px; padding:10px 22px; border-radius:10px; background:rgba(133,183,235,0.1); border:1px solid rgba(133,183,235,0.25); color:#85B7EB; text-decoration:none; font-size:13px; transition:background .2s; }
+    .no-worker-banner a:hover { background:rgba(133,183,235,0.18); }
+    .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
+    .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(250,199,117,0.05) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .form-card-header h3 { font-size:14px; font-weight:500; color:var(--warning); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+    .required-note { font-size:11px; color:var(--muted); }
+    .required-note span { color:var(--danger); }
+    .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
+    .form-section { display:flex; flex-direction:column; gap:1.25rem; }
+    .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .form-row { display:grid; gap:1rem; }
+    .col-2 { grid-template-columns:1fr 1fr; }
+    .col-1 { grid-template-columns:1fr; }
+    .field { display:flex; flex-direction:column; gap:7px; }
+    .field label { font-size:12px; font-weight:500; color:var(--muted); }
+    .field label .req { color:var(--danger); margin-left:2px; }
+    .input-wrap { position:relative; }
+    .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+    .input-wrap.top-icon i { top:16px; transform:none; }
+    input,select,textarea { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px 11px 42px; transition:border-color .2s,background .2s,box-shadow .2s; outline:none; -webkit-appearance:none; appearance:none; }
+    input::placeholder,textarea::placeholder { color:rgba(138,155,181,0.5); }
+    input:focus,select:focus,textarea:focus { border-color:var(--warning); background:rgba(250,199,117,0.04); box-shadow:0 0 0 3px rgba(250,199,117,0.07); }
+    select { cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 14px) center; padding-right:36px; }
+    select option { background:#152D50; color:var(--white); }
+    textarea { resize:vertical; min-height:100px; padding-top:12px; line-height:1.6; }
+    .stars-container { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; }
+    .stars-wrap { display:flex; align-items:center; gap:2px; padding:9px 14px; }
+    .star-btn { font-size:22px; cursor:pointer; color:rgba(138,155,181,0.3); transition:color .15s,transform .1s; background:none; border:none; }
+    .star-btn.active { color:var(--gold); }
+    .star-btn:hover { color:var(--gold); transform:scale(1.15); }
+    .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
+    .status-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    .status-pill input[type="radio"] { display:none; }
+    .status-pill label { display:flex; align-items:center; justify-content:center; gap:7px; padding:10px 8px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; }
+    .status-pill label i { font-size:12px; }
+    .pill-activo    input:checked + label { background:rgba(93,202,165,0.12);  border-color:#5DCAA5; color:#5DCAA5; }
+    .pill-inactivo  input:checked + label { background:rgba(138,155,181,0.12); border-color:var(--muted); color:var(--muted); }
+    .pill-vacaciones input:checked + label { background:rgba(250,199,117,0.12); border-color:#FAC775; color:#FAC775; }
+    .pill-baja      input:checked + label { background:rgba(240,149,149,0.12); border-color:var(--danger); color:var(--danger); }
+    .status-pill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
+    .form-divider { height:1px; background:var(--border); }
+    .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+    .form-footer-left i { color:var(--warning); }
+    .form-footer-right { display:flex; gap:10px; }
+    .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; text-decoration:none; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
+    .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
+    .btn-ghost:hover:not(:disabled) { border-color:var(--muted); color:var(--white); }
+    .btn-warning { background:linear-gradient(135deg,#FAC775,#d4963a); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(250,199,117,0.2); }
+    .btn-warning:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(250,199,117,0.3); }
+    .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
+    .btn.loading .spinner { display:inline-block; }
+    .btn.loading .btn-icon { display:none; }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:680px){.col-2{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr 1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}}
   </style>
 </head>
 <body>
@@ -361,34 +126,15 @@
 
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link active" href="AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link" href="../Contratistas/index.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
-  <a class="nav-link" href="../Proyectos/index.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link active" href="VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <div class="nav-sep"></div>
-  <button class="nav-logout" onclick="cerrarSesion()">
-    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-  </button>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
-<div class="subnav">
-  <a class="subnav-link green" href="AltaTrabajador.html">
-    <div class="subnav-dot" style="background:#5DCAA5"></div>
-    <i class="fa-solid fa-user-plus"></i> Registrar trabajador
-  </a>
-  <div class="subnav-sep"></div>
-  <a class="subnav-link blue" href="VisualizarTrabajadores.html">
-    <div class="subnav-dot" style="background:#85B7EB"></div>
-    <i class="fa-solid fa-list"></i> Ver lista de personal
-  </a>
-  <div class="subnav-sep"></div>
-  <a class="subnav-link amber active" href="EditTrabajador.html">
-    <div class="subnav-dot" style="background:#FAC775"></div>
-    <i class="fa-solid fa-user-pen"></i> Editar trabajador
-  </a>
-</div>
-
 <main>
-
   <div class="page-header">
     <div class="page-header-left">
       <div class="page-icon"><i class="fa-solid fa-user-pen"></i></div>
@@ -406,20 +152,16 @@
     </div>
   </div>
 
-  <!-- Badge con nombre e ID del trabajador -->
   <div class="worker-badge" id="workerBadge">
     <i class="fa-solid fa-circle-info"></i>
     <div class="worker-badge-text">Editando a: <strong id="badgeName">—</strong></div>
     <div class="worker-badge-id">ID #<span id="badgeIdNum">—</span></div>
   </div>
 
-  <!-- Mensaje si llegan sin seleccionar trabajador -->
   <div class="no-worker-banner" id="noWorkerBanner" style="display:none">
     <i class="fa-solid fa-user-slash"></i>
     <p>No se ha seleccionado ningún trabajador.<br/>Ve a la lista y presiona <strong>Editar</strong> en la tarjeta correspondiente.</p>
-    <a href="VisualizarTrabajadores.html">
-      <i class="fa-solid fa-arrow-left"></i> Volver a la lista
-    </a>
+    <a href="VisualizarTrabajadores.html"><i class="fa-solid fa-arrow-left"></i> Volver a la lista</a>
   </div>
 
   <div class="form-card" id="formCard">
@@ -430,74 +172,61 @@
 
     <form class="form-body" id="formEditar" novalidate>
 
-      <!-- ── INFORMACIÓN PERSONAL ── -->
       <div class="form-section">
-        <div class="section-label">
-          <i class="fa-solid fa-circle-user" style="color:var(--gold);font-size:11px"></i>
-          Información personal
-        </div>
+        <div class="section-label"><i class="fa-solid fa-circle-user" style="color:var(--gold);font-size:11px"></i> Información personal</div>
         <div class="form-row col-2">
           <div class="field">
             <label>Nombre completo <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-user"></i>
-              <input type="text" name="nombreTrabajador" id="nombreTrabajador"
-                     placeholder="Ej. Juan García López" maxlength="100" />
-            </div>
+            <div class="input-wrap"><i class="fa-solid fa-user"></i><input type="text" id="nombreTrabajador" placeholder="Ej. Juan García López" maxlength="100" /></div>
           </div>
           <div class="field">
             <label>NSS</label>
-            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i>
-              <input type="text" name="nssTrabajador" id="nssTrabajador"
-                     placeholder="Ej. 12345678901" maxlength="15" />
-            </div>
+            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i><input type="text" id="nssTrabajador" placeholder="Ej. 12345678901" maxlength="15" /></div>
           </div>
         </div>
         <div class="form-row col-2">
           <div class="field">
             <label>Teléfono <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-phone"></i>
-              <input type="tel" name="telefonoTrabajador" id="telefonoTrabajador"
-                     placeholder="+52 000 000 0000" maxlength="15" />
-            </div>
+            <div class="input-wrap"><i class="fa-solid fa-phone"></i><input type="tel" id="telefonoTrabajador" placeholder="+52 000 000 0000" maxlength="15" /></div>
           </div>
           <div class="field">
             <label>Correo electrónico <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-envelope"></i>
-              <input type="email" name="correoTrabajador" id="correoTrabajador"
-                     placeholder="correo@ejemplo.com" maxlength="100" />
-            </div>
+            <div class="input-wrap"><i class="fa-solid fa-envelope"></i><input type="email" id="correoTrabajador" placeholder="correo@ejemplo.com" maxlength="100" /></div>
           </div>
         </div>
       </div>
 
       <div class="form-divider"></div>
 
-      <!-- ── INFORMACIÓN PROFESIONAL ── -->
       <div class="form-section">
-        <div class="section-label">
-          <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i>
-          Información profesional
-        </div>
+        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Información profesional</div>
         <div class="form-row col-2">
           <div class="field">
             <label>Especialidad <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-helmet-safety"></i>
-              <input type="text" name="especialidadTrabajador" id="especialidadTrabajador"
-                     placeholder="Ej. Soldador, Electricista…" maxlength="100" />
+              <select id="especialidadTrabajador">
+                <option value="" disabled>Selecciona una especialidad…</option>
+                <option value="Obra">Obra</option>
+                <option value="Remodelacion">Remodelación</option>
+                <option value="Instalacion de mobiliario">Instalación de mobiliario</option>
+                <option value="Venta de mobiliario">Venta de mobiliario</option>
+              </select>
             </div>
           </div>
           <div class="field">
             <label>Fecha de ingreso <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-calendar-day"></i>
-              <input type="date" name="fechaIngreso" id="fechaIngreso" />
-            </div>
+            <div class="input-wrap"><i class="fa-solid fa-calendar-day"></i><input type="date" id="fechaIngreso" /></div>
           </div>
         </div>
         <div class="form-row col-2">
           <div class="field">
             <label>Ubicación <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
-              <select name="ubicacionTrabajador" id="ubicacionTrabajador">
+              <!--
+                Values EXACTOS del enum Ubicacion en Java:
+                CDMX | Hidalgo | Puebla
+              -->
+              <select id="ubicacionTrabajador">
                 <option value="" disabled>Selecciona…</option>
                 <option value="CDMX">CDMX</option>
                 <option value="Hidalgo">Hidalgo</option>
@@ -517,15 +246,14 @@
                 <span class="star-value-label" id="starLabel">Sin calificar</span>
               </div>
             </div>
-            <input type="hidden" name="calificacionTrabajador" id="calificacionTrabajador" />
+            <input type="hidden" id="calificacionTrabajador" />
           </div>
         </div>
         <div class="form-row col-1">
           <div class="field">
             <label>Experiencia</label>
             <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
-              <textarea name="experiencia" id="experiencia"
-                        placeholder="Describe brevemente la experiencia…" maxlength="200"></textarea>
+              <textarea id="experiencia" placeholder="Describe brevemente la experiencia…" maxlength="200"></textarea>
             </div>
           </div>
         </div>
@@ -533,9 +261,7 @@
           <div class="field">
             <label>Descripción del trabajador</label>
             <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
-              <textarea name="descripcionTrabajador" id="descripcionTrabajador"
-                        placeholder="Información adicional relevante…"
-                        maxlength="800" style="min-height:120px"></textarea>
+              <textarea id="descripcionTrabajador" placeholder="Información adicional relevante…" maxlength="800" style="min-height:120px"></textarea>
             </div>
           </div>
         </div>
@@ -543,32 +269,16 @@
 
       <div class="form-divider"></div>
 
-      <!-- ── ESTADO ── -->
       <div class="form-section">
-        <div class="section-label">
-          <i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i>
-          Estado
-        </div>
+        <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estado</div>
         <div class="form-row col-1">
           <div class="field">
-            <label>Estado del trabajador <span class="req">*</span></label>
+            <label>Estado del trabajador</label>
             <div class="status-grid">
-              <div class="status-pill pill-activo">
-                <input type="radio" name="estadoTrabajador" id="est-activo" value="ACTIVO" />
-                <label for="est-activo"><i class="fa-solid fa-circle-check"></i> Activo</label>
-              </div>
-              <div class="status-pill pill-inactivo">
-                <input type="radio" name="estadoTrabajador" id="est-inactivo" value="INACTIVO" />
-                <label for="est-inactivo"><i class="fa-solid fa-circle-xmark"></i> Inactivo</label>
-              </div>
-              <div class="status-pill pill-vacaciones">
-                <input type="radio" name="estadoTrabajador" id="est-vac" value="VACACIONES" />
-                <label for="est-vac"><i class="fa-solid fa-umbrella-beach"></i> Vacaciones</label>
-              </div>
-              <div class="status-pill pill-baja">
-                <input type="radio" name="estadoTrabajador" id="est-baja" value="BAJA" />
-                <label for="est-baja"><i class="fa-solid fa-user-slash"></i> Baja</label>
-              </div>
+              <div class="status-pill pill-activo"><input type="radio" name="estadoTrabajador" id="est-activo" value="ACTIVO"/><label for="est-activo"><i class="fa-solid fa-circle-check"></i> Activo</label></div>
+              <div class="status-pill pill-inactivo"><input type="radio" name="estadoTrabajador" id="est-inactivo" value="INACTIVO"/><label for="est-inactivo"><i class="fa-solid fa-circle-xmark"></i> Inactivo</label></div>
+              <div class="status-pill pill-vacaciones"><input type="radio" name="estadoTrabajador" id="est-vac" value="VACACIONES"/><label for="est-vac"><i class="fa-solid fa-umbrella-beach"></i> Vacaciones</label></div>
+              <div class="status-pill pill-baja"><input type="radio" name="estadoTrabajador" id="est-baja" value="BAJA"/><label for="est-baja"><i class="fa-solid fa-user-slash"></i> Baja</label></div>
             </div>
           </div>
         </div>
@@ -582,9 +292,8 @@
         <span id="changesLabel">Sin cambios pendientes</span>
       </div>
       <div class="form-footer-right">
-        <button class="btn btn-ghost" type="button" onclick="descartarCambios()">
-          <i class="fa-solid fa-rotate-left"></i> Descartar
-        </button>
+        <a class="btn btn-ghost" href="VisualizarTrabajadores.html"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
+        <button class="btn btn-ghost" type="button" onclick="descartarCambios()"><i class="fa-solid fa-rotate-left"></i> Descartar</button>
         <button class="btn btn-warning" type="button" id="btnGuardar" onclick="guardarCambios()">
           <span class="spinner"></span>
           <i class="fa-solid fa-floppy-disk btn-icon"></i>
@@ -593,7 +302,6 @@
       </div>
     </div>
   </div>
-
 </main>
 
 <footer>
@@ -604,270 +312,185 @@
   </div>
 </footer>
 
-<div class="toast" id="toast">
-  <i id="toastIcon" class="fa-solid fa-circle-check"></i>
-  <span id="toastMsg">Cambios guardados</span>
-</div>
-
-<button class="scroll-top" id="scrollTop"
-        onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <i class="fa-solid fa-chevron-up"></i>
-</button>
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 
 <script>
-  /* ══════════════════════════════════════
-     CONFIG
-  ══════════════════════════════════════ */
   const API_BASE    = 'http://localhost:8080/api/v1';
   const STORAGE_KEY = 'indecsa_trabajador_editar';
+  const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+  const $ = id => document.getElementById(id);
 
-  /* ────────────────────── estado ── */
-  let trabajadorActual = null;   // objeto cargado desde localStorage
-  let originales       = {};     // snapshot para detectar cambios
-  let currentStar      = 0;
-  const starLabels = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+  let trabajadorActual = null, originales = {}, currentStar = 0;
 
-  /* ════════════════════════════════════════
-     1. LEER TRABAJADOR DEL LOCALSTORAGE
-  ════════════════════════════════════════ */
-  function init() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-
-    if (!raw) {
-      // Nadie seleccionó un trabajador → mostrar banner
-      document.getElementById('workerBadge').style.display = 'none';
-      document.getElementById('formCard').style.display    = 'none';
-      document.getElementById('noWorkerBanner').style.display = 'block';
-      return;
-    }
-
-    try {
-      trabajadorActual = JSON.parse(raw);
-    } catch {
-      document.getElementById('workerBadge').style.display = 'none';
-      document.getElementById('formCard').style.display    = 'none';
-      document.getElementById('noWorkerBanner').style.display = 'block';
-      return;
-    }
-
-    cargarDatos(trabajadorActual);
+  /*
+    Normaliza ubicación al valor EXACTO del enum Java:
+    CDMX | Hidalgo | Puebla
+    Elimina el .toUpperCase() que causaba HIDALGO/PUEBLA → Error 400
+  */
+  function normalizarUbicacion(val) {
+    const mapa = {
+      'CDMX'    : 'CDMX',
+      'cdmx'    : 'CDMX',
+      'HIDALGO' : 'Hidalgo',
+      'hidalgo' : 'Hidalgo',
+      'Hidalgo' : 'Hidalgo',
+      'PUEBLA'  : 'Puebla',
+      'puebla'  : 'Puebla',
+      'Puebla'  : 'Puebla'
+    };
+    return mapa[val] !== undefined ? mapa[val] : val;
   }
 
-  /* ════════════════════════════════════════
-     2. RELLENAR EL FORMULARIO
-  ════════════════════════════════════════ */
+  /* ── INIT ── */
+  function init() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) { mostrarNoBanner(); return; }
+    try { trabajadorActual = JSON.parse(raw); } catch { mostrarNoBanner(); return; }
+    cargarDatos(trabajadorActual);
+  }
+  function mostrarNoBanner() {
+    $('workerBadge').style.display    = 'none';
+    $('formCard').style.display       = 'none';
+    $('noWorkerBanner').style.display = 'block';
+  }
+
+  /* ── CARGAR DATOS ── */
   function cargarDatos(d) {
-    // Badge
-    document.getElementById('badgeName').textContent   = d.nombreTrabajador  || '—';
-    document.getElementById('badgeIdNum').textContent  = d.idTrabajador       || '—';
+    $('badgeName').textContent   = d.nombreTrabajador || '—';
+    $('badgeIdNum').textContent  = d.idTrabajador || '—';
+    setVal('nombreTrabajador',    d.nombreTrabajador);
+    setVal('nssTrabajador',       d.nssTrabajador);
+    setVal('telefonoTrabajador',  d.telefonoTrabajador);
+    setVal('correoTrabajador',    d.correoTrabajador);
+    setVal('fechaIngreso',        d.fechaIngreso);
+    setVal('experiencia',         d.experiencia);
+    setVal('descripcionTrabajador', d.descripcionTrabajador);
 
-    // Campos de texto
-    setVal('nombreTrabajador',       d.nombreTrabajador);
-    setVal('nssTrabajador',          d.nssTrabajador);
-    setVal('telefonoTrabajador',     d.telefonoTrabajador);
-    setVal('correoTrabajador',       d.correoTrabajador);
-    setVal('especialidadTrabajador', d.especialidadTrabajador);
-    setVal('fechaIngreso',           d.fechaIngreso);
-    setVal('experiencia',            d.experiencia);
-    setVal('descripcionTrabajador',  d.descripcionTrabajador);
-
-    // Ubicación
-    if (d.ubicacionTrabajador) {
-      document.getElementById('ubicacionTrabajador').value = d.ubicacionTrabajador;
+    /* especialidad */
+    if (d.especialidadTrabajador) {
+      const sel = $('especialidadTrabajador');
+      const exists = [...sel.options].some(o => o.value === d.especialidadTrabajador);
+      if (exists) {
+        sel.value = d.especialidadTrabajador;
+      } else {
+        const o = document.createElement('option');
+        o.value = d.especialidadTrabajador; o.textContent = d.especialidadTrabajador;
+        sel.appendChild(o); sel.value = d.especialidadTrabajador;
+      }
     }
 
-    // Estado radio
+    /* ubicación — normalizar para que coincida con las opciones del select */
+    const ubic = normalizarUbicacion((d.ubicacionTrabajador || '').toString());
+    if (ubic) $('ubicacionTrabajador').value = ubic;
+
+    /* estado */
     const radio = document.querySelector(`input[name="estadoTrabajador"][value="${d.estadoTrabajador}"]`);
     if (radio) radio.checked = true;
 
-    // Estrellas
-    if (d.calificacionTrabajador) {
-      currentStar = d.calificacionTrabajador;
-      document.getElementById('calificacionTrabajador').value = currentStar;
-      paintStars(currentStar);
-      document.getElementById('starLabel').textContent = starLabels[currentStar] || '';
-    }
+    /* estrellas */
+    currentStar = d.calificacionTrabajador || 0;
+    $('calificacionTrabajador').value = currentStar || '';
+    paintStars(currentStar);
+    $('starLabel').textContent = currentStar > 0 ? STAR_LABELS[currentStar] : 'Sin calificar';
 
     guardarSnapshot();
-    escucharCambios();
+    document.querySelectorAll('#formEditar input,#formEditar select,#formEditar textarea')
+      .forEach(el => { el.addEventListener('input', detectarCambios); el.addEventListener('change', detectarCambios); });
   }
 
-  function setVal(id, val) {
-    const el = document.getElementById(id);
-    if (el && val != null) el.value = val;
-  }
+  function setVal(id, val) { const el = $(id); if (el && val != null) el.value = val; }
 
-  /* ════════════════════════════════════════
-     3. DETECCIÓN DE CAMBIOS
-  ════════════════════════════════════════ */
-  function guardarSnapshot() {
-    originales = leerFormulario();
-  }
-
-  function escucharCambios() {
-    document.querySelectorAll('#formEditar input, #formEditar select, #formEditar textarea')
-      .forEach(el => {
-        el.addEventListener('input',  detectarCambios);
-        el.addEventListener('change', detectarCambios);
-      });
-  }
-
+  /* ── LEER FORMULARIO ── */
   function leerFormulario() {
-    const radioEstado = document.querySelector('input[name="estadoTrabajador"]:checked');
+    const r = document.querySelector('input[name="estadoTrabajador"]:checked');
     return {
-      nombreTrabajador:       document.getElementById('nombreTrabajador').value.trim(),
-      nssTrabajador:          document.getElementById('nssTrabajador').value.trim() || null,
-      telefonoTrabajador:     document.getElementById('telefonoTrabajador').value.trim(),
-      correoTrabajador:       document.getElementById('correoTrabajador').value.trim(),
-      especialidadTrabajador: document.getElementById('especialidadTrabajador').value.trim(),
-      fechaIngreso:           document.getElementById('fechaIngreso').value,
-      experiencia:            document.getElementById('experiencia').value.trim() || null,
-      descripcionTrabajador:  document.getElementById('descripcionTrabajador').value.trim() || null,
+      nombreTrabajador:       $('nombreTrabajador').value.trim(),
+      nssTrabajador:          $('nssTrabajador').value.trim() || null,
+      telefonoTrabajador:     $('telefonoTrabajador').value.trim(),
+      correoTrabajador:       $('correoTrabajador').value.trim(),
+      especialidadTrabajador: $('especialidadTrabajador').value,
+      fechaIngreso:           $('fechaIngreso').value,
+      experiencia:            $('experiencia').value.trim() || null,
+      descripcionTrabajador:  $('descripcionTrabajador').value.trim() || null,
       calificacionTrabajador: currentStar > 0 ? currentStar : null,
-      ubicacionTrabajador:    document.getElementById('ubicacionTrabajador').value,
-      estadoTrabajador:       radioEstado ? radioEstado.value : ''
+      /* Normalizado: nunca se manda HIDALGO ni PUEBLA al backend */
+      ubicacionTrabajador:    normalizarUbicacion($('ubicacionTrabajador').value || ''),
+      estadoTrabajador:       r ? r.value : ''
     };
   }
 
+  function guardarSnapshot() { originales = leerFormulario(); }
   function detectarCambios() {
     const actual = leerFormulario();
-    const modificados = Object.keys(originales).filter(
-      k => String(actual[k] ?? '') !== String(originales[k] ?? '')
-    ).length;
-
-    const lbl = document.getElementById('changesLabel');
-    lbl.textContent = modificados > 0
-      ? `${modificados} campo${modificados > 1 ? 's' : ''} modificado${modificados > 1 ? 's' : ''}`
-      : 'Sin cambios pendientes';
-    lbl.style.color = modificados > 0 ? 'var(--warning)' : '';
+    const mod = Object.keys(originales).filter(k => String(actual[k] ?? '') !== String(originales[k] ?? '')).length;
+    const lbl = $('changesLabel');
+    lbl.textContent = mod > 0 ? `${mod} campo${mod > 1 ? 's' : ''} modificado${mod > 1 ? 's' : ''}` : 'Sin cambios pendientes';
+    lbl.style.color = mod > 0 ? 'var(--warning)' : '';
   }
 
-  /* ════════════════════════════════════════
-     4. GUARDAR → PUT /api/v1/trabajadores/{id}
-  ════════════════════════════════════════ */
+  /* ── GUARDAR ── */
   async function guardarCambios() {
     if (!trabajadorActual) return;
-
-    const btn = document.getElementById('btnGuardar');
+    const btn = $('btnGuardar');
     setLoading(btn, true);
-
-    // El estado se puede cambiar sólo vía PATCH /estado,
-    // pero el PUT de tu API acepta el DTO completo (sin estado).
-    // Separamos: primero PUT para datos, luego PATCH si cambió el estado.
     const payload = leerFormulario();
     const { estadoTrabajador, ...dtoSinEstado } = payload;
-
     try {
-      // ── PUT datos ──
-      const resPut = await fetch(
-        `${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dtoSinEstado)
-        }
-      );
+      const resPut = await fetch(`${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dtoSinEstado)
+      });
       if (!resPut.ok) {
-        const err = await resPut.json().catch(() => ({}));
-        throw new Error(err.message || `Error ${resPut.status}`);
+        const e = await resPut.json().catch(() => ({}));
+        throw new Error(e.message || `Error ${resPut.status}`);
       }
-      const updatedData = await resPut.json();
+      const updated = await resPut.json();
 
-      // ── PATCH estado (sólo si cambió) ──
+      /* PATCH estado solo si cambió */
       if (estadoTrabajador && estadoTrabajador !== trabajadorActual.estadoTrabajador) {
         const resPatch = await fetch(
           `${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}/estado?estado=${estadoTrabajador}`,
           { method: 'PATCH' }
         );
         if (!resPatch.ok) {
-          const err = await resPatch.json().catch(() => ({}));
-          throw new Error(err.message || `Error actualizando estado ${resPatch.status}`);
+          const e = await resPatch.json().catch(() => ({}));
+          throw new Error(e.message || `Error estado ${resPatch.status}`);
         }
       }
 
-      // Actualizar el objeto local y el localStorage
-      trabajadorActual = { ...updatedData, estadoTrabajador };
+      trabajadorActual = { ...updated, estadoTrabajador };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(trabajadorActual));
-
-      // Actualizar badge
-      document.getElementById('badgeName').textContent = trabajadorActual.nombreTrabajador;
-
-      guardarSnapshot();
-      detectarCambios();
+      $('badgeName').textContent = trabajadorActual.nombreTrabajador;
+      guardarSnapshot(); detectarCambios();
       showToast('Cambios guardados correctamente', true);
-
-    } catch (e) {
-      console.error(e);
-      showToast(e.message || 'Error al guardar', false);
-    } finally {
-      setLoading(btn, false);
-    }
+    } catch(e) { showToast(e.message || 'Error al guardar', false); }
+    finally { setLoading(btn, false); }
   }
 
-  /* ════════════════════════════════════════
-     5. DESCARTAR
-  ════════════════════════════════════════ */
   function descartarCambios() {
-    if (trabajadorActual) {
-      cargarDatos(trabajadorActual);
-      showToast('Cambios descartados', false);
-    }
+    if (trabajadorActual) { cargarDatos(trabajadorActual); showToast('Cambios descartados', false); }
   }
 
-  /* ════════════════════════════════════════
-     6. ESTRELLAS
-  ════════════════════════════════════════ */
+  /* ── ESTRELLAS ── */
   const stars = document.querySelectorAll('.star-btn');
   stars.forEach(s => {
-    s.addEventListener('click', () => {
-      currentStar = parseInt(s.dataset.val);
-      document.getElementById('calificacionTrabajador').value = currentStar;
-      paintStars(currentStar);
-      document.getElementById('starLabel').textContent = starLabels[currentStar];
-      detectarCambios();
-    });
+    s.addEventListener('click', () => { currentStar = parseInt(s.dataset.val); $('calificacionTrabajador').value = currentStar; paintStars(currentStar); $('starLabel').textContent = STAR_LABELS[currentStar]; detectarCambios(); });
     s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
     s.addEventListener('mouseleave', () => paintStars(currentStar));
   });
-  function paintStars(n) {
-    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n));
-  }
+  function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
 
-  /* ════════════════════════════════════════
-     7. HELPERS
-  ════════════════════════════════════════ */
-  function setLoading(btn, on) {
-    btn.disabled = on;
-    btn.classList.toggle('loading', on);
-    btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios';
-  }
-
-  function showToast(msg, ok) {
-    const t = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
-    const icon = document.getElementById('toastIcon');
-    icon.style.color = ok ? 'var(--success)' : 'var(--danger)';
-    icon.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-
+  /* ── HELPERS ── */
+  function setLoading(btn, on) { btn.disabled = on; btn.classList.toggle('loading', on); btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios'; }
+  function showToast(msg, ok) { const t = $('toast'); $('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; const ic = $('toastIcon'); ic.style.color = ok ? 'var(--success)' : 'var(--danger)'; ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
   function cerrarSesion() { window.location.href = '../../index.html'; }
 
-  /* Smart navbar */
-  let lastScroll = 0;
-  const scrollBtn = document.getElementById('scrollTop');
-  window.addEventListener('scroll', () => {
-    const c = window.scrollY;
-    document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
-    lastScroll = c <= 0 ? 0 : c;
-    scrollBtn.classList.toggle('visible', c > 200);
-  });
+  let lastScroll = 0; const scrollBtn = $('scrollTop');
+  window.addEventListener('scroll', () => { const c = window.scrollY; document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80); lastScroll = c <= 0 ? 0 : c; scrollBtn.classList.toggle('visible', c > 200); });
 
-  /* ── INIT ── */
   init();
 </script>
-
 </body>
 </html>

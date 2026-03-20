@@ -22,7 +22,6 @@
       --blue:      #85B7EB;
       --border:    rgba(200,169,110,0.18);
     }
-
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--navy);
@@ -71,7 +70,6 @@
       transition: background .2s;
     }
     .nav-logout:hover { background: rgba(226,75,74,0.1); }
-
     .nav-hidden header { transform: translateY(-72px); }
     .nav-hidden nav    { transform: translateY(-72px); }
 
@@ -83,11 +81,11 @@
       border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 20px rgba(200,169,110,0.35);
-      transition: transform .2s, opacity .3s, box-shadow .2s;
+      transition: transform .2s, opacity .3s;
       opacity: 0; pointer-events: none; z-index: 997;
     }
     .scroll-top.visible { opacity: 1; pointer-events: auto; }
-    .scroll-top:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(200,169,110,0.45); }
+    .scroll-top:hover { transform: translateY(-3px); }
     .scroll-top i { font-size: 16px; color: var(--navy); }
 
     /* ── MAIN ── */
@@ -97,12 +95,10 @@
     }
     .page-wrap { max-width: 960px; margin: 0 auto; }
 
-    /* ── PAGE HEADER ── */
     .page-header {
       display: flex; align-items: flex-end;
       justify-content: space-between; gap: 1rem;
-      margin-bottom: 2rem;
-      animation: fadeUp .3s ease both;
+      margin-bottom: 2rem; animation: fadeUp .3s ease both;
     }
     .page-header-left { display: flex; align-items: center; gap: 1rem; }
     .page-icon {
@@ -121,22 +117,19 @@
     /* ── TOOLBAR ── */
     .toolbar {
       display: flex; align-items: flex-end; gap: 12px;
-      margin-bottom: 1.25rem;
-      animation: fadeUp .35s ease both;
+      margin-bottom: 1.25rem; animation: fadeUp .35s ease both;
     }
     .btn-add {
       display: flex; align-items: center; gap: 8px;
       padding: 10px 20px; border-radius: 10px;
       background: linear-gradient(135deg, #85B7EB 0%, #3a72b0 100%);
       color: #0B1F3A; font-family: 'DM Sans', sans-serif;
-      font-size: 13.5px; font-weight: 700;
-      border: none; cursor: pointer;
+      font-size: 13.5px; font-weight: 700; border: none; cursor: pointer;
       box-shadow: 0 4px 16px rgba(133,183,235,0.25);
       transition: transform .2s, box-shadow .2s;
       text-decoration: none; white-space: nowrap;
     }
     .btn-add:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(133,183,235,0.35); }
-
     .toolbar-right { margin-left: auto; display: flex; align-items: flex-end; gap: 10px; }
     .filter-group { display: flex; flex-direction: column; gap: 5px; }
     .filter-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
@@ -153,11 +146,7 @@
     }
     .filter-select:focus { outline: none; border-color: var(--gold); }
     .filter-select option { background: #152D50; }
-
-    /* ── BÚSQUEDA ── */
-    .search-wrap {
-      position: relative; flex: 1; min-width: 200px;
-    }
+    .search-wrap { position: relative; flex: 1; min-width: 200px; }
     .search-wrap i {
       position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
       font-size: 13px; color: var(--muted); pointer-events: none;
@@ -167,44 +156,28 @@
       border: 1px solid rgba(200,169,110,0.2);
       border-radius: 9px; color: var(--white);
       font-family: 'DM Sans', sans-serif; font-size: 13px;
-      padding: 9px 13px 9px 36px; outline: none;
-      transition: border-color .2s;
+      padding: 9px 13px 9px 36px; outline: none; transition: border-color .2s;
     }
     .search-input::placeholder { color: rgba(138,155,181,0.5); }
     .search-input:focus { border-color: var(--gold); }
 
-    /* ── RESULTADOS ── */
-    .results-info {
-      font-size: 12px; color: var(--muted);
-      margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .results-info { font-size: 12px; color: var(--muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px; }
     .results-info strong { color: var(--white); }
 
-    /* ── SKELETON LOADER ── */
+    /* ── SKELETON ── */
     .skeleton-card {
-      background: var(--navy-mid);
-      border: 1px solid rgba(200,169,110,0.08);
+      background: var(--navy-mid); border: 1px solid rgba(200,169,110,0.08);
       border-radius: 13px; padding: 14px 16px;
-      display: grid; grid-template-columns: 42px 1fr;
-      gap: 12px;
+      display: grid; grid-template-columns: 42px 1fr; gap: 12px;
     }
     .sk { background: rgba(255,255,255,0.05); border-radius: 6px; animation: pulse 1.5s ease infinite; }
     .sk-circle { width: 38px; height: 38px; border-radius: 50%; }
     .sk-line { height: 10px; margin-bottom: 8px; }
-    .sk-w80 { width: 80%; }
-    .sk-w60 { width: 60%; }
-    .sk-w40 { width: 40%; }
-    @keyframes pulse {
-      0%, 100% { opacity: .5; }
-      50%       { opacity: 1; }
-    }
+    .sk-w80{width:80%} .sk-w60{width:60%} .sk-w40{width:40%}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 
     /* ── GRID ── */
-    .cards-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px; animation: fadeUp .4s ease both;
-    }
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; animation: fadeUp .4s ease both; }
 
     /* ── TARJETA ── */
     .worker-card {
@@ -213,29 +186,33 @@
       border-radius: 13px; padding: 14px 16px;
       display: grid; grid-template-columns: 42px 1fr;
       gap: 12px; align-items: start;
-      position: relative;
-      transition: border-color .2s, background .2s;
+      position: relative; cursor: pointer;
+      transition: border-color .2s, background .2s, transform .15s, box-shadow .2s;
       animation: fadeUp .4s ease both;
     }
-    .worker-card:hover { border-color: rgba(200,169,110,0.4); background: #1a3560; }
+    .worker-card:hover {
+      border-color: rgba(200,169,110,0.45);
+      background: #1a3560;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
 
     .avatar {
       width: 38px; height: 38px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 13px; font-weight: 600; flex-shrink: 0; margin-top: 2px;
     }
-    .av-blue   { background: rgba(133,183,235,0.15); color: #85B7EB; border: 1px solid rgba(133,183,235,0.3); }
-    .av-green  { background: rgba(93,202,165,0.15);  color: #5DCAA5; border: 1px solid rgba(93,202,165,0.3); }
-    .av-amber  { background: rgba(250,199,117,0.15); color: #FAC775; border: 1px solid rgba(250,199,117,0.3); }
-    .av-purple { background: rgba(175,169,236,0.15); color: #AFA9EC; border: 1px solid rgba(175,169,236,0.3); }
-    .av-coral  { background: rgba(240,149,149,0.12); color: #F09595; border: 1px solid rgba(240,149,149,0.3); }
-    .av-teal   { background: rgba(93,202,165,0.1);  color: #5DCAA5; border: 1px solid rgba(93,202,165,0.25); }
+    .av-blue   { background:rgba(133,183,235,0.15); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
+    .av-green  { background:rgba(93,202,165,0.15);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
+    .av-amber  { background:rgba(250,199,117,0.15); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
+    .av-purple { background:rgba(175,169,236,0.15); color:#AFA9EC; border:1px solid rgba(175,169,236,0.3); }
+    .av-coral  { background:rgba(240,149,149,0.12); color:#F09595; border:1px solid rgba(240,149,149,0.3); }
+    .av-teal   { background:rgba(93,202,165,0.1);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.25); }
 
     .wname { font-size: 13px; font-weight: 500; color: var(--white); margin-bottom: 6px; padding-right: 74px; }
     .wmeta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
     .wrow { font-size: 11.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
     .wrow i { font-size: 10px; color: var(--gold); width: 12px; flex-shrink: 0; }
-
     .wfooter {
       display: flex; align-items: center; justify-content: space-between;
       padding-top: 9px; border-top: 1px solid rgba(255,255,255,0.06);
@@ -247,50 +224,48 @@
       display: flex; align-items: center; gap: 5px;
       transition: background .15s; background: none;
       font-family: 'DM Sans', sans-serif;
+      position: relative; z-index: 2;
     }
     .wact i { font-size: 10px; }
-    .wact.edit { color: var(--warning); border-color: rgba(250,199,117,0.25); background: rgba(250,199,117,0.06); }
-    .wact.edit:hover { background: rgba(250,199,117,0.12); }
-    .wact.del  { color: var(--danger);  border-color: rgba(240,149,149,0.25); background: rgba(240,149,149,0.06); }
-    .wact.del:hover  { background: rgba(240,149,149,0.12); }
-    .wact.elim { color: var(--muted); border-color: rgba(138,155,181,0.2); background: rgba(138,155,181,0.05); }
-    .wact.elim:hover { background: rgba(138,155,181,0.12); color: var(--white); }
-
+    .wact.edit  { color:var(--warning); border-color:rgba(250,199,117,0.25); background:rgba(250,199,117,0.06); }
+    .wact.edit:hover  { background:rgba(250,199,117,0.12); }
+    .wact.del   { color:var(--danger);  border-color:rgba(240,149,149,0.25); background:rgba(240,149,149,0.06); }
+    .wact.del:hover   { background:rgba(240,149,149,0.12); }
+    .wact.elim  { color:var(--muted); border-color:rgba(138,155,181,0.2); background:rgba(138,155,181,0.05); }
+    .wact.elim:hover  { background:rgba(138,155,181,0.12); color:var(--white); }
     .stars-mini { display: flex; gap: 1px; }
     .st { font-size: 11px; color: rgba(200,169,110,0.2); }
     .st.on { color: var(--gold); }
-
     .status-badge {
       position: absolute; top: 13px; right: 14px;
       font-size: 9px; font-weight: 600;
       padding: 3px 9px; border-radius: 20px;
       letter-spacing: .5px; text-transform: uppercase;
     }
-    .s-activo     { background: rgba(93,202,165,0.12);  color: #5DCAA5; border: 1px solid rgba(93,202,165,0.3); }
-    .s-inactivo   { background: rgba(138,155,181,0.12); color: #8A9BB5; border: 1px solid rgba(138,155,181,0.3); }
-    .s-vacaciones { background: rgba(250,199,117,0.12); color: #FAC775; border: 1px solid rgba(250,199,117,0.3); }
-    .s-baja       { background: rgba(240,149,149,0.12); color: #F09595; border: 1px solid rgba(240,149,149,0.3); }
+    .s-activo     { background:rgba(93,202,165,0.12);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
+    .s-inactivo   { background:rgba(138,155,181,0.12); color:#8A9BB5; border:1px solid rgba(138,155,181,0.3); }
+    .s-vacaciones { background:rgba(250,199,117,0.12); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
+    .s-baja       { background:rgba(240,149,149,0.12); color:#F09595; border:1px solid rgba(240,149,149,0.3); }
 
-    /* ── ERROR / EMPTY ── */
-    .empty-state {
-      grid-column: 1 / -1; text-align: center;
-      padding: 3rem 1rem; color: var(--muted);
-    }
-    .empty-state i { font-size: 36px; color: rgba(200,169,110,0.2); margin-bottom: 1rem; display: block; }
-    .empty-state p { font-size: 14px; }
+    /* ── EMPTY ── */
+    .empty-state { grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--muted); }
+    .empty-state i { font-size:36px; color:rgba(200,169,110,0.2); margin-bottom:1rem; display:block; }
+    .empty-state p { font-size:14px; }
     .empty-state .retry-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      margin-top: 1rem; padding: 9px 20px; border-radius: 9px;
-      background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.2);
-      color: var(--gold); font-family: 'DM Sans', sans-serif;
-      font-size: 13px; cursor: pointer; transition: background .2s;
+      display:inline-flex; align-items:center; gap:7px;
+      margin-top:1rem; padding:9px 20px; border-radius:9px;
+      background:rgba(200,169,110,0.1); border:1px solid rgba(200,169,110,0.2);
+      color:var(--gold); font-family:'DM Sans',sans-serif;
+      font-size:13px; cursor:pointer; transition:background .2s;
     }
-    .empty-state .retry-btn:hover { background: rgba(200,169,110,0.18); }
+    .empty-state .retry-btn:hover { background:rgba(200,169,110,0.18); }
 
-    /* ── MODAL CONFIRMACIÓN BAJA ── */
+    /* ══════════════════════════════════════
+       MODALES – base
+    ══════════════════════════════════════ */
     .modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(5px);
       display: flex; align-items: center; justify-content: center;
       z-index: 500; opacity: 0; pointer-events: none;
       transition: opacity .25s;
@@ -298,10 +273,82 @@
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
     .modal {
       background: var(--navy-card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 2rem; max-width: 400px; width: 90%;
-      transform: translateY(20px); transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      border-radius: 18px; padding: 2rem; width: 90%;
+      transform: translateY(20px);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      max-height: 90vh; overflow-y: auto;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
+
+    /* ── MODAL DETALLE ── */
+    #modalDetalle .modal { max-width: 580px; }
+
+    .det-header {
+      display: flex; align-items: center; gap: 16px;
+      padding-bottom: 1.25rem; margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .det-avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; flex-shrink: 0;
+    }
+    .det-info { flex: 1; min-width: 0; }
+    .det-name { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--white); }
+    .det-esp  { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .det-badge {
+      font-size: 9px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+      letter-spacing: .5px; text-transform: uppercase;
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    .det-section { margin-bottom: 1.25rem; }
+    .det-section-title {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--muted); margin-bottom: .75rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .det-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+    .det-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .det-field { display: flex; flex-direction: column; gap: 4px; }
+    .det-field.full { grid-column: 1 / -1; }
+    .det-lbl { font-size: 11px; color: var(--muted); }
+    .det-val {
+      font-size: 13px; color: var(--white);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px; padding: 9px 12px;
+      word-break: break-word; line-height: 1.5;
+    }
+    .det-val.muted-val { color: var(--muted); font-size: 12.5px; }
+    .det-stars-wrap { display: flex; align-items: center; gap: 3px; padding: 6px 0; }
+    .det-star  { font-size: 20px; color: rgba(200,169,110,0.2); }
+    .det-star.on { color: var(--gold); }
+    .det-star-lbl { font-size: 12px; color: var(--muted); margin-left: 6px; }
+
+    .det-footer {
+      display: flex; gap: 10px; justify-content: flex-end;
+      padding-top: 1.25rem; border-top: 1px solid var(--border); margin-top: .5rem;
+      flex-wrap: wrap;
+    }
+    .det-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 20px; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; border: 1px solid transparent; transition: all .2s;
+    }
+    .det-btn.close-btn { background:rgba(255,255,255,0.05); color:var(--muted); border-color:rgba(255,255,255,0.08); }
+    .det-btn.close-btn:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+    .det-btn.edit-btn  { background:rgba(250,199,117,0.08); color:var(--warning); border-color:rgba(250,199,117,0.25); }
+    .det-btn.edit-btn:hover  { background:rgba(250,199,117,0.16); }
+    .det-btn.baja-btn  { background:rgba(240,149,149,0.08); color:var(--danger); border-color:rgba(240,149,149,0.25); }
+    .det-btn.baja-btn:hover  { background:rgba(240,149,149,0.16); }
+    .det-btn.elim-btn  { background:rgba(138,155,181,0.06); color:var(--muted); border-color:rgba(138,155,181,0.2); }
+    .det-btn.elim-btn:hover  { background:rgba(138,155,181,0.14); color:var(--white); }
+
+    /* ── MODAL BAJA ── */
+    #modalBaja .modal { max-width: 400px; }
     .modal-icon { font-size: 32px; color: var(--danger); margin-bottom: 1rem; }
     .modal-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: .5rem; }
     .modal-body { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
@@ -312,110 +359,79 @@
       font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
       display: flex; align-items: center; gap: 7px; transition: all .2s;
     }
-    .modal-btn.cancel { background: rgba(255,255,255,0.06); color: var(--muted); }
-    .modal-btn.cancel:hover { background: rgba(255,255,255,0.1); color: var(--white); }
-    .modal-btn.confirm {
-      background: linear-gradient(135deg, var(--danger) 0%, #c44f4f 100%);
-      color: var(--white);
-    }
+    .modal-btn.cancel { background:rgba(255,255,255,0.06); color:var(--muted); }
+    .modal-btn.cancel:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+    .modal-btn.confirm { background:linear-gradient(135deg,var(--danger) 0%,#c44f4f 100%); color:var(--white); }
     .modal-btn.confirm:hover { transform: translateY(-1px); }
-    .modal-btn.confirm:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .modal-btn.confirm:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
     /* ── MODAL ELIMINAR ── */
-    #modalEliminar .modal { border-color: rgba(200,169,110,0.25); max-width: 420px; }
+    #modalEliminar .modal { max-width: 420px; border-color: rgba(200,169,110,0.25); }
     #modalEliminar .modal-icon { color: var(--muted); font-size: 26px; }
-    .code-display {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      margin: 1.2rem 0 1rem;
-    }
+    .code-display { display:flex; align-items:center; justify-content:center; gap:10px; margin:1.2rem 0 1rem; }
     .code-digit {
-      width: 52px; height: 64px;
-      background: rgba(200,169,110,0.07);
-      border: 1.5px solid rgba(200,169,110,0.3);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 30px; font-weight: 700; color: var(--gold);
-      animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+      width:52px; height:64px; background:rgba(200,169,110,0.07);
+      border:1.5px solid rgba(200,169,110,0.3); border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:30px; font-weight:700; color:var(--gold);
+      animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;
     }
-    .code-digit:nth-child(2) { animation-delay: .07s; }
-    .code-digit:nth-child(3) { animation-delay: .14s; }
-    @keyframes popIn {
-      from { opacity:0; transform: scale(.5) translateY(10px); }
-      to   { opacity:1; transform: scale(1) translateY(0); }
-    }
-    .code-input-wrap {
-      display: flex; align-items: center; gap: 10px; margin-bottom: .4rem;
-    }
+    .code-digit:nth-child(2){animation-delay:.07s} .code-digit:nth-child(3){animation-delay:.14s}
+    @keyframes popIn{from{opacity:0;transform:scale(.5) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .code-input-wrap { display:flex; align-items:center; gap:10px; margin-bottom:.4rem; }
     .code-input {
-      flex: 1; background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 9px;
-      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 18px;
-      font-weight: 600; letter-spacing: 6px; text-align: center;
-      padding: 10px 14px; outline: none;
-      transition: border-color .2s, box-shadow .2s;
+      flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+      border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif;
+      font-size:18px; font-weight:600; letter-spacing:6px; text-align:center;
+      padding:10px 14px; outline:none; transition:border-color .2s, box-shadow .2s;
     }
-    .code-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,169,110,0.08); }
-    .code-input.wrong {
-      border-color: var(--danger) !important;
-      animation: shake .35s ease;
-    }
-    .code-input.right { border-color: var(--success) !important; }
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%      { transform: translateX(-6px); }
-      40%      { transform: translateX(6px); }
-      60%      { transform: translateX(-4px); }
-      80%      { transform: translateX(4px); }
-    }
-    .code-hint { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 1.2rem; }
-    .modal-btn.elim {
-      background: rgba(200,169,110,0.12);
-      border: 1px solid rgba(200,169,110,0.3);
-      color: var(--gold); font-weight: 600;
-    }
-    .modal-btn.elim:hover:not(:disabled) { background: rgba(200,169,110,0.2); }
-    .modal-btn.elim:disabled { opacity: .3; cursor: not-allowed; }
+    .code-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,169,110,0.08); }
+    .code-input.wrong { border-color:var(--danger)!important; animation:shake .35s ease; }
+    .code-input.right { border-color:var(--success)!important; }
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+    .code-hint { font-size:11px; color:var(--muted); text-align:center; margin-bottom:1.2rem; }
+    .modal-btn.elim { background:rgba(200,169,110,0.12); border:1px solid rgba(200,169,110,0.3); color:var(--gold); font-weight:600; }
+    .modal-btn.elim:hover:not(:disabled) { background:rgba(200,169,110,0.2); }
+    .modal-btn.elim:disabled { opacity:.3; cursor:not-allowed; }
 
     /* ── TOAST ── */
     .toast {
-      position: fixed; bottom: 28px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--navy-mid); border: 1px solid var(--success);
-      border-radius: 12px; padding: 14px 20px;
-      display: flex; align-items: center; gap: 12px;
-      font-size: 13px; color: var(--white);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      opacity: 0; transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
-      z-index: 999; pointer-events: none; white-space: nowrap;
+      position:fixed; bottom:28px; left:50%;
+      transform:translateX(-50%) translateY(80px);
+      background:var(--navy-mid); border:1px solid var(--success);
+      border-radius:12px; padding:14px 20px;
+      display:flex; align-items:center; gap:12px;
+      font-size:13px; color:var(--white);
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);
+      opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+      z-index:999; pointer-events:none; white-space:nowrap;
     }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    .toast i { font-size: 16px; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--navy-mid); border-top: 1px solid var(--border);
-      height: 56px; display: flex; align-items: center;
-      justify-content: space-between; padding: 0 2rem;
+      background:var(--navy-mid); border-top:1px solid var(--border);
+      height:56px; display:flex; align-items:center;
+      justify-content:space-between; padding:0 2rem;
     }
-    .footer-left { font-size: 12px; color: var(--muted); }
-    .footer-contact { display: flex; gap: 24px; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
     .footer-contact a {
-      font-size: 12px; color: var(--muted); text-decoration: none;
-      display: flex; align-items: center; gap: 6px; transition: color .2s;
+      font-size:12px; color:var(--muted); text-decoration:none;
+      display:flex; align-items:center; gap:6px; transition:color .2s;
     }
-    .footer-contact a:hover { color: var(--gold); }
-    .footer-contact a i { font-size: 13px; color: var(--gold); }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 700px) {
-      .cards-grid { grid-template-columns: 1fr; }
-      .toolbar { flex-direction: column; align-items: stretch; }
-      .toolbar-right { margin-left: 0; flex-wrap: wrap; }
-      .page-header { flex-direction: column; align-items: flex-start; }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:700px){
+      .cards-grid{grid-template-columns:1fr}
+      .toolbar{flex-direction:column;align-items:stretch}
+      .toolbar-right{margin-left:0;flex-wrap:wrap}
+      .page-header{flex-direction:column;align-items:flex-start}
+      .det-grid{grid-template-columns:1fr}
+      .det-footer{flex-direction:column}
     }
   </style>
 </head>
@@ -427,10 +443,21 @@
 </header>
 
 <nav>
-  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link active" href="AltaTrabajador.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link" href="../Contratistas/index.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
-  <a class="nav-link" href="../Proyectos/index.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html">
+    <i class="fa-solid fa-users-gear"></i> Cap. Humano
+  </a>
+  <a class="nav-link active" href="VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
+  </a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()">
     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
@@ -445,7 +472,7 @@
         <div class="page-icon"><i class="fa-solid fa-users"></i></div>
         <div>
           <div class="page-title">Personal registrado</div>
-          <div class="page-sub">Consulta, edita o da de baja a los empleados del sistema</div>
+          <div class="page-sub">Haz clic en una tarjeta para ver el detalle completo</div>
         </div>
       </div>
       <div class="breadcrumb">
@@ -455,7 +482,6 @@
       </div>
     </div>
 
-    <!-- ── TOOLBAR ── -->
     <div class="toolbar">
       <a class="btn-add" href="AltaTrabajador.html">
         <i class="fa-solid fa-user-plus"></i> Agregar trabajador
@@ -491,16 +517,10 @@
     </div>
 
     <div class="cards-grid" id="cardsGrid">
-      <!-- skeletons -->
-      ${[...Array(4)].map(() => `
-      <div class="skeleton-card">
-        <div class="sk sk-circle"></div>
-        <div>
-          <div class="sk sk-line sk-w80"></div>
-          <div class="sk sk-line sk-w60"></div>
-          <div class="sk sk-line sk-w40"></div>
-        </div>
-      </div>`).join('')}
+      <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
+      <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
+      <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
+      <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
     </div>
 
   </div>
@@ -509,7 +529,7 @@
 <footer>
   <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
   <div class="footer-contact">
-    <a href="/cdn-cgi/l/email-protection#8fece0e1fbeeecfbe0cfecf6ebeafceea1ece0e2"><i class="fa-solid fa-envelope"></i><span class="__cf_email__" data-cfemail="bcdfd3d2c8dddfc8d3fcdfc5d8d9cfdd92dfd3d1">[email&#160;protected]</span></a>
+    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
@@ -518,8 +538,92 @@
   <i class="fa-solid fa-chevron-up"></i>
 </button>
 
-<!-- ── MODAL BAJA ── -->
-<div class="modal-overlay" id="modalOverlay">
+<!-- ══════════════════════════════════════
+     MODAL — DETALLE COMPLETO
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="modalDetalle">
+  <div class="modal">
+
+    <div class="det-header">
+      <div class="det-avatar" id="detAvatar"></div>
+      <div class="det-info">
+        <div class="det-name" id="detNombre">—</div>
+        <div class="det-esp"  id="detEsp">—</div>
+      </div>
+      <span class="det-badge status-badge" id="detBadge">—</span>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title">
+        <i class="fa-solid fa-address-card" style="color:var(--gold);font-size:10px"></i>
+        Contacto
+      </div>
+      <div class="det-grid">
+        <div class="det-field">
+          <div class="det-lbl">Teléfono</div>
+          <div class="det-val" id="detTelefono">—</div>
+        </div>
+        <div class="det-field">
+          <div class="det-lbl">Correo electrónico</div>
+          <div class="det-val" id="detCorreo">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title">
+        <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:10px"></i>
+        Información laboral
+      </div>
+      <div class="det-grid">
+        <div class="det-field">
+          <div class="det-lbl">NSS</div>
+          <div class="det-val" id="detNss">—</div>
+        </div>
+        <div class="det-field">
+          <div class="det-lbl">Fecha de ingreso</div>
+          <div class="det-val" id="detFecha">—</div>
+        </div>
+        <div class="det-field">
+          <div class="det-lbl">Ubicación</div>
+          <div class="det-val" id="detUbicacion">—</div>
+        </div>
+        <div class="det-field">
+          <div class="det-lbl">Calificación</div>
+          <div class="det-stars-wrap" id="detStars"></div>
+        </div>
+        <div class="det-field full">
+          <div class="det-lbl">Experiencia</div>
+          <div class="det-val muted-val" id="detExperiencia">—</div>
+        </div>
+        <div class="det-field full">
+          <div class="det-lbl">Descripción adicional</div>
+          <div class="det-val muted-val" id="detDescripcion">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="det-footer">
+      <button class="det-btn close-btn" onclick="cerrarDetalle()">
+        <i class="fa-solid fa-xmark"></i> Cerrar
+      </button>
+      <button class="det-btn elim-btn" id="detBtnEliminar">
+        <i class="fa-solid fa-trash"></i> Eliminar
+      </button>
+      <button class="det-btn baja-btn" id="detBtnBaja">
+        <i class="fa-solid fa-user-slash"></i> Dar de baja
+      </button>
+      <button class="det-btn edit-btn" id="detBtnEditar">
+        <i class="fa-solid fa-pen"></i> Editar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL — CONFIRMAR BAJA
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="modalBaja">
   <div class="modal">
     <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
     <div class="modal-title">¿Dar de baja al trabajador?</div>
@@ -529,7 +633,7 @@
       desde la pantalla de edición.
     </div>
     <div class="modal-actions">
-      <button class="modal-btn cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="modal-btn cancel" onclick="cerrarModalBaja()">Cancelar</button>
       <button class="modal-btn confirm" id="btnConfirmBaja" onclick="confirmarBaja()">
         <i class="fa-solid fa-user-slash"></i> Confirmar baja
       </button>
@@ -537,7 +641,9 @@
   </div>
 </div>
 
-<!-- ── MODAL ELIMINAR (con código de confirmación) ── -->
+<!-- ══════════════════════════════════════
+     MODAL — ELIMINAR CON CÓDIGO
+══════════════════════════════════════ -->
 <div class="modal-overlay" id="modalEliminar">
   <div class="modal">
     <div class="modal-icon"><i class="fa-solid fa-helmet-safety"></i></div>
@@ -546,22 +652,17 @@
       Se eliminará permanentemente el registro de <strong id="elimNombre">—</strong>
       del sistema. Ingresa el código para confirmar.
     </div>
-
-    <!-- Código visual -->
     <div class="code-display">
       <div class="code-digit" id="cd0">?</div>
       <div class="code-digit" id="cd1">?</div>
       <div class="code-digit" id="cd2">?</div>
     </div>
-
-    <!-- Input del usuario -->
     <div class="code-input-wrap">
       <input class="code-input" type="text" id="elimCodeInput"
              maxlength="3" placeholder="···"
              oninput="validarCodigoElim()" autocomplete="off" />
     </div>
     <div class="code-hint">Escribe los 3 dígitos exactamente como aparecen arriba</div>
-
     <div class="modal-actions">
       <button class="modal-btn cancel" onclick="cerrarModalEliminar()">Cancelar</button>
       <button class="modal-btn elim" id="btnConfirmElim" disabled onclick="confirmarEliminar()">
@@ -570,54 +671,53 @@
     </div>
   </div>
 </div>
+
 <div class="toast" id="toast">
   <i id="toastIcon" class="fa-solid fa-circle-check"></i>
   <span id="toastMsg">OK</span>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* ══════════════════════════════════════
-     CONFIG – ajusta si tu backend usa otro
-     puerto o dominio
-  ══════════════════════════════════════ */
-  const API_BASE = 'http://localhost:8080/api/v1';
+<script>
+  const API_BASE    = 'http://localhost:8080/api/v1';
+  const AV_COLORS   = ['av-blue','av-green','av-amber','av-purple','av-coral','av-teal'];
+  const ESTADO_CLS  = { ACTIVO:'s-activo', INACTIVO:'s-inactivo', VACACIONES:'s-vacaciones', BAJA:'s-baja' };
+  const ESTADO_LBL  = { ACTIVO:'Activo',   INACTIVO:'Inactivo',   VACACIONES:'Vacaciones',   BAJA:'Baja'   };
+  const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
 
-  /* ────────────────────── helpers visuales ── */
-  const avatarColors = ['av-blue','av-green','av-amber','av-purple','av-coral','av-teal'];
-  const estadoClase  = { ACTIVO:'s-activo', INACTIVO:'s-inactivo', VACACIONES:'s-vacaciones', BAJA:'s-baja' };
-  const estadoLabel  = { ACTIVO:'Activo', INACTIVO:'Inactivo', VACACIONES:'Vacaciones', BAJA:'Baja' };
+  const $ = id => document.getElementById(id);
 
-  function iniciales(n) {
+  function iniciales(n='') {
     const p = n.trim().split(' ');
-    return (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase();
+    return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
   }
-  function estrellas(n) {
-    return [1,2,3,4,5].map(i => `<div class="st${i<=(n||0)?' on':''}">★</div>`).join('');
+  function miniStars(n) {
+    return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">★</div>`).join('');
   }
-  function fmtFecha(f) {
+  function detStars(n) {
+    const f = n||0;
+    return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">★</span>`).join('')
+      + `<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`;
+  }
+  function fmt(f) {
     if (!f) return '—';
-    const [y,m,d] = f.split('-');
-    return `${d}/${m}/${y}`;
+    const [y,m,d] = f.split('-'); return `${d}/${m}/${y}`;
   }
 
-  /* ────────────────────── estado global ── */
-  let todos   = [];   // todos los trabajadores cargados de la API
-  let pendingBajaId   = null;
-  let pendingBajaNombre = '';
+  let todos = [];
+  let pendingBajaId='', pendingBajaNombre='';
+  let pendingElimId='', pendingElimNombre='', codigoElim='';
+  let detalleId = null;
 
-  /* ════════════════════════════════════════
-     1. CARGAR DESDE LA API
-  ════════════════════════════════════════ */
+  /* ══ CARGAR ══ */
   async function cargarTrabajadores() {
     try {
       const res = await fetch(`${API_BASE}/trabajadores`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       todos = await res.json();
-      poblarEspecialidades();
-      filtrar();
-    } catch (e) {
+      poblarEspecialidades(); filtrar();
+    } catch(e) {
       console.error(e);
-      document.getElementById('cardsGrid').innerHTML = `
+      $('cardsGrid').innerHTML = `
         <div class="empty-state">
           <i class="fa-solid fa-triangle-exclamation"></i>
           <p>No se pudo conectar con el servidor.<br/>Verifica que el backend esté corriendo.</p>
@@ -625,253 +725,232 @@
             <i class="fa-solid fa-rotate-right"></i> Reintentar
           </button>
         </div>`;
-      document.getElementById('resultsLabel').textContent = 'Error al cargar datos';
+      $('resultsLabel').textContent = 'Error al cargar datos';
     }
   }
 
-  /* ════════════════════════════════════════
-     2. FILTRAR + RENDERIZAR
-  ════════════════════════════════════════ */
+  /* ══ FILTRAR ══ */
   function filtrar() {
-    const q      = document.getElementById('busqueda').value.toLowerCase();
-    const estado = document.getElementById('filtroEstado').value;
-    const esp    = document.getElementById('filtroEspecialidad').value;
-
-    const filtrados = todos.filter(t =>
-      (!q      || (t.nombreTrabajador || '').toLowerCase().includes(q)) &&
-      (!estado || t.estadoTrabajador === estado) &&
-      (!esp    || t.especialidadTrabajador === esp)
+    const q   = $('busqueda').value.toLowerCase();
+    const est = $('filtroEstado').value;
+    const esp = $('filtroEspecialidad').value;
+    const res = todos.filter(t =>
+      (!q   || (t.nombreTrabajador||'').toLowerCase().includes(q)) &&
+      (!est || t.estadoTrabajador === est) &&
+      (!esp || t.especialidadTrabajador === esp)
     );
-
-    const grid = document.getElementById('cardsGrid');
-    const lbl  = document.getElementById('resultsLabel');
-
-    if (filtrados.length === 0) {
-      grid.innerHTML = `
-        <div class="empty-state">
-          <i class="fa-solid fa-user-slash"></i>
-          <p>No se encontraron trabajadores con los filtros seleccionados.</p>
-        </div>`;
+    const grid = $('cardsGrid'), lbl = $('resultsLabel');
+    if (!res.length) {
+      grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-user-slash"></i><p>Sin resultados con los filtros aplicados.</p></div>`;
       lbl.innerHTML = 'Sin resultados';
     } else {
-      grid.innerHTML = filtrados.map((t, i) => renderCard(t, i)).join('');
-      lbl.innerHTML = `<strong>${filtrados.length}</strong> trabajador${filtrados.length !== 1 ? 'es' : ''} encontrado${filtrados.length !== 1 ? 's' : ''}`;
+      grid.innerHTML = res.map((t,i) => renderCard(t,i)).join('');
+      lbl.innerHTML  = `<strong>${res.length}</strong> trabajador${res.length!==1?'es':''} encontrado${res.length!==1?'s':''}`;
     }
   }
 
-  /* ════════════════════════════════════════
-     3. RENDER TARJETA
-  ════════════════════════════════════════ */
-  function renderCard(t, idx) {
-    const av = avatarColors[idx % avatarColors.length];
-    const cl = estadoClase[t.estadoTrabajador] || '';
-    const lb = estadoLabel[t.estadoTrabajador]  || t.estadoTrabajador;
+  /* ══ RENDER CARD ══ */
+  function renderCard(t, i) {
+    const av = AV_COLORS[i % AV_COLORS.length];
+    const cl = ESTADO_CLS[t.estadoTrabajador]||'';
+    const lb = ESTADO_LBL[t.estadoTrabajador]||t.estadoTrabajador;
+    const nom = (t.nombreTrabajador||'').replace(/'/g,"\\'");
     return `
-      <div class="worker-card">
-        <div class="avatar ${av}">${iniciales(t.nombreTrabajador || '?')}</div>
+      <div class="worker-card" onclick="abrirDetalle(${t.idTrabajador})">
+        <div class="avatar ${av}">${iniciales(t.nombreTrabajador)}</div>
         <div>
           <div class="wname">${t.nombreTrabajador}</div>
           <div class="wmeta">
-            <div class="wrow"><i class="fa-solid fa-helmet-safety"></i>${t.especialidadTrabajador || '—'}</div>
-            <div class="wrow"><i class="fa-solid fa-phone"></i>${t.telefonoTrabajador || '—'}</div>
-            <div class="wrow"><i class="fa-solid fa-envelope"></i>${t.correoTrabajador || '—'}</div>
-            <div class="wrow"><i class="fa-solid fa-calendar-day"></i>Alta: ${fmtFecha(t.fechaIngreso)}</div>
-            <div class="wrow"><i class="fa-solid fa-id-badge"></i>NSS: ${t.nssTrabajador || '—'}</div>
+            <div class="wrow"><i class="fa-solid fa-helmet-safety"></i>${t.especialidadTrabajador||'—'}</div>
+            <div class="wrow"><i class="fa-solid fa-phone"></i>${t.telefonoTrabajador||'—'}</div>
+            <div class="wrow"><i class="fa-solid fa-envelope"></i>${t.correoTrabajador||'—'}</div>
+            <div class="wrow"><i class="fa-solid fa-calendar-day"></i>Alta: ${fmt(t.fechaIngreso)}</div>
+            <div class="wrow"><i class="fa-solid fa-id-badge"></i>NSS: ${t.nssTrabajador||'—'}</div>
           </div>
           <div class="wfooter">
             <div class="wactions">
-              <button class="wact edit" onclick="irAEditar(${t.idTrabajador})">
+              <button class="wact edit" onclick="event.stopPropagation();irAEditar(${t.idTrabajador})">
                 <i class="fa-solid fa-pen"></i> Editar
               </button>
-              <button class="wact del" onclick="abrirModalBaja(${t.idTrabajador}, '${(t.nombreTrabajador||'').replace(/'/g,"\\'")}')">
-                <i class="fa-solid fa-user-slash"></i> Dar de baja
+              <button class="wact del" onclick="event.stopPropagation();abrirModalBaja(${t.idTrabajador},'${nom}')">
+                <i class="fa-solid fa-user-slash"></i> Baja
               </button>
-              <button class="wact elim" onclick="abrirModalEliminar(${t.idTrabajador}, '${(t.nombreTrabajador||'').replace(/'/g,"\\'")}')">
+              <button class="wact elim" onclick="event.stopPropagation();abrirModalEliminar(${t.idTrabajador},'${nom}')">
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>
             </div>
-            <div class="stars-mini">${estrellas(t.calificacionTrabajador)}</div>
+            <div class="stars-mini">${miniStars(t.calificacionTrabajador)}</div>
           </div>
         </div>
         <div class="status-badge ${cl}">${lb}</div>
       </div>`;
   }
 
-  /* ════════════════════════════════════════
-     4. IR A EDITAR
-     Guarda el objeto completo en localStorage
-     para que EditTrabajador.html lo lea
-  ════════════════════════════════════════ */
+  /* ══════════════════════════════════════
+     MODAL DETALLE
+  ══════════════════════════════════════ */
+  function abrirDetalle(id) {
+    const t = todos.find(x => x.idTrabajador === id);
+    if (!t) return;
+    detalleId = id;
+
+    const avIdx = todos.indexOf(t);
+    const avCls = AV_COLORS[avIdx % AV_COLORS.length];
+
+    // Header
+    const av = $('detAvatar');
+    av.textContent = iniciales(t.nombreTrabajador);
+    av.className = `det-avatar ${avCls}`;
+
+    $('detNombre').textContent = t.nombreTrabajador||'—';
+    $('detEsp').textContent    = t.especialidadTrabajador||'—';
+
+    const badge = $('detBadge');
+    badge.textContent = ESTADO_LBL[t.estadoTrabajador]||t.estadoTrabajador||'—';
+    badge.className   = `det-badge status-badge ${ESTADO_CLS[t.estadoTrabajador]||''}`;
+
+    // Contacto
+    $('detTelefono').textContent = t.telefonoTrabajador||'—';
+    $('detCorreo').textContent   = t.correoTrabajador||'—';
+
+    // Laboral
+    $('detNss').textContent       = t.nssTrabajador||'—';
+    $('detFecha').textContent     = fmt(t.fechaIngreso);
+    $('detUbicacion').textContent = t.ubicacionTrabajador||'—';
+    $('detStars').innerHTML       = detStars(t.calificacionTrabajador);
+    $('detExperiencia').textContent  = t.experiencia||'Sin registrar';
+    $('detDescripcion').textContent  = t.descripcionTrabajador||'Sin registrar';
+
+    // Botones de acción en el footer del detalle
+    $('detBtnEditar').onclick   = () => { cerrarDetalle(); irAEditar(id); };
+    $('detBtnBaja').onclick     = () => { cerrarDetalle(); abrirModalBaja(id, t.nombreTrabajador||''); };
+    $('detBtnEliminar').onclick = () => { cerrarDetalle(); abrirModalEliminar(id, t.nombreTrabajador||''); };
+
+    $('modalDetalle').classList.add('open');
+  }
+
+  function cerrarDetalle() {
+    $('modalDetalle').classList.remove('open');
+    detalleId = null;
+  }
+
+  /* ══ EDITAR ══ */
   function irAEditar(id) {
-    const trabajador = todos.find(t => t.idTrabajador === id);
-    if (!trabajador) return;
-    // Guardamos el objeto en localStorage con clave fija
-    localStorage.setItem('indecsa_trabajador_editar', JSON.stringify(trabajador));
+    const t = todos.find(x => x.idTrabajador === id);
+    if (!t) return;
+    localStorage.setItem('indecsa_trabajador_editar', JSON.stringify(t));
     window.location.href = 'EditTrabajador.html';
   }
 
-  /* ════════════════════════════════════════
-     5. MODAL BAJA
-  ════════════════════════════════════════ */
+  /* ══ BAJA ══ */
   function abrirModalBaja(id, nombre) {
-    pendingBajaId    = id;
-    pendingBajaNombre = nombre;
-    document.getElementById('modalNombre').textContent = nombre;
-    document.getElementById('modalOverlay').classList.add('open');
+    pendingBajaId = id; pendingBajaNombre = nombre;
+    $('modalNombre').textContent = nombre;
+    $('modalBaja').classList.add('open');
   }
-  function cerrarModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-    pendingBajaId = null;
+  function cerrarModalBaja() {
+    $('modalBaja').classList.remove('open');
+    pendingBajaId = '';
   }
-
   async function confirmarBaja() {
     if (!pendingBajaId) return;
-    const btn = document.getElementById('btnConfirmBaja');
+    const btn = $('btnConfirmBaja');
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando…';
-
     try {
-      const res = await fetch(
-        `${API_BASE}/trabajadores/${pendingBajaId}/estado?estado=BAJA`,
-        { method: 'PATCH' }
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-      // Actualizar en el array local para no recargar toda la lista
-      const idx = todos.findIndex(t => t.idTrabajador === pendingBajaId);
-      if (idx !== -1) todos[idx].estadoTrabajador = 'BAJA';
-
-      cerrarModal();
-      filtrar();
+      const res = await fetch(`${API_BASE}/trabajadores/${pendingBajaId}/estado?estado=BAJA`,{method:'PATCH'});
+      if (!res.ok) throw new Error();
+      const idx = todos.findIndex(t=>t.idTrabajador===pendingBajaId);
+      if (idx!==-1) todos[idx].estadoTrabajador='BAJA';
+      cerrarModalBaja(); filtrar();
       showToast(`${pendingBajaNombre} dado de baja correctamente`, true);
-    } catch (e) {
-      console.error(e);
-      showToast('Error al procesar la baja', false);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-user-slash"></i> Confirmar baja';
+    } catch { showToast('Error al procesar la baja', false); }
+    finally {
+      btn.disabled=false;
+      btn.innerHTML='<i class="fa-solid fa-user-slash"></i> Confirmar baja';
     }
   }
 
-  /* ════════════════════════════════════════
-     6. MODAL ELIMINAR — con código aleatorio
-  ════════════════════════════════════════ */
-  let pendingElimId     = null;
-  let pendingElimNombre = '';
-  let codigoElim        = '';
-
+  /* ══ ELIMINAR ══ */
   function abrirModalEliminar(id, nombre) {
-    pendingElimId     = id;
-    pendingElimNombre = nombre;
-    // Código aleatorio de 3 dígitos (100-999)
-    codigoElim = String(Math.floor(Math.random() * 900) + 100);
-    document.getElementById('elimNombre').textContent = nombre;
-    document.getElementById('cd0').textContent = codigoElim[0];
-    document.getElementById('cd1').textContent = codigoElim[1];
-    document.getElementById('cd2').textContent = codigoElim[2];
-    const inp = document.getElementById('elimCodeInput');
-    inp.value = '';
-    inp.classList.remove('wrong','right');
-    document.getElementById('btnConfirmElim').disabled = true;
-    document.getElementById('modalEliminar').classList.add('open');
-    setTimeout(() => inp.focus(), 300);
+    pendingElimId=id; pendingElimNombre=nombre;
+    codigoElim = String(Math.floor(Math.random()*900)+100);
+    $('elimNombre').textContent = nombre;
+    $('cd0').textContent=codigoElim[0]; $('cd1').textContent=codigoElim[1]; $('cd2').textContent=codigoElim[2];
+    const inp=$('elimCodeInput'); inp.value=''; inp.classList.remove('wrong','right');
+    $('btnConfirmElim').disabled=true;
+    $('modalEliminar').classList.add('open');
+    setTimeout(()=>inp.focus(),300);
   }
-
   function cerrarModalEliminar() {
-    document.getElementById('modalEliminar').classList.remove('open');
-    pendingElimId = null;
+    $('modalEliminar').classList.remove('open');
+    pendingElimId='';
   }
-
   function validarCodigoElim() {
-    const inp = document.getElementById('elimCodeInput');
-    const val = inp.value.replace(/\D/g,'');   // solo dígitos
-    inp.value = val;
-    inp.classList.remove('wrong','right');
-    const btn = document.getElementById('btnConfirmElim');
-    if (val.length === 3) {
-      if (val === codigoElim) {
-        inp.classList.add('right');
-        btn.disabled = false;
-      } else {
-        inp.classList.add('wrong');
-        btn.disabled = true;
-      }
-    } else {
-      btn.disabled = true;
-    }
+    const inp=$('elimCodeInput'), val=inp.value.replace(/\D/g,'');
+    inp.value=val; inp.classList.remove('wrong','right');
+    const btn=$('btnConfirmElim');
+    if (val.length===3) {
+      if(val===codigoElim){inp.classList.add('right');btn.disabled=false;}
+      else{inp.classList.add('wrong');btn.disabled=true;}
+    } else btn.disabled=true;
   }
-
   async function confirmarEliminar() {
     if (!pendingElimId) return;
-    const btn = document.getElementById('btnConfirmElim');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
-
+    const btn=$('btnConfirmElim');
+    btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
     try {
-      const res = await fetch(`${API_BASE}/trabajadores/${pendingElimId}`, { method: 'DELETE' });
-      if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
-
-      // Quitar del array local
-      todos = todos.filter(t => t.idTrabajador !== pendingElimId);
-      poblarEspecialidades();
-      cerrarModalEliminar();
-      filtrar();
-      showToast(`${pendingElimNombre} eliminado permanentemente`, false);
-    } catch (e) {
-      console.error(e);
-      showToast('Error al eliminar el trabajador', false);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-trash"></i> Confirmar eliminación';
+      const res=await fetch(`${API_BASE}/trabajadores/${pendingElimId}`,{method:'DELETE'});
+      if(!res.ok&&res.status!==204) throw new Error();
+      todos=todos.filter(t=>t.idTrabajador!==pendingElimId);
+      poblarEspecialidades(); cerrarModalEliminar(); filtrar();
+      showToast(`${pendingElimNombre} eliminado permanentemente`,false);
+    } catch { showToast('Error al eliminar el trabajador',false); }
+    finally {
+      btn.disabled=false;
+      btn.innerHTML='<i class="fa-solid fa-trash"></i> Confirmar eliminación';
     }
   }
 
-  /* ════════════════════════════════════════
-     7. HELPERS
-  ════════════════════════════════════════ */
+  /* ══ HELPERS ══ */
   function poblarEspecialidades() {
-    const sel = document.getElementById('filtroEspecialidad');
-    // limpia opciones previas menos la primera
-    while (sel.options.length > 1) sel.remove(1);
-    const esp = [...new Set(todos.map(t => t.especialidadTrabajador).filter(Boolean))].sort();
-    esp.forEach(e => {
-      const o = document.createElement('option');
-      o.value = e; o.textContent = e; sel.appendChild(o);
-    });
+    const sel=$('filtroEspecialidad');
+    while(sel.options.length>1) sel.remove(1);
+    [...new Set(todos.map(t=>t.especialidadTrabajador).filter(Boolean))].sort()
+      .forEach(e=>{const o=document.createElement('option');o.value=e;o.textContent=e;sel.appendChild(o);});
   }
-
-  function showToast(msg, ok) {
-    const t = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
-    const icon = document.getElementById('toastIcon');
-    icon.style.color   = ok ? 'var(--success)' : 'var(--danger)';
-    icon.className     = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+  function showToast(msg,ok) {
+    const t=$('toast');
+    $('toastMsg').textContent=msg;
+    t.style.borderColor=ok?'var(--success)':'var(--danger)';
+    const ic=$('toastIcon');
+    ic.style.color=ok?'var(--success)':'var(--danger)';
+    ic.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation';
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
+    setTimeout(()=>t.classList.remove('show'),3500);
   }
+  function cerrarSesion(){ window.location.href='../../index.html'; }
 
-  function cerrarSesion() { window.location.href = '../../index.html'; }
-
-  /* ── Smart navbar ── */
-  let lastScroll = 0;
-  const scrollBtn = document.getElementById('scrollTop');
-  window.addEventListener('scroll', () => {
-    const c = window.scrollY;
-    document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
-    lastScroll = c <= 0 ? 0 : c;
-    scrollBtn.classList.toggle('visible', c > 200);
+  /* Smart navbar */
+  let lastScroll=0;
+  const scrollBtn=$('scrollTop');
+  window.addEventListener('scroll',()=>{
+    const c=window.scrollY;
+    document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80);
+    lastScroll=c<=0?0:c;
+    scrollBtn.classList.toggle('visible',c>200);
   });
 
-  /* Cerrar modales al click fuera */
-  document.getElementById('modalOverlay').addEventListener('click', e => {
-    if (e.target === e.currentTarget) cerrarModal();
+  /* Cerrar modales con click fuera o ESC */
+  ['modalDetalle','modalBaja','modalEliminar'].forEach(id=>{
+    $(id).addEventListener('click',e=>{ if(e.target===e.currentTarget) $(id).classList.remove('open'); });
   });
-  document.getElementById('modalEliminar').addEventListener('click', e => {
-    if (e.target === e.currentTarget) cerrarModalEliminar();
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      ['modalDetalle','modalBaja','modalEliminar'].forEach(id=>$(id).classList.remove('open'));
+    }
   });
 
-  /* ── INIT ── */
   cargarTrabajadores();
 </script>
 
