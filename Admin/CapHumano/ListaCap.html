@@ -117,7 +117,6 @@
     .det-name { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); }
     .det-sub  { font-size:13px; color:var(--muted); margin-top:3px; }
     .det-role-badge { font-size:9px; font-weight:600; padding:4px 12px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; white-space:nowrap; flex-shrink:0; }
-
     .det-section { margin-bottom:1.25rem; }
     .det-section-title { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:.75rem; display:flex; align-items:center; gap:8px; }
     .det-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
@@ -126,7 +125,6 @@
     .det-field.full { grid-column:1/-1; }
     .det-lbl { font-size:11px; color:var(--muted); }
     .det-val { font-size:13px; color:var(--white); background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:9px 12px; word-break:break-word; }
-
     .det-footer { display:flex; gap:10px; justify-content:flex-end; padding-top:1.25rem; border-top:1px solid var(--border); margin-top:.5rem; flex-wrap:wrap; }
     .det-btn { display:flex; align-items:center; gap:8px; padding:9px 20px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; border:1px solid transparent; transition:all .2s; }
     .det-btn.close-btn { background:rgba(255,255,255,0.05); color:var(--muted); border-color:rgba(255,255,255,0.08); }
@@ -257,7 +255,6 @@
       </div>
       <span class="det-role-badge rol-badge" id="detRolBadge">—</span>
     </div>
-
     <div class="det-section">
       <div class="det-section-title">
         <i class="fa-solid fa-id-card" style="color:var(--gold);font-size:10px"></i>
@@ -282,7 +279,6 @@
         </div>
       </div>
     </div>
-
     <div class="det-footer">
       <button class="det-btn close-btn" onclick="cerrarDetalle()">
         <i class="fa-solid fa-xmark"></i> Cerrar
@@ -351,10 +347,10 @@
   let todos = [];
   let pendingElimId = '', pendingElimNombre = '', codigoElim = '';
 
-  /* ══ CARGAR ══ */
+  /* ══ CARGAR — solo empleados con rol CAPITAL_HUMANO (idRol = 2) ══ */
   async function cargarEmpleados() {
     try {
-      const res = await fetch(`${API_BASE}/empleados`);
+      const res = await fetch(`${API_BASE}/empleados/rol/2`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       todos = await res.json();
       filtrar();
@@ -388,7 +384,7 @@
     }
   }
 
-  /* ══ RENDER CARD — con botones Editar y Eliminar ══ */
+  /* ══ RENDER CARD ══ */
   function renderCard(e, idx) {
     const av  = AV_COLORS[idx % AV_COLORS.length];
     const rol = e.rol?.nombreRol || '—';
@@ -419,7 +415,7 @@
       </div>`;
   }
 
-  /* ══ MODAL DETALLE — con botones Editar y Eliminar ══ */
+  /* ══ MODAL DETALLE ══ */
   function abrirDetalle(id) {
     const e = todos.find(x => x.idEmpleado === id);
     if (!e) return;
@@ -451,7 +447,7 @@
 
   function cerrarDetalle() { $('modalDetalle').classList.remove('open'); }
 
-  /* ══ EDITAR — guarda en localStorage y navega a EditCap.html ══ */
+  /* ══ EDITAR ══ */
   function irAEditar(id) {
     const e = todos.find(x => x.idEmpleado === id);
     if (!e) return;
