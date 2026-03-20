@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INDECSA – Trabajadores</title>
+  <title>INDECSA – Contratistas</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -24,14 +24,8 @@
     }
 
     @keyframes cardFade {
-      from{
-        opacity:0;
-        transform:translateY(14px) scale(.98);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-      }
+      from{ opacity:0; transform:translateY(14px) scale(.98);}
+      to{ opacity:1; transform:translateY(0) scale(1);}
     }
 
     body{
@@ -53,9 +47,7 @@
       align-items:center;
       justify-content:space-between;
       position:fixed;
-      top:0;
-      left:0;
-      right:0;
+      top:0; left:0; right:0;
       z-index:1000;
     }
 
@@ -76,8 +68,7 @@
       gap:4px;
       position:fixed;
       top:72px;
-      left:0;
-      right:0;
+      left:0; right:0;
       z-index:999;
     }
 
@@ -183,7 +174,7 @@
       grid-template-columns:48px 1fr;
       gap:14px;
       cursor:pointer;
-      transition:.35s cubic-bezier(.22,.9,.32,1);
+      transition:.35s;
       position:relative;
       animation:cardFade .45s ease forwards;
     }
@@ -191,17 +182,14 @@
     .worker-card::before{
       content:'';
       position:absolute;
-      top:0;
-      left:0;
-      right:0;
+      top:0; left:0; right:0;
       height:3px;
       border-radius:14px 14px 0 0;
     }
 
     .c-activo::before{ background:linear-gradient(90deg,transparent,#5DCAA5,transparent); }
     .c-inactivo::before{ background:linear-gradient(90deg,transparent,#F09595,transparent); }
-    .c-vacaciones::before{ background:linear-gradient(90deg,transparent,#F4D35E,transparent); }
-    .c-baja::before{ background:linear-gradient(90deg,transparent,#999,transparent); }
+    .c-suspendido::before{ background:linear-gradient(90deg,transparent,#F4D35E,transparent); }
 
     .worker-card:hover{
       border-color:rgba(200,169,110,0.55);
@@ -251,8 +239,7 @@
 
     .s-activo{ background:rgba(93,202,165,0.12); color:#5DCAA5; }
     .s-inactivo{ background:rgba(240,149,149,0.12); color:#F09595; }
-    .s-vacaciones{ background:rgba(244,211,94,0.12); color:#F4D35E; }
-    .s-baja{ background:rgba(200,200,200,0.12); color:#ccc; }
+    .s-suspendido{ background:rgba(244,211,94,0.12); color:#F4D35E; }
 
     footer{
       background:var(--navy-mid);
@@ -276,11 +263,9 @@
 
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link active"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
-  <a class="nav-link" href="../Contratista/ListaContratistas.html">
-    <i class="fa-solid fa-people-group"></i> Contratistas
-  </a>
+  <a class="nav-link active"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()">
@@ -293,14 +278,15 @@
 
     <div class="page-header">
       <div>
-        <div class="page-title">Trabajadores registrados</div>
-        <div class="page-sub">Consulta del personal dentro del sistema</div>
+        <div class="page-title">Contratistas registrados</div>
+        <div class="page-sub">Consulta de contratistas en el sistema</div>
       </div>
     </div>
 
     <div class="toolbar">
+
       <div class="filter-group">
-        <div class="filter-label">Buscar trabajador</div>
+        <div class="filter-label">Buscar contratista</div>
         <input id="busquedaNombre" class="filter-select" oninput="filtrar()">
       </div>
 
@@ -320,10 +306,10 @@
           <option value="">Todos</option>
           <option>ACTIVO</option>
           <option>INACTIVO</option>
-          <option>VACACIONES</option>
-          <option>BAJA</option>
+          <option>SUSPENDIDO</option>
         </select>
       </div>
+
     </div>
 
     <div class="cards-grid" id="cardsGrid"></div>
@@ -337,12 +323,12 @@
 
 <script>
 
-  let trabajadores=[];
+  let contratistas=[];
 
   async function cargar(){
-    const res=await fetch("http://localhost:8080/api/v1/trabajadores");
-    trabajadores=await res.json();
-    render(trabajadores);
+    const res=await fetch("http://localhost:8080/api/v1/contratistas");
+    contratistas=await res.json();
+    render(contratistas);
   }
 
   function iniciales(nombre){
@@ -361,36 +347,34 @@
   function render(lista){
     const grid=document.getElementById("cardsGrid");
 
-    grid.innerHTML=lista.map(t=>`
+    grid.innerHTML=lista.map(c=>`
 
-<div class="worker-card c-${t.estadoTrabajador.toLowerCase()}" onclick="verDetalle(${t.idTrabajador})">
+<div class="worker-card c-${c.estadoContratista.toLowerCase()}" onclick="verDetalle(${c.idContratista})">
 
-<div class="avatar">${iniciales(t.nombreTrabajador)}</div>
+<div class="avatar">${iniciales(c.nombreContratista)}</div>
 
 <div>
 
-<div class="wname">${t.nombreTrabajador}</div>
+<div class="wname">${c.nombreContratista}</div>
 
 <div class="wmeta">
 
-<div class="wrow"><i class="fa-solid fa-helmet-safety"></i>${t.especialidadTrabajador}</div>
+<div class="wrow"><i class="fa-solid fa-file-invoice"></i>${c.rfcContratista}</div>
 
-<div class="wrow"><i class="fa-solid fa-phone"></i>${t.telefonoTrabajador}</div>
+<div class="wrow"><i class="fa-solid fa-phone"></i>${c.telefonoContratista}</div>
 
-<div class="wrow"><i class="fa-solid fa-envelope"></i>${t.correoTrabajador}</div>
+<div class="wrow"><i class="fa-solid fa-envelope"></i>${c.correoContratista}</div>
 
-<div class="wrow"><i class="fa-solid fa-location-dot"></i>${t.ubicacionTrabajador}</div>
+<div class="wrow"><i class="fa-solid fa-location-dot"></i>${c.ubicacionContratista}</div>
 
-<div class="wrow stars">${estrellas(t.calificacionTrabajador||0)}</div>
-
-<div class="wrow"><i class="fa-solid fa-calendar"></i>${t.fechaIngreso}</div>
+<div class="wrow stars">${estrellas(c.calificacionContratista||0)}</div>
 
 </div>
 
 </div>
 
-<div class="status-badge s-${t.estadoTrabajador.toLowerCase()}">
-${t.estadoTrabajador}
+<div class="status-badge s-${c.estadoContratista.toLowerCase()}">
+${c.estadoContratista}
 </div>
 
 </div>
@@ -403,17 +387,17 @@ ${t.estadoTrabajador}
     const ubic=document.getElementById("filtroUbicacion").value;
     const estado=document.getElementById("filtroEstado").value;
 
-    const filtrados=trabajadores.filter(t=>
-      t.nombreTrabajador.toLowerCase().includes(nombre) &&
-      (!ubic || t.ubicacionTrabajador===ubic) &&
-      (!estado || t.estadoTrabajador===estado)
+    const filtrados=contratistas.filter(c=>
+      c.nombreContratista.toLowerCase().includes(nombre) &&
+      (!ubic || c.ubicacionContratista===ubic) &&
+      (!estado || c.estadoContratista===estado)
     );
 
     render(filtrados);
   }
 
   function verDetalle(id){
-    window.location.href = "DetalleTrabajador.html?id=" + id;
+    window.location.href="DetalleContratista.html?id="+id;
   }
 
   function cerrarSesion(){

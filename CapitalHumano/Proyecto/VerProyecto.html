@@ -227,6 +227,20 @@
       color:var(--muted);
     }
 
+    .btn{
+      margin-top:20px;
+      padding:8px 18px;
+      border-radius:8px;
+      border:none;
+      background:var(--gold);
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .btn:hover{
+      opacity:0.85;
+    }
+
   </style>
 </head>
 
@@ -249,6 +263,10 @@
 
   <a class="nav-link" href="ListaProyectos.html">
     <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+
+  <a class="nav-link" href="../Contratista/ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
   </a>
 
   <a class="nav-link" href="../Relacion/Relacionar.html">
@@ -292,6 +310,11 @@
 
       <div id="estatus"></div>
 
+      <!-- 🔙 BOTÓN -->
+      <button class="btn" onclick="volver()">
+        <i class="fa-solid fa-arrow-left"></i> Volver
+      </button>
+
     </div>
 
     <div class="panel">
@@ -320,9 +343,13 @@
   <div class="footer-left">© 2026 INDECSA</div>
 </footer>
 
+
 <script>
 
   const API = "http://localhost:8080/api/v1/proyectos";
+  const API_ASIG = "http://localhost:8080/api/v1/asignaciones/trabajador-proyecto";
+  const API_PC = "http://localhost:8080/api/v1/asignaciones/proyecto-contratista";
+
 
   function obtenerID(){
     const params = new URLSearchParams(window.location.search);
@@ -359,14 +386,40 @@
           ${proyecto.estatusProyecto.replace("_"," ")}
         </span>`;
 
-      document.getElementById("contadorTrabajadores").innerText =
-        "0 / 8 trabajadores asignados";
+      // 🔥 TRABAJADORES
+      const resTrab = await fetch(`${API_ASIG}/proyecto/${id}`);
+      const asignados = await resTrab.json();
 
-      document.getElementById("listaTrabajadores").innerHTML =
-        "<div class='empty'>No hay trabajadores asignados</div>";
+      document.getElementById("contadorTrabajadores").innerText =
+        `${asignados.length} / 8 trabajadores asignados`;
+
+      if(!asignados.length){
+        document.getElementById("listaTrabajadores").innerHTML =
+          "<div class='empty'>No hay trabajadores asignados</div>";
+      } else {
+
+        // 🔥 ORDENAR POR ESPECIALIDAD
+        asignados.sort((a,b)=>
+          a.trabajador.especialidadTrabajador.localeCompare(b.trabajador.especialidadTrabajador)
+        );
+
+        document.getElementById("listaTrabajadores").innerHTML =
+          asignados.map(a => `
+      <div class="worker-card">
+        <span>${a.trabajador.nombreTrabajador}</span>
+        <span>${a.trabajador.especialidadTrabajador}</span>
+      </div>
+    `).join("");
+      }
+
+// 🔥 CONTRATISTA
+      const resCont = await fetch(`${API_PC}/proyecto/${id}`);
+      const contratos = await resCont.json();
+
+      const activo = contratos.find(c => c.estatusContrato === "ACTIVO");
 
       document.getElementById("contratista").innerText =
-        "No disponible";
+        activo ? activo.contratista.nombreContratista : "No asignado";
 
     }catch(e){
       console.error(e);
@@ -377,6 +430,10 @@
 
   function cerrarSesion(){
     window.location.href='../../index.html';
+  }
+
+  function volver(){
+    window.history.back();
   }
 
   cargarProyecto();

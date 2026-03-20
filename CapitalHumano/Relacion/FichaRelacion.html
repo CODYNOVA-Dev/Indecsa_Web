@@ -34,7 +34,6 @@
     }
 
     /* HEADER */
-
     header{
       background:var(--navy-mid);
       border-bottom:1px solid var(--border);
@@ -44,9 +43,7 @@
       justify-content:space-between;
       padding:0 2rem;
       position:fixed;
-      top:0;
-      left:0;
-      right:0;
+      top:0; left:0; right:0;
     }
 
     .header-tag{
@@ -57,7 +54,6 @@
     }
 
     /* NAV */
-
     nav{
       background:var(--navy-dark);
       border-bottom:1px solid rgba(200,169,110,0.12);
@@ -67,9 +63,7 @@
       padding:0 2rem;
       gap:8px;
       position:fixed;
-      top:72px;
-      left:0;
-      right:0;
+      top:72px; left:0; right:0;
     }
 
     .nav-link{
@@ -90,9 +84,7 @@
 
     .nav-sep{flex:1;}
 
-    main{
-      padding:40px;
-    }
+    main{ padding:40px; }
 
     .page-wrap{
       max-width:850px;
@@ -112,6 +104,8 @@
       padding:20px;
       margin-bottom:18px;
     }
+
+
 
     label{
       font-size:13px;
@@ -166,7 +160,6 @@
     }
 
     /* FOOTER */
-
     footer{
       background:var(--navy-mid);
       border-top:1px solid var(--border);
@@ -184,41 +177,24 @@
     }
 
   </style>
-
 </head>
 
 <body>
 
 <header>
-
   <img src="../../img/logo.png" height="52">
-
-  <div class="header-tag">
-    Capital Humano
-  </div>
-
+  <div class="header-tag">Capital Humano</div>
 </header>
 
 <nav>
-
-  <a class="nav-link" href="../Paginaprincipal.html">
-    <i class="fa-solid fa-house"></i> Inicio
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
   </a>
-
-  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
-    <i class="fa-solid fa-user"></i> Trabajadores
-  </a>
-
-  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
-    <i class="fa-solid fa-diagram-project"></i> Proyectos
-  </a>
-
-  <a class="nav-link active">
-    <i class="fa-solid fa-link"></i> Relacionar
-  </a>
-
+  <a class="nav-link active"><i class="fa-solid fa-link"></i> Relacionar</a>
   <div class="nav-sep"></div>
-
 </nav>
 
 <main>
@@ -229,7 +205,20 @@
 
     <div class="card">
 
-      <label>Agregar trabajador</label>
+      <label>Asignar contratista</label>
+
+      <select id="contratistaSelect"></select>
+
+      <button id="btnAsignarCont" class="btn-add" onclick="asignarContratista()">
+        Asignar contratista
+      </button>
+
+      <button id="btnEliminarCont" class="btn-del" style="display:none;" onclick="eliminarContratista()">
+        Eliminar contratista
+      </button>
+
+      <label> </label>
+      <label> Agregar trabajador</label>
 
       <select id="trabajadorSelect"></select>
 
@@ -238,7 +227,6 @@
       </button>
 
       <table>
-
         <thead>
         <tr>
           <th>Trabajador</th>
@@ -251,33 +239,16 @@
 
       </table>
 
-    </div>
-
-    <div class="card">
-
-      <label>Contratista</label>
-
-      <select id="contratistaSelect">
-        <option>Constructora Atlas</option>
-        <option>Grupo Industrial MX</option>
-      </select>
-
-      <button class="btn-add" onclick="agregarContratista()">
-        Asignar contratista
+      <!-- 🔥 BOTÓN BIEN PUESTO -->
+      <label> </label>
+      <button class="btn-add" onclick="guardarTodo()">
+        Guardar cambios
       </button>
 
-      <table>
-
-        <thead>
-        <tr>
-          <th>Contratista</th>
-          <th>Acción</th>
-        </tr>
-        </thead>
-
-        <tbody id="tablaContratista"></tbody>
-
-      </table>
+      <label> </label>
+      <button class="btn-add" onclick="volver()" style="margin-top:15px;">
+        Volver
+      </button>
 
     </div>
 
@@ -286,123 +257,273 @@
 </main>
 
 <footer>
-
   <div class="footer-content">
-
-    <div>
-      <b>INDECSA</b><br>
-      Sistema de gestión de personal
-    </div>
-
-    <div>
-      Contacto<br>
-      soporte@indecsa.com
-    </div>
-
-    <div>
-      © 2026 INDECSA
-    </div>
-
+    <div><b>INDECSA</b><br>Sistema de gestión de personal</div>
+    <div>Contacto<br>soporte@indecsa.com</div>
+    <div>© 2026 INDECSA</div>
   </div>
-
 </footer>
+
+<!-- SOLO TE PONGO SCRIPT + CAMBIOS CLAVE, LO DEMÁS QUEDA IGUAL -->
+
+<div style="margin:10px 0; font-size:13px; color:#8A9BB5;">
+  Trabajadores asignados: <span id="contador">0 / 8</span>
+</div>
 
 <script>
 
-  const trabajadoresDisponibles=[
+  const API_TRAB = "http://localhost:8080/api/v1/trabajadores";
+  const API_PROY = "http://localhost:8080/api/v1/proyectos";
+  const API_ASIG = "http://localhost:8080/api/v1/asignaciones/trabajador-proyecto";
+  const API_CONTRATISTAS = "http://localhost:8080/api/v1/contratistas";
+  const API_PC = "http://localhost:8080/api/v1/asignaciones/proyecto-contratista";
 
-    {nombre:"Juan Pérez",especialidad:"Carpintero"},
-    {nombre:"Pedro Gómez",especialidad:"Plomero"},
-    {nombre:"Carlos Ruiz",especialidad:"Tablaroquero"},
-    {nombre:"Mario Díaz",especialidad:"Chalan de obra"}
+  let trabajadores = [];
+  let contratistas = [];
+  let asignados = [];
+  let proyecto = null;
+  let contratoActivo = null;
 
-  ];
+  const params = new URLSearchParams(window.location.search);
+  const idProyecto = params.get("id");
 
-  let trabajadoresAsignados=[];
-  let contratistaAsignado=null;
+  async function init(){
+    await cargarProyecto();
+    await cargarContratoProyecto(); // 🔥 primero esto
+    await cargarContratistas();
+    await cargarTrabajadores();
+    await cargarAsignados();
 
-  const select=document.getElementById("trabajadorSelect");
+    renderSelects();
+    renderTabla();
+    actualizarUIContrato(); // 🔥 ahora sí detecta desde inicio
+  }
 
-  trabajadoresDisponibles.forEach((t,i)=>{
+  /* ================== CARGAS ================== */
 
-    select.innerHTML+=`<option value="${i}">
-${t.nombre} – ${t.especialidad}
-</option>`;
+  async function cargarProyecto(){
+    const res = await fetch(`${API_PROY}/${idProyecto}`);
+    proyecto = await res.json();
+  }
 
-  });
+  async function cargarContratoProyecto(){
+    const res = await fetch(`${API_PC}/proyecto/${idProyecto}`);
+    const data = await res.json();
 
-  function agregarTrabajador(){
+    contratoActivo = data.find(c => c.estatusContrato === "ACTIVO") || null;
+  }
 
-    if(trabajadoresAsignados.length>=8){
-      alert("Máximo 8 trabajadores");
+  async function cargarContratistas(){
+    const res = await fetch(API_CONTRATISTAS);
+    const data = await res.json();
+
+    contratistas = data.filter(c =>
+      c.estadoContratista === "ACTIVO" &&
+      c.ubicacionContratista?.toUpperCase() === proyecto.estadoProyectoGeo?.toUpperCase()
+    );
+  }
+
+  async function cargarTrabajadores(){
+    const res = await fetch(API_TRAB);
+    const data = await res.json();
+
+    trabajadores = data
+      .filter(t =>
+        t.estadoTrabajador === "ACTIVO" &&
+        t.ubicacionTrabajador?.toUpperCase() === proyecto.estadoProyectoGeo?.toUpperCase()
+      )
+      .sort((a,b)=> a.especialidadTrabajador.localeCompare(b.especialidadTrabajador));
+  }
+
+  async function cargarAsignados(){
+    const res = await fetch(`${API_ASIG}/proyecto/${idProyecto}`);
+    asignados = await res.json();
+  }
+
+  /* ================== UI ================== */
+
+  function renderSelects(){
+
+    const selectTrab = document.getElementById("trabajadorSelect");
+    const selectCont = document.getElementById("contratistaSelect");
+
+    selectCont.innerHTML = contratistas.length === 0
+      ? `<option>No hay contratistas disponibles</option>`
+      : contratistas.map(c => `
+      <option value="${c.idContratista}">
+        ${c.nombreContratista} – ${c.ubicacionContratista}
+      </option>
+    `).join("");
+
+    selectTrab.innerHTML = trabajadores.length === 0
+      ? `<option>No hay trabajadores disponibles</option>`
+      : trabajadores.map(t => `
+      <option value="${t.idTrabajador}">
+        ${t.especialidadTrabajador} – ${t.nombreTrabajador}
+      </option>
+    `).join("");
+  }
+
+  function renderTabla(){
+
+    const tbody = document.getElementById("tablaTrabajadores");
+    const contador = document.getElementById("contador");
+    const btnAgregar = document.querySelector("button[onclick='agregarTrabajador()']");
+
+    contador.innerText = `${asignados.length} / 8`;
+
+    if(asignados.length === 0){
+      tbody.innerHTML = `<tr><td colspan="3">Sin trabajadores asignados</td></tr>`;
+    } else {
+      tbody.innerHTML = asignados.map(a => `
+      <tr>
+        <td>${a.trabajador.nombreTrabajador}</td>
+        <td>${a.trabajador.especialidadTrabajador}</td>
+        <td>
+          <button class="btn-del" onclick="eliminar(${a.idAsignacionTp})">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    `).join("");
+    }
+
+    if(asignados.length >= 8){
+      btnAgregar.disabled = true;
+      btnAgregar.innerText = "Límite alcanzado (8)";
+      btnAgregar.style.background = "#999";
+    } else {
+      btnAgregar.disabled = false;
+      btnAgregar.innerText = "Agregar trabajador";
+      btnAgregar.style.background = "#5DCAA5";
+    }
+  }
+
+  /* ================== CONTRATISTA ================== */
+
+  function actualizarUIContrato(){
+
+    const btnAsignar = document.getElementById("btnAsignarCont");
+    const btnEliminar = document.getElementById("btnEliminarCont");
+
+    if(contratoActivo){
+      btnAsignar.style.display = "none";
+      btnEliminar.style.display = "inline-block";
+    } else {
+      btnAsignar.style.display = "inline-block";
+      btnEliminar.style.display = "none";
+    }
+  }
+
+  async function asignarContratista(){
+
+    if(contratoActivo){
+      alert("Este proyecto ya tiene contratista ");
       return;
     }
 
-    const index=select.value;
-    const t=trabajadoresDisponibles[index];
+    const idCont = parseInt(document.getElementById("contratistaSelect").value);
 
-    trabajadoresAsignados.push(t);
-
-    render();
-
-  }
-
-  function render(){
-
-    let tbody=document.getElementById("tablaTrabajadores");
-
-    tbody.innerHTML="";
-
-    trabajadoresAsignados.forEach((t,i)=>{
-
-      tbody.innerHTML+=`
-
-<tr>
-<td>${t.nombre}</td>
-<td>${t.especialidad}</td>
-<td><button class="btn-del" onclick="eliminarTrabajador(${i})">Eliminar</button></td>
-</tr>
-
-`;
-
+    const res = await fetch(API_PC,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        idProyecto: parseInt(idProyecto),
+        idContratista: idCont,
+        estatusContrato: "ACTIVO"
+      })
     });
 
-  }
-
-  function eliminarTrabajador(i){
-
-    trabajadoresAsignados.splice(i,1);
-
-    render();
-
-  }
-
-  function agregarContratista(){
-
-    if(contratistaAsignado){
-      alert("Solo puede haber un contratista");
+    if(!res.ok){
+      alert("Error al asignar contratista ");
       return;
     }
 
-    contratistaAsignado=document.getElementById("contratistaSelect").value;
+    await cargarContratoProyecto();
+    actualizarUIContrato();
 
-    document.getElementById("tablaContratista").innerHTML=`
-
-<tr>
-<td>${contratistaAsignado}</td>
-<td><button class="btn-del" onclick="eliminarContratista()">Eliminar</button></td>
-</tr>
-
-`;
-
+    alert("Contratista asignado ");
   }
 
-  function eliminarContratista(){
+  async function eliminarContratista(){
 
-    contratistaAsignado=null;
+    if(!confirm("¿Eliminar contratista del proyecto?")) return;
 
-    document.getElementById("tablaContratista").innerHTML="";
+    await fetch(`${API_PC}/${contratoActivo.idAsignacionPc}`,{
+      method:"DELETE"
+    });
 
+    contratoActivo = null;
+
+    await cargarContratoProyecto();
+    actualizarUIContrato();
+
+    alert("Contratista eliminado 🗑");
+  }
+
+  /* ================== TRABAJADORES ================== */
+
+  async function agregarTrabajador(){
+
+    if(!contratoActivo){
+      alert("Primero asigna un contratista ");
+      return;
+    }
+
+    const idTrab = parseInt(document.getElementById("trabajadorSelect").value);
+
+    if(asignados.some(a => a.trabajador.idTrabajador === idTrab)){
+      alert("Ese trabajador ya está asignado ");
+      return;
+    }
+
+    if(asignados.length >= 8){
+      alert("Máximo 8 trabajadores ");
+      return;
+    }
+
+    const res = await fetch(API_ASIG,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        idTrabajador: idTrab,
+        idProyecto: parseInt(idProyecto),
+        idAsignacionPc: contratoActivo.idAsignacionPc,
+        rolEnProyecto: "Operativo"
+      })
+    });
+
+    if(!res.ok){
+      alert("Error al agregar trabajador ");
+      return;
+    }
+
+    await cargarAsignados();
+    renderTabla();
+  }
+
+  async function eliminar(id){
+
+    if(!confirm("¿Eliminar trabajador?")) return;
+
+    await fetch(`${API_ASIG}/${id}`,{ method:"DELETE" });
+
+    await cargarAsignados();
+    renderTabla();
+  }
+
+  function guardarTodo(){
+    alert("Guardado exitoso");
+  }
+
+  init();
+
+  function volver(){
+    if(document.referrer){
+      window.history.back();
+    } else {
+      window.location.href = "../Proyecto/ListaProyectos.html";
+    }
   }
 
 </script>

@@ -47,6 +47,7 @@
       text-transform:uppercase;
     }
 
+    /* NAVBAR COMPLETO 🔥 */
     nav{
       background:var(--navy-dark);
       border-bottom:1px solid rgba(200,169,110,0.15);
@@ -54,6 +55,23 @@
       align-items:center;
       padding:0 2rem;
       height:48px;
+      gap:6px;
+    }
+
+    .nav-link{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 14px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .nav-link:hover{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
     }
 
     .nav-sep{flex:1;}
@@ -69,7 +87,6 @@
       cursor:pointer;
       border:1px solid rgba(226,75,74,0.25);
       background:none;
-      font-family:'DM Sans',sans-serif;
     }
 
     main{
@@ -94,13 +111,11 @@
 
     .cards-grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr); /* 🔥 ahora 4 */
       gap:14px;
       width:100%;
-      max-width:860px;
+      max-width:1000px;
     }
-
-    /* ====== CARDS MEJORADAS ====== */
 
     .mod-card{
       background:var(--navy-mid);
@@ -124,6 +139,7 @@
     .mod-card:nth-child(1){animation-delay:.05s;}
     .mod-card:nth-child(2){animation-delay:.1s;}
     .mod-card:nth-child(3){animation-delay:.15s;}
+    .mod-card:nth-child(4){animation-delay:.2s;}
 
     .mod-card:hover{
       transform:translateY(-4px) scale(1.02);
@@ -144,19 +160,6 @@
       opacity:.6;
     }
 
-    .mod-card::after{
-      content:'';
-      position:absolute;
-      inset:0;
-      background:radial-gradient(circle at top,rgba(200,169,110,0.15),transparent 70%);
-      opacity:0;
-      transition:.3s;
-    }
-
-    .mod-card:hover::after{
-      opacity:1;
-    }
-
     .mod-icon{
       width:76px;
       height:76px;
@@ -170,19 +173,9 @@
       transition:.3s;
     }
 
-    .mod-card:hover .mod-icon{
-      transform:scale(1.1);
-      background:rgba(200,169,110,0.15);
-    }
-
     .mod-icon i{
       font-size:32px;
       color:var(--gold);
-      transition:.3s;
-    }
-
-    .mod-card:hover .mod-icon i{
-      transform:scale(1.1);
     }
 
     .mod-card h3{
@@ -204,8 +197,6 @@
       }
     }
 
-    /* ====== FIN CARDS ====== */
-
     footer{
       background:var(--navy-mid);
       border-top:1px solid rgba(200,169,110,0.15);
@@ -221,25 +212,6 @@
       color:var(--muted);
     }
 
-    .footer-contact{
-      display:flex;
-      gap:24px;
-    }
-
-    .footer-contact a{
-      font-size:12px;
-      color:var(--muted);
-      text-decoration:none;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-
-    .footer-contact a i{
-      font-size:13px;
-      color:var(--gold);
-    }
-
   </style>
 </head>
 
@@ -247,23 +219,16 @@
 
 <header>
   <img src="../img/logo.png" height="52">
-  <div class="header-tag">Gestión de proyectos</div>
+  <div class="header-tag">Capital Humano</div>
 </header>
 
-<nav>
-  <div class="nav-sep"></div>
 
-  <button class="nav-logout" onclick="cerrarSesion()">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    Cerrar sesión
-  </button>
-</nav>
 
 <main>
 
   <div class="top">
     <h2>Panel Capital Humano</h2>
-    <p>Consulta trabajadores y asigna personal a proyectos</p>
+    <p>Consulta información del sistema</p>
   </div>
 
   <div class="cards-grid">
@@ -271,19 +236,26 @@
     <div class="mod-card" onclick="ir('Trabajador/VisualizarTrabajadores.html')">
       <div class="mod-icon"><i class="fa-solid fa-user"></i></div>
       <h3>Trabajadores</h3>
-      <p>Consulta la lista de trabajadores registrados dentro del sistema.</p>
+      <p>Consulta la lista de trabajadores registrados.</p>
     </div>
 
     <div class="mod-card" onclick="ir('Proyecto/ListaProyectos.html')">
       <div class="mod-icon"><i class="fa-solid fa-diagram-project"></i></div>
       <h3>Proyectos</h3>
-      <p>Consulta los proyectos activos y su estado actual.</p>
+      <p>Consulta los proyectos.</p>
+    </div>
+
+    <!-- 🔥 NUEVA CARD -->
+    <div class="mod-card" onclick="ir('Contratista/ListaContratistas.html')">
+      <div class="mod-icon"><i class="fa-solid fa-people-group"></i></div>
+      <h3>Contratistas</h3>
+      <p>Consulta los contratistas registrados en el sistema.</p>
     </div>
 
     <div class="mod-card" onclick="ir('Relacion/Relacionar.html')">
       <div class="mod-icon"><i class="fa-solid fa-link"></i></div>
       <h3>Relacionar</h3>
-      <p>Asigna trabajadores a proyectos existentes.</p>
+      <p>Visualiza relaciones existentes (solo consulta).</p>
     </div>
 
   </div>
@@ -291,16 +263,9 @@
 </main>
 
 <footer>
-
   <div class="footer-left">
-    © 2025 INDECSA — Todos los derechos reservados
+    © 2026 INDECSA
   </div>
-
-  <div class="footer-contact">
-    <a href="#"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
-    <a href="#"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
-  </div>
-
 </footer>
 
 <script>

@@ -25,7 +25,7 @@
       --warning:#FAC775;
       --purple:#AFA9EC;
       --danger:#F09595;
-      --blue:#6FA8FF; /* 🔵 nuevo */
+      --blue:#6FA8FF;
     }
 
     body{
@@ -38,33 +38,105 @@
       padding-top:120px;
     }
 
-    header{background:var(--navy-mid);border-bottom:1px solid var(--border);height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:fixed;top:0;left:0;right:0;}
-    .header-tag{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
-
-    nav{background:var(--navy-dark);border-bottom:1px solid rgba(200,169,110,0.12);height:48px;display:flex;align-items:center;padding:0 2rem;gap:8px;position:fixed;top:72px;left:0;right:0;}
-
-    .nav-link{color:var(--muted);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;display:flex;align-items:center;gap:6px;}
-    .nav-link:hover,.nav-link.active{background:rgba(200,169,110,0.1);color:var(--gold);}
-    .nav-sep{flex:1;}
-
-    .nav-logout{display:flex;align-items:center;gap:7px;padding:6px 16px;border-radius:6px;font-size:13px;color:#F09595;cursor:pointer;border:1px solid rgba(226,75,74,0.25);background:none;}
-
-    main{flex:1;padding:40px;background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);}
-
-    .page-wrap{max-width:900px;margin:auto;}
-    .page-title{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:20px;}
-
-    .toolbar{display:flex;gap:10px;margin-bottom:20px;}
-
-    input,select{
-      background:#0f2747;
-      border:1px solid var(--border);
-      color:white;
-      padding:8px;
-      border-radius:8px;
+    header{
+      background:var(--navy-mid);
+      border-bottom:1px solid var(--border);
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 2rem;
+      position:fixed;
+      top:0;left:0;right:0;
     }
 
-    .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .header-tag{
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    nav{
+      background:var(--navy-dark);
+      border-bottom:1px solid rgba(200,169,110,0.12);
+      height:48px;
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      gap:8px;
+      position:fixed;
+      top:72px;left:0;right:0;
+    }
+
+    .nav-link{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      padding:6px 14px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .nav-link:hover,.nav-link.active{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
+    }
+
+    .nav-sep{flex:1;}
+
+    .nav-logout{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--danger);
+      cursor:pointer;
+      border:1px solid rgba(226,75,74,0.25);
+      background:none;
+    }
+
+    main{
+      flex:1;
+      padding:2.5rem 2rem;
+      background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);
+    }
+
+    .page-wrap{
+      max-width:900px;
+      margin:auto;
+    }
+
+    .page-title{
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      margin-bottom:20px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .filter-select{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(200,169,110,0.2);
+      border-radius:9px;
+      color:white;
+      font-size:13px;
+      padding:8px 10px;
+    }
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
 
     .proj-card{
       background:var(--navy-mid);
@@ -86,7 +158,14 @@
       box-shadow:0 10px 25px rgba(0,0,0,0.25);
     }
 
-    @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+    @keyframes fadeUp{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* 🔥 línea superior */
 
     .proj-card::before{
       content:'';
@@ -101,18 +180,34 @@
     .c-en_curso::before{background:linear-gradient(90deg,transparent,var(--success),transparent);}
     .c-finalizado::before{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
     .c-pausado::before{background:linear-gradient(90deg,transparent,var(--warning),transparent);}
-    .c-planeacion::before{background:linear-gradient(90deg,transparent,var(--blue),transparent);} /* 🔵 */
+    .c-planeacion::before{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+    .c-cancelado::before{background:linear-gradient(90deg,transparent,var(--danger),transparent);}
 
-    .proj-name{font-weight:600;margin-bottom:6px;}
+    .proj-name{
+      font-size:15px;
+      font-weight:500;
+      margin-bottom:6px;
+    }
 
-    .wrow{font-size:12px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
-    .wrow i{color:var(--gold);font-size:11px;}
+    .wrow{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:5px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .wrow i{
+      color:var(--gold);
+      font-size:11px;
+    }
 
     .status-badge{
       position:absolute;
       top:12px;
       right:12px;
-      font-size:10px;
+      font-size:9px;
       padding:4px 9px;
       border-radius:20px;
       text-transform:uppercase;
@@ -121,10 +216,22 @@
     .s-en_curso{background:rgba(93,202,165,0.12);color:var(--success);border:1px solid rgba(93,202,165,0.3);}
     .s-finalizado{background:rgba(175,169,236,0.12);color:var(--purple);border:1px solid rgba(175,169,236,0.3);}
     .s-pausado{background:rgba(250,199,117,0.12);color:var(--warning);border:1px solid rgba(250,199,117,0.3);}
-    .s-planeacion{background:rgba(111,168,255,0.12);color:var(--blue);border:1px solid rgba(111,168,255,0.3);} /* 🔵 */
+    .s-planeacion{background:rgba(111,168,255,0.12);color:var(--blue);border:1px solid rgba(111,168,255,0.3);}
+    .s-cancelado{background:rgba(240,149,149,0.12);color:var(--danger);border:1px solid rgba(240,149,149,0.3);}
 
-    footer{background:var(--navy-mid);border-top:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 2rem;}
-    .footer-left{font-size:12px;color:var(--muted);}
+    footer{
+      background:var(--navy-mid);
+      border-top:1px solid var(--border);
+      height:56px;
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+    }
+
+    .footer-left{
+      font-size:12px;
+      color:var(--muted);
+    }
 
   </style>
 </head>
@@ -140,6 +247,9 @@
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
+  </a>
   <a class="nav-link active"><i class="fa-solid fa-link"></i> Relacionar</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
@@ -147,13 +257,13 @@
 
 <main>
   <div class="page-wrap">
+
     <h2 class="page-title">Relacionar personal con proyectos</h2>
 
     <div class="toolbar">
-      <input id="busqueda" placeholder="Buscar proyecto..." oninput="filtrar()">
+      <input id="busqueda" class="filter-select" placeholder="Buscar proyecto..." oninput="filtrar()">
 
-      <!-- 🆕 filtro estatus -->
-      <select id="filtroEstatus" onchange="filtrar()">
+      <select id="filtroEstatus" class="filter-select" onchange="filtrar()">
         <option value="">Todos</option>
         <option value="PLANEACION">Planeación</option>
         <option value="EN_CURSO">En curso</option>
@@ -162,7 +272,7 @@
         <option value="CANCELADO">Cancelado</option>
       </select>
 
-      <select id="filtroEstado" onchange="filtrar()">
+      <select id="filtroEstado" class="filter-select" onchange="filtrar()">
         <option value="">Todos</option>
         <option value="CDMX">CDMX</option>
         <option value="Hidalgo">Hidalgo</option>
@@ -171,11 +281,12 @@
     </div>
 
     <div class="cards-grid" id="cardsGrid"></div>
+
   </div>
 </main>
 
 <footer>
-  <div class="footer-left">© 2025 INDECSA</div>
+  <div class="footer-left">© 2026 INDECSA</div>
 </footer>
 
 <script>
@@ -196,21 +307,40 @@
       trabajadores: 0
     }));
 
+
+    for (let p of proyectos) {
+
+      // trabajadores
+      const resTrab = await fetch(`http://localhost:8080/api/v1/asignaciones/trabajador-proyecto/proyecto/${p.id}`);
+      const trabs = await resTrab.json();
+      p.trabajadores = trabs.length;
+
+      // contratista
+      const resCont = await fetch(`http://localhost:8080/api/v1/asignaciones/proyecto-contratista/proyecto/${p.id}`);
+      const conts = await resCont.json();
+
+      const activo = conts.find(c => c.estatusContrato === "ACTIVO");
+      p.contratista = activo ? activo.contratista.nombreContratista : "Sin asignar";
+    }
+
     filtrar();
+
   }
 
   function render(p){
     return `
   <div class="proj-card c-${p.estatus.toLowerCase()}" onclick="abrirProyecto(${p.id})">
-  <div class="proj-name">${p.nombre}</div>
 
-  <div class="wrow"><i class="fa-solid fa-location-dot"></i>${p.estado}</div>
-  <div class="wrow"><i class="fa-solid fa-map-pin"></i>${p.municipio}</div>
-  <div class="wrow"><i class="fa-solid fa-users"></i>${p.trabajadores}/8 trabajadores</div>
+    <div class="proj-name">${p.nombre}</div>
 
-  <div class="status-badge s-${p.estatus.toLowerCase()}">
-  ${p.estatus.replace("_"," ")}
-  </div>
+    <div class="wrow"><i class="fa-solid fa-location-dot"></i>${p.estado}</div>
+    <div class="wrow"><i class="fa-solid fa-map-pin"></i>${p.municipio}</div>
+    <div class="wrow"><i class="fa-solid fa-users"></i>${p.trabajadores}/8 trabajadores</div>
+    <div class="wrow"><i class="fa-solid fa-people-group"></i>${p.contratista}</div>
+
+    <div class="status-badge s-${p.estatus.toLowerCase()}">
+      ${p.estatus.replace("_"," ")}
+    </div>
 
   </div>`;
   }

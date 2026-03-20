@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Detalle del trabajador</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -17,6 +16,9 @@
       --gold:#C8A96E;
       --muted:#8A9BB5;
       --border:rgba(200,169,110,0.18);
+      --success:#5DCAA5;
+      --danger:#F09595;
+      --warning:#F4D35E;
     }
 
     body{
@@ -36,7 +38,23 @@
       padding:30px;
       width:420px;
       text-align:center;
+      position:relative;
     }
+
+    .detalle-card::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:4px;
+      border-radius:14px 14px 0 0;
+    }
+
+    .c-activo::before{ background:#5DCAA5; }
+    .c-inactivo::before{ background:#F09595; }
+    .c-vacaciones::before{ background:#F4D35E; }
+    .c-baja::before{ background:#999; }
 
     .avatar{
       width:70px;
@@ -63,11 +81,12 @@
       gap:8px;
       margin:6px 0;
       color:var(--muted);
+      flex-wrap:wrap;
     }
 
-    .row i{
-      color:var(--gold);
-    }
+    .row i{ color:var(--gold); }
+
+    .stars i{ color:gold; }
 
     button{
       margin-top:18px;
@@ -83,7 +102,7 @@
 
 <body>
 
-<div class="detalle-card">
+<div class="detalle-card" id="card">
 
   <div class="avatar" id="avatar"></div>
 
@@ -106,7 +125,23 @@
 
   <div class="row">
     <i class="fa-solid fa-location-dot"></i>
-    <span id="estado"></span>
+    <span id="ubicacion"></span>
+  </div>
+
+  <div class="row stars" id="estrellas"></div>
+
+  <div class="row">
+    <i class="fa-solid fa-calendar"></i>
+    <span id="fecha"></span>
+  </div>
+
+  <div class="row">
+    <i class="fa-solid fa-align-left"></i>
+    <span id="descripcion"></span>
+  </div>
+
+  <div class="row">
+    <strong id="estado"></strong>
   </div>
 
   <button onclick="volver()">Volver</button>
@@ -115,23 +150,54 @@
 
 <script>
 
-  const trabajador = JSON.parse(localStorage.getItem("trabajadorSeleccionado"));
+  function getId(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+  }
 
   function iniciales(n){
     const p=n.split(" ");
-    return p[0][0]+p[1][0];
+    return p[0][0]+(p[1]?p[1][0]:"");
   }
 
-  document.getElementById("avatar").innerText = iniciales(trabajador.nombre);
-  document.getElementById("nombre").innerText = trabajador.nombre;
-  document.getElementById("especialidad").innerText = trabajador.especialidad;
-  document.getElementById("telefono").innerText = trabajador.telefono;
-  document.getElementById("correo").innerText = trabajador.correo;
-  document.getElementById("estado").innerText = trabajador.estado;
+  function estrellas(n){
+    let s="";
+    for(let i=1;i<=5;i++){
+      s+=`<i class="fa-star ${i<=n?'fa-solid':'fa-regular'}"></i>`;
+    }
+    return s;
+  }
+
+  async function cargar(){
+
+    const id = getId();
+
+    const res = await fetch(`http://localhost:8080/api/v1/trabajadores/${id}`);
+    const t = await res.json();
+
+    document.getElementById("avatar").innerText = iniciales(t.nombreTrabajador);
+    document.getElementById("nombre").innerText = t.nombreTrabajador;
+    document.getElementById("especialidad").innerText = t.especialidadTrabajador;
+    document.getElementById("telefono").innerText = t.telefonoTrabajador;
+    document.getElementById("correo").innerText = t.correoTrabajador;
+    document.getElementById("ubicacion").innerText = t.ubicacionTrabajador;
+    document.getElementById("fecha").innerText = t.fechaIngreso;
+    document.getElementById("descripcion").innerText = t.descripcionTrabajador || "Sin descripción";
+    document.getElementById("estado").innerText = t.estadoTrabajador;
+
+    document.getElementById("estrellas").innerHTML = estrellas(t.calificacionTrabajador || 0);
+
+    // color dinámico
+    const card = document.getElementById("card");
+    card.classList.add("c-" + t.estadoTrabajador.toLowerCase());
+
+  }
 
   function volver(){
     window.history.back();
   }
+
+  cargar();
 
 </script>
 

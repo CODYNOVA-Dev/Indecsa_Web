@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>INDECSA – Detalle Contratista</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --navy:#0B1F3A;
+      --navy-mid:#152D50;
+      --navy-dark:#0a1828;
+      --gold:#C8A96E;
+      --muted:#8A9BB5;
+      --border:rgba(200,169,110,0.18);
+      --success:#5DCAA5;
+      --danger:#F09595;
+      --warning:#FAC775;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      color:white;
+      padding-top:120px;
+    }
+
+    /* HEADER */
+    header{
+      background:var(--navy-mid);
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 2rem;
+      position:fixed;
+      top:0;left:0;right:0;
+    }
+
+    .header-tag{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* NAV */
+    nav{
+      background:var(--navy-dark);
+      height:48px;
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      gap:8px;
+      position:fixed;
+      top:72px;left:0;right:0;
+    }
+
+    .nav-link{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      padding:6px 14px;
+      border-radius:6px;
+    }
+
+    .nav-link:hover{
+      background:rgba(200,169,110,0.1);
+      color:var(--gold);
+    }
+
+    .nav-sep{flex:1;}
+
+    .nav-logout{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 16px;
+      border-radius:6px;
+      font-size:13px;
+      color:var(--danger);
+      cursor:pointer;
+      border:1px solid rgba(226,75,74,0.25);
+      background:none;
+    }
+
+    /* MAIN */
+    main{
+      padding:40px;
+    }
+
+    .page-wrap{
+      max-width:850px;
+      margin:auto;
+    }
+
+    /* PANEL */
+    .panel{
+      background:var(--navy-mid);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:22px;
+      margin-bottom:18px;
+      position:relative;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      top:0;left:0;right:0;
+      height:4px;
+      border-radius:14px 14px 0 0;
+    }
+
+    .c-activo::before{ background:var(--success); }
+    .c-inactivo::before{ background:var(--danger); }
+    .c-suspendido::before{ background:var(--warning); }
+
+    /* HEADER CARD */
+    .header-card{
+      text-align:center;
+    }
+
+    .avatar{
+      width:70px;
+      height:70px;
+      border-radius:50%;
+      background:rgba(200,169,110,0.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      margin:auto;
+      margin-bottom:10px;
+    }
+
+    .nombre{
+      font-family:'Playfair Display',serif;
+      font-size:22px;
+    }
+
+    .status{
+      margin-top:6px;
+      font-size:11px;
+      padding:4px 10px;
+      border-radius:20px;
+      display:inline-block;
+    }
+
+    .s-activo{background:rgba(93,202,165,0.15);color:#5DCAA5;}
+    .s-inactivo{background:rgba(240,149,149,0.15);color:#F09595;}
+    .s-suspendido{background:rgba(250,199,117,0.15);color:#FAC775;}
+
+    /* INFO */
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:15px;
+    }
+
+    .row{
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .row i{color:var(--gold);}
+
+    .descripcion{
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    /* PROYECTOS */
+    .worker-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .worker-card{
+      background:#1a3560;
+      border-radius:8px;
+      padding:10px 12px;
+      display:flex;
+      justify-content:space-between;
+      cursor:pointer;
+    }
+
+    .empty{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* BTN */
+    .btn{
+      margin-top:20px;
+      padding:8px 18px;
+      border-radius:8px;
+      border:none;
+      background:var(--gold);
+      cursor:pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52">
+  <div class="header-tag">Capital Humano</div>
+</header>
+
+<nav>
+
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+
+  <a class="nav-link" href="ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
+  </a>
+
+  <a class="nav-link" href="../Relacion/Relacionar.html">
+    <i class="fa-solid fa-link"></i> Relacionar
+  </a>
+
+  <div class="nav-sep"></div>
+
+  <button class="nav-logout" onclick="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
+
+</nav>
+
+<main>
+  <div class="page-wrap">
+
+    <!-- CONTRATISTA -->
+    <div class="panel" id="card">
+
+      <div class="header-card">
+        <div class="avatar" id="avatar"></div>
+        <div class="nombre" id="nombre"></div>
+        <div id="estado"></div>
+      </div>
+
+      <div class="info-grid">
+        <div class="row"><i class="fa-solid fa-file-invoice"></i><span id="rfc"></span></div>
+        <div class="row"><i class="fa-solid fa-location-dot"></i><span id="ubicacion"></span></div>
+        <div class="row"><i class="fa-solid fa-phone"></i><span id="telefono"></span></div>
+        <div class="row"><i class="fa-solid fa-envelope"></i><span id="correo"></span></div>
+      </div>
+
+      <div class="descripcion" id="descripcion"></div>
+
+      <button class="btn" onclick="volver()">Volver
+      </button>
+
+    </div>
+
+    <!-- PROYECTOS -->
+    <div class="panel">
+
+      <div class="panel-title">Proyectos asociados</div>
+
+      <div class="worker-list" id="listaProyectos"></div>
+
+    </div>
+
+  </div>
+</main>
+
+<script>
+
+  const API = "http://localhost:8080/api/v1/contratistas";
+  const API_PC = "http://localhost:8080/api/v1/asignaciones/proyecto-contratista";
+
+  function obtenerID(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+  }
+
+  function iniciales(n){
+    const p = n.split(" ");
+    return p[0][0] + (p[1]?p[1][0]:"");
+  }
+
+  async function cargar(){
+
+    const id = obtenerID();
+
+    try{
+
+      const res = await fetch(`${API}/${id}`);
+      if(!res.ok) throw new Error();
+
+      const data = await res.json();
+
+      document.getElementById("avatar").innerText = iniciales(data.nombreContratista);
+      document.getElementById("nombre").innerText = data.nombreContratista;
+      document.getElementById("rfc").innerText = data.rfcContratista;
+      document.getElementById("ubicacion").innerText = data.ubicacionContratista;
+      document.getElementById("telefono").innerText = data.telefonoContratista;
+      document.getElementById("correo").innerText = data.correoContratista;
+      document.getElementById("descripcion").innerText =
+        data.descripcionContratista || "Sin descripción";
+
+      const estado = data.estadoContratista || "ACTIVO";
+
+      document.getElementById("estado").innerHTML =
+        `<span class="status s-${estado.toLowerCase()}">${estado}</span>`;
+
+      document.getElementById("card").classList.add("c-" + estado.toLowerCase());
+
+      cargarProyectos(id);
+
+    }catch(e){
+      console.error(e);
+      document.body.innerHTML = "<h2 style='padding:40px'>Error cargando contratista</h2>";
+    }
+
+  }
+
+  async function cargarProyectos(id){
+
+    try{
+
+      const res = await fetch(API_PC);
+      const relaciones = await res.json();
+
+      const cont = document.getElementById("listaProyectos");
+
+      // 🔥 filtrar por contratista
+      const proyectos = relaciones.filter(r =>
+        r.contratista.idContratista == id &&
+        r.estatusContrato === "ACTIVO"
+      );
+
+      if(proyectos.length === 0){
+        cont.innerHTML = "<div class='empty'>No hay proyectos asociados</div>";
+        return;
+      }
+
+      cont.innerHTML = proyectos.map(r=>`
+
+      <div class="worker-card" onclick="verProyecto(${r.proyecto.idProyecto})">
+        <span>${r.proyecto.nombreProyecto}</span>
+        <span style="color:#C8A96E;">
+          ${r.proyecto.estatusProyecto.replace("_"," ")}
+        </span>
+      </div>
+
+    `).join("");
+
+    }catch(e){
+      console.error(e);
+      document.getElementById("listaProyectos").innerHTML =
+        "<div class='empty'>Error cargando proyectos</div>";
+    }
+
+  }
+
+  function verProyecto(id){
+    window.location.href = "../Proyecto/DetalleProyecto.html?id=" + id;
+  }
+
+  function volver(){
+    if(document.referrer){
+      window.history.back();
+    } else {
+      window.location.href = "../Relacion/Relacionar.html";
+    }
+  }
+
+  function cerrarSesion(){
+    window.location.href='../../index.html';
+  }
+
+
+
+  cargar();
+
+</script>
+
+</body>
+</html>
