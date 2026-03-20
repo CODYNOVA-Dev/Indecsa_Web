@@ -31,6 +31,9 @@
       background:var(--navy);
       color:var(--white);
       padding-top:120px;
+      display:flex;              /* ← agrega */
+  flex-direction:column;     /* ← agrega */
+  min-height:100vh;
     }
 
     /* HEADER */
@@ -84,11 +87,14 @@
 
     .nav-sep{flex:1;}
 
-    main{ padding:40px; }
+    main{ padding:40px;
+       flex:1;
+}
 
     .page-wrap{
       max-width:850px;
       margin:auto;
+
     }
 
     .page-title{
@@ -175,6 +181,20 @@
       font-size:12px;
       color:var(--muted);
     }
+    .btn-volver{
+  margin-top:20px;
+  padding:8px 18px;
+  border-radius:8px;
+  border:1px solid rgba(200,169,110,0.3);
+  color:var(--gold);       /* ← agrega */
+  color:var(--gold);
+  cursor:pointer;
+  font-size:13px;
+}
+
+.btn-volver:hover{
+  background:rgba(200,169,110,0.1);
+}
 
   </style>
 </head>
@@ -218,7 +238,14 @@
       </button>
 
       <label> </label>
+
+
+
       <label> Agregar trabajador</label>
+
+      <div style="margin:10px 0; font-size:13px; color:#8A9BB5;">
+        Trabajadores asignados: <span id="contador">0 / 8</span>
+      </div>
 
       <select id="trabajadorSelect"></select>
 
@@ -266,9 +293,7 @@
 
 <!-- SOLO TE PONGO SCRIPT + CAMBIOS CLAVE, LO DEMÁS QUEDA IGUAL -->
 
-<div style="margin:10px 0; font-size:13px; color:#8A9BB5;">
-  Trabajadores asignados: <span id="contador">0 / 8</span>
-</div>
+
 
 <script>
 
