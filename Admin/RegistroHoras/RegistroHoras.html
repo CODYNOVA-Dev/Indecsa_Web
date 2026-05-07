@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INDECSA – Registro de Horas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:13px; }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+    main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+    .page-wrap { max-width:1200px; margin:0 auto; }
+    .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(133,183,235,0.1); border:1px solid rgba(133,183,235,0.25); display:flex; align-items:center; justify-content:center; }
+    .page-icon i { font-size:22px; color:var(--blue); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
+
+    /* Layout 2 columnas */
+    .layout { display:grid; grid-template-columns:420px 1fr; gap:20px; align-items:start; }
+
+    /* Panel formulario */
+    .form-panel { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:1.75rem; animation:fadeUp .35s ease both; position:sticky; top:130px; }
+    .panel-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); margin-bottom:1.25rem; display:flex; align-items:center; gap:10px; }
+    .panel-title i { font-size:14px; color:var(--blue); }
+    .form-group { margin-bottom:1rem; }
+    .form-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; display:block; }
+    .form-select, .form-input, .form-textarea {
+      width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2);
+      border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px;
+      padding:10px 14px; outline:none; transition:border-color .2s;
+    }
+    .form-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; padding-right:36px; cursor:pointer; background-color:rgba(255,255,255,0.04); }
+    .form-select:focus, .form-input:focus, .form-textarea:focus { border-color:var(--gold); }
+    .form-select option { background:#152D50; }
+    .form-select:disabled { opacity:.45; cursor:not-allowed; }
+    .form-textarea { resize:vertical; min-height:72px; }
+
+    /* Tipo periodo pills */
+    .period-pills { display:flex; gap:8px; }
+    .ppill { flex:1; }
+    .ppill input[type="radio"] { display:none; }
+    .ppill label { display:flex; align-items:center; justify-content:center; gap:6px; padding:9px 8px; border-radius:9px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; width:100%; }
+    .ppill input:checked + label { background:rgba(133,183,235,0.12); border-color:var(--blue); color:var(--blue); }
+    .ppill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
+
+    .btn-registrar { width:100%; padding:12px; border-radius:10px; background:linear-gradient(135deg,var(--blue),#3a72b0); color:var(--navy); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .2s,box-shadow .2s; margin-top:1.25rem; }
+    .btn-registrar:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 24px rgba(133,183,235,0.3); }
+    .btn-registrar:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+    /* Panel registros */
+    .records-panel { animation:fadeUp .4s ease both; }
+    .records-header { display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
+    .records-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); display:flex; align-items:center; gap:10px; }
+    .records-title i { font-size:14px; color:var(--blue); }
+    .records-toolbar { display:flex; align-items:flex-end; gap:10px; margin-bottom:1rem; flex-wrap:wrap; }
+    .filter-group { display:flex; flex-direction:column; gap:5px; }
+    .filter-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+    .filter-input { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px; outline:none; transition:border-color .2s; }
+    .filter-input:focus { border-color:var(--gold); }
+    .btn-filter { display:flex; align-items:center; gap:7px; padding:9px 18px; border-radius:9px; background:rgba(200,169,110,0.08); border:1px solid rgba(200,169,110,0.2); color:var(--gold); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:background .2s; align-self:flex-end; }
+    .btn-filter:hover { background:rgba(200,169,110,0.15); }
+    .btn-filter.secondary { background:rgba(138,155,181,0.06); border-color:rgba(138,155,181,0.2); color:var(--muted); }
+    .btn-filter.secondary:hover { background:rgba(138,155,181,0.12); color:var(--white); }
+    .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
+    .results-info strong { color:var(--white); }
+
+    /* Tarjeta de registro */
+    .record-card { background:var(--navy-card); border:1px solid rgba(133,183,235,0.12); border-radius:14px; padding:16px 18px; margin-bottom:10px; display:flex; align-items:flex-start; gap:14px; transition:border-color .2s,transform .15s; animation:fadeUp .3s ease both; }
+    .record-card:hover { border-color:rgba(133,183,235,0.3); transform:translateY(-1px); }
+    .rec-avatar { width:42px; height:42px; border-radius:50%; background:rgba(133,183,235,0.12); border:1px solid rgba(133,183,235,0.3); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; color:var(--blue); flex-shrink:0; }
+    .rec-body { flex:1; min-width:0; }
+    .rec-head { display:flex; align-items:center; gap:10px; margin-bottom:7px; flex-wrap:wrap; }
+    .rec-nombre { font-size:14px; font-weight:600; color:var(--white); }
+    .period-badge { font-size:9px; padding:2px 9px; border-radius:20px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+    .p-diario  { background:rgba(93,202,165,0.12); color:var(--success); border:1px solid rgba(93,202,165,0.3); }
+    .p-semanal { background:rgba(175,169,236,0.12); color:var(--purple); border:1px solid rgba(175,169,236,0.3); }
+    .rec-meta { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .rec-chip { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--muted); }
+    .rec-chip i { font-size:10px; color:var(--gold); }
+    .rec-horas { font-size:20px; font-weight:700; color:var(--blue); line-height:1; }
+    .rec-horas span { font-size:11px; color:var(--muted); font-weight:400; }
+    .rec-obs { font-size:11.5px; color:var(--muted); margin-top:7px; font-style:italic; line-height:1.5; }
+    .rec-actions { display:flex; gap:6px; flex-shrink:0; }
+    .btn-del { padding:5px 11px; border-radius:7px; border:1px solid rgba(240,149,149,0.2); background:rgba(240,149,149,0.06); color:var(--danger); font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:5px; transition:background .15s; }
+    .btn-del:hover { background:rgba(240,149,149,0.14); }
+
+    /* Skeleton */
+    .skeleton-card { background:var(--navy-card); border:1px solid rgba(200,169,110,0.08); border-radius:14px; padding:18px; margin-bottom:10px; }
+    .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
+    .sk-line { height:10px; margin-bottom:10px; }
+    .sk-w90{width:90%} .sk-w70{width:70%} .sk-w50{width:50%} .sk-w30{width:30%}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+    .empty-state { text-align:center; padding:3rem 1rem; color:var(--muted); }
+    .empty-state i { font-size:36px; color:rgba(133,183,235,0.2); margin-bottom:1rem; display:block; }
+    .empty-state p { font-size:14px; }
+
+    /* Modal */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; }
+    .modal-overlay.open { opacity:1; pointer-events:auto; }
+    .modal { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:2rem; width:90%; max-width:400px; transform:translateY(20px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .modal-overlay.open .modal { transform:translateY(0); }
+    .modal-icon { font-size:26px; margin-bottom:1rem; }
+    .modal-title { font-family:'Playfair Display',serif; font-size:18px; margin-bottom:.5rem; }
+    .modal-body { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:1.5rem; }
+    .modal-body strong { color:var(--white); }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .modal-btn { padding:9px 20px; border-radius:9px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; display:flex; align-items:center; gap:7px; transition:all .2s; }
+    .modal-btn.cancel { background:rgba(255,255,255,0.06); color:var(--muted); }
+    .modal-btn.cancel:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+    .modal-btn.confirm-del { background:rgba(240,149,149,0.1); color:var(--danger); border:1px solid rgba(240,149,149,0.25); font-weight:600; }
+    .modal-btn.confirm-del:hover:not(:disabled) { background:rgba(240,149,149,0.2); }
+    .modal-btn.confirm-del:disabled { opacity:.5; cursor:not-allowed; }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.form-panel{position:static}}
+    @media(max-width:600px){.records-toolbar{flex-direction:column;align-items:stretch}}
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52" alt="INDECSA" />
+  <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
+</header>
+
+<nav>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link active" href="RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
+  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
+  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
+  <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
+  <div class="nav-sep"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+</nav>
+
+<main>
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="page-icon"><i class="fa-solid fa-clock"></i></div>
+        <div>
+          <div class="page-title">Registro de Horas</div>
+          <div class="page-sub">Registra y consulta las horas trabajadas por proyecto</div>
+        </div>
+      </div>
+      <div class="breadcrumb">
+        <a href="../Paginaprincipal.html">Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Registro de Horas</span>
+      </div>
+    </div>
+
+    <div class="layout">
+
+      <!-- ══ PANEL FORMULARIO ══ -->
+      <div class="form-panel">
+        <div class="panel-title"><i class="fa-solid fa-plus-circle"></i> Nuevo registro</div>
+
+        <div class="form-group">
+          <label class="form-label">Proyecto</label>
+          <select class="form-select" id="selProyecto" onchange="onProyectoChange()">
+            <option value="">— Selecciona un proyecto —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Trabajador</label>
+          <select class="form-select" id="selTrabajador" disabled>
+            <option value="">— Selecciona primero un proyecto —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Cuadrilla <span style="font-size:10px;color:var(--muted)">(opcional)</span></label>
+          <select class="form-select" id="selCuadrilla" disabled>
+            <option value="">Sin cuadrilla</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Fecha</label>
+          <input class="form-input" type="date" id="inputFecha" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Horas trabajadas</label>
+          <input class="form-input" type="number" id="inputHoras" min="0.1" max="24" step="0.5" placeholder="0 – 24" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tipo de periodo</label>
+          <div class="period-pills">
+            <div class="ppill">
+              <input type="radio" name="tipoPeriodo" id="tp-diario" value="DIARIO" checked />
+              <label for="tp-diario"><i class="fa-solid fa-sun"></i> Diario</label>
+            </div>
+            <div class="ppill">
+              <input type="radio" name="tipoPeriodo" id="tp-semanal" value="SEMANAL" />
+              <label for="tp-semanal"><i class="fa-solid fa-calendar-week"></i> Semanal</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Observaciones <span style="font-size:10px;color:var(--muted)">(opcional)</span></label>
+          <textarea class="form-textarea" id="inputObs" placeholder="Notas adicionales…"></textarea>
+        </div>
+
+        <button class="btn-registrar" id="btnRegistrar" onclick="registrar()">
+          <i class="fa-solid fa-circle-check"></i> Registrar horas
+        </button>
+      </div>
+
+      <!-- ══ PANEL REGISTROS ══ -->
+      <div class="records-panel">
+        <div class="records-title" style="margin-bottom:1rem"><i class="fa-solid fa-list-check"></i> Registros del proyecto</div>
+
+        <div class="records-toolbar">
+          <div class="filter-group">
+            <div class="filter-label">Fecha inicio</div>
+            <input class="filter-input" type="date" id="filtroInicio" />
+          </div>
+          <div class="filter-group">
+            <div class="filter-label">Fecha fin</div>
+            <input class="filter-input" type="date" id="filtroFin" />
+          </div>
+          <button class="btn-filter" onclick="buscarPorFecha()"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
+          <button class="btn-filter secondary" onclick="limpiarFiltros()"><i class="fa-solid fa-xmark"></i> Limpiar</button>
+        </div>
+
+        <div class="results-info">
+          <i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i>
+          <span id="resultsLabel">Selecciona un proyecto para ver registros</span>
+        </div>
+
+        <div id="recordsList">
+          <div class="empty-state">
+            <i class="fa-solid fa-clock"></i>
+            <p>Selecciona un proyecto para cargar los registros de horas</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
+  <div class="footer-contact">
+    <a href="mailto:contacto@indecsa.com"><i class="fa-solid fa-envelope"></i>contacto@indecsa.com</a>
+    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<!-- MODAL ELIMINAR -->
+<div class="modal-overlay" id="modalEliminar">
+  <div class="modal">
+    <div class="modal-icon" style="color:var(--danger)"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="modal-title">Eliminar registro</div>
+    <div class="modal-body">
+      ¿Confirmas que deseas eliminar el registro de <strong id="elimNombre">—</strong>
+      del <strong id="elimFecha">—</strong>? Esta acción no se puede deshacer.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="cerrarModalElim()">Cancelar</button>
+      <button class="modal-btn confirm-del" id="btnConfirmElim" onclick="confirmarEliminar()">
+        <i class="fa-solid fa-trash"></i> Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <i id="toastIcon" class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg">OK</span>
+</div>
+
+<script>
+  const API_BASE = 'http://localhost:8080/api/v1';
+  const $ = id => document.getElementById(id);
+
+  let proyectoActual = null;
+  let listaAsignaciones = [];
+  let listaCuadrillas   = [];
+  let listaRegistros    = [];
+  let pendingDelId = null, pendingDelNombre = '', pendingDelFecha = '';
+
+  // ── INIT ──────────────────────────────────────────────────────────────────
+  (async function init() {
+    $('inputFecha').value = new Date().toISOString().split('T')[0];
+    await cargarProyectos();
+  })();
+
+  // ── PROYECTOS ─────────────────────────────────────────────────────────────
+  async function cargarProyectos() {
+    try {
+      const res = await fetch(`${API_BASE}/proyectos`);
+      if (!res.ok) throw new Error();
+      const proyectos = await res.json();
+      const sel = $('selProyecto');
+      sel.innerHTML = '<option value="">— Selecciona un proyecto —</option>';
+      proyectos.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.idProyecto;
+        opt.textContent = p.nombreProyecto;
+        sel.appendChild(opt);
+      });
+    } catch {
+      showToast('Error al cargar proyectos', false);
+    }
+  }
+
+  // ── CAMBIO DE PROYECTO ────────────────────────────────────────────────────
+  async function onProyectoChange() {
+    const idProyecto = $('selProyecto').value;
+    if (!idProyecto) {
+      proyectoActual = null;
+      resetSelectores();
+      $('recordsList').innerHTML = `<div class="empty-state"><i class="fa-solid fa-clock"></i><p>Selecciona un proyecto para cargar los registros de horas</p></div>`;
+      $('resultsLabel').textContent = 'Selecciona un proyecto para ver registros';
+      return;
+    }
+    proyectoActual = parseInt(idProyecto);
+    mostrarSkeleton();
+    await Promise.all([
+      cargarAsignaciones(proyectoActual),
+      cargarCuadrillas(proyectoActual),
+      cargarRegistros(proyectoActual)
+    ]);
+  }
+
+  async function cargarAsignaciones(idProyecto) {
+    try {
+      const res = await fetch(`${API_BASE}/asignaciones-trabajador/proyecto/${idProyecto}`);
+      listaAsignaciones = res.ok ? await res.json() : [];
+    } catch { listaAsignaciones = []; }
+    renderSelectTrabajador();
+  }
+
+  async function cargarCuadrillas(idProyecto) {
+    try {
+      const res = await fetch(`${API_BASE}/cuadrillas/proyecto/${idProyecto}`);
+      listaCuadrillas = res.ok ? await res.json() : [];
+    } catch { listaCuadrillas = []; }
+    renderSelectCuadrilla();
+  }
+
+  async function cargarRegistros(idProyecto, fechaInicio, fechaFin) {
+    try {
+      let url = `${API_BASE}/registro-horas/proyecto/${idProyecto}`;
+      const params = [];
+      if (fechaInicio) params.push(`fechaInicio=${fechaInicio}`);
+      if (fechaFin)    params.push(`fechaFin=${fechaFin}`);
+      if (params.length) url += '?' + params.join('&');
+      const res = await fetch(url);
+      listaRegistros = res.ok ? await res.json() : [];
+    } catch { listaRegistros = []; }
+    renderRegistros();
+  }
+
+  // ── RENDER SELECTORES ─────────────────────────────────────────────────────
+  function renderSelectTrabajador() {
+    const sel = $('selTrabajador');
+    if (!listaAsignaciones.length) {
+      sel.innerHTML = '<option value="">Sin trabajadores asignados</option>';
+      sel.disabled = true;
+      return;
+    }
+    sel.innerHTML = '<option value="">— Selecciona trabajador —</option>';
+    listaAsignaciones.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.idAsignacionTp;
+      opt.textContent = a.nombreTrabajador || `Trabajador #${a.idTrabajador}`;
+      sel.appendChild(opt);
+    });
+    sel.disabled = false;
+  }
+
+  function renderSelectCuadrilla() {
+    const sel = $('selCuadrilla');
+    sel.innerHTML = '<option value="">Sin cuadrilla</option>';
+    listaCuadrillas.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.idCuadrilla;
+      opt.textContent = c.nombreCuadrilla || `Cuadrilla #${c.idCuadrilla}`;
+      sel.appendChild(opt);
+    });
+    sel.disabled = false;
+  }
+
+  function resetSelectores() {
+    const selT = $('selTrabajador');
+    selT.innerHTML = '<option value="">— Selecciona primero un proyecto —</option>';
+    selT.disabled = true;
+    const selC = $('selCuadrilla');
+    selC.innerHTML = '<option value="">Sin cuadrilla</option>';
+    selC.disabled = true;
+    listaAsignaciones = [];
+    listaCuadrillas   = [];
+  }
+
+  // ── RENDER REGISTROS ──────────────────────────────────────────────────────
+  function renderRegistros() {
+    const list = $('recordsList');
+    const lbl  = $('resultsLabel');
+    if (!listaRegistros.length) {
+      const conFiltros = $('filtroInicio').value || $('filtroFin').value;
+      list.innerHTML = `<div class="empty-state"><i class="fa-solid fa-clock"></i><p>No hay registros para este proyecto${conFiltros ? ' con los filtros aplicados' : ''}</p></div>`;
+      lbl.textContent = 'Sin registros';
+      return;
+    }
+    lbl.innerHTML = `<strong>${listaRegistros.length}</strong> registro${listaRegistros.length !== 1 ? 's' : ''} encontrado${listaRegistros.length !== 1 ? 's' : ''}`;
+    list.innerHTML = listaRegistros.map(r => renderCard(r)).join('');
+  }
+
+  function renderCard(r) {
+    const nombre   = r.nombreTrabajador || `Trabajador #${r.idTrabajador}`;
+    const avatar   = nombre.charAt(0).toUpperCase();
+    const fecha    = r.fechaRegistro ? fmtFecha(r.fechaRegistro) : '—';
+    const horas    = r.horasTrabajadas != null ? r.horasTrabajadas : '—';
+    const periodo  = r.tipoPeriodo || '';
+    const periodoCls = periodo === 'DIARIO' ? 'p-diario' : 'p-semanal';
+    const cuadrilla  = r.nombreCuadrilla || '';
+    const obs        = r.observaciones  || '';
+    const safeName   = nombre.replace(/'/g, "\\'");
+    const safeDate   = (r.fechaRegistro || '').replace(/'/g, "\\'");
+    return `
+      <div class="record-card">
+        <div class="rec-avatar">${avatar}</div>
+        <div class="rec-body">
+          <div class="rec-head">
+            <span class="rec-nombre">${nombre}</span>
+            ${periodo ? `<span class="period-badge ${periodoCls}">${periodo}</span>` : ''}
+          </div>
+          <div class="rec-meta">
+            <div class="rec-chip"><i class="fa-solid fa-calendar-day"></i>${fecha}</div>
+            ${cuadrilla ? `<div class="rec-chip"><i class="fa-solid fa-people-group"></i>${cuadrilla}</div>` : ''}
+            <div class="rec-horas">${horas}<span> h</span></div>
+          </div>
+          ${obs ? `<div class="rec-obs">"${obs}"</div>` : ''}
+        </div>
+        <div class="rec-actions">
+          <button class="btn-del" onclick="abrirModalElim(${r.idRegistro},'${safeName}','${safeDate}')">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  function mostrarSkeleton() {
+    $('recordsList').innerHTML = [1,2,3].map(() =>
+      `<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`
+    ).join('');
+    $('resultsLabel').textContent = 'Cargando registros…';
+  }
+
+  // ── REGISTRAR ─────────────────────────────────────────────────────────────
+  async function registrar() {
+    if (!proyectoActual)       { showToast('Selecciona un proyecto', false); return; }
+    const idAsignacion = $('selTrabajador').value;
+    if (!idAsignacion)         { showToast('Selecciona un trabajador', false); return; }
+    const fecha = $('inputFecha').value;
+    if (!fecha)                { showToast('Selecciona una fecha', false); return; }
+    const horasStr = $('inputHoras').value;
+    if (!horasStr)             { showToast('Ingresa las horas trabajadas', false); return; }
+    const horas = parseFloat(horasStr);
+    if (isNaN(horas) || horas <= 0 || horas > 24) { showToast('Las horas deben estar entre 0.1 y 24', false); return; }
+
+    const tipoPeriodo  = document.querySelector('input[name="tipoPeriodo"]:checked').value;
+    const idCuadrilla  = $('selCuadrilla').value || null;
+    const obs          = $('inputObs').value.trim();
+
+    const dto = { idAsignacionTp: parseInt(idAsignacion), fechaRegistro: fecha, horasTrabajadas: horas, tipoPeriodo };
+    if (idCuadrilla) dto.idCuadrilla = parseInt(idCuadrilla);
+    if (obs)         dto.observaciones = obs;
+
+    const btn = $('btnRegistrar');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registrando…';
+    try {
+      const res = await fetch(`${API_BASE}/registro-horas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dto)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      showToast('Horas registradas correctamente', true);
+      limpiarForm();
+      await cargarRegistros(proyectoActual, $('filtroInicio').value || null, $('filtroFin').value || null);
+    } catch {
+      showToast('Error al registrar las horas', false);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Registrar horas';
+    }
+  }
+
+  function limpiarForm() {
+    $('selTrabajador').value = '';
+    $('selCuadrilla').value  = '';
+    $('inputFecha').value    = new Date().toISOString().split('T')[0];
+    $('inputHoras').value    = '';
+    $('tp-diario').checked   = true;
+    $('inputObs').value      = '';
+  }
+
+  // ── FILTROS ───────────────────────────────────────────────────────────────
+  async function buscarPorFecha() {
+    if (!proyectoActual) { showToast('Selecciona un proyecto primero', false); return; }
+    mostrarSkeleton();
+    await cargarRegistros(proyectoActual, $('filtroInicio').value || null, $('filtroFin').value || null);
+  }
+
+  async function limpiarFiltros() {
+    $('filtroInicio').value = '';
+    $('filtroFin').value    = '';
+    if (proyectoActual) {
+      mostrarSkeleton();
+      await cargarRegistros(proyectoActual);
+    }
+  }
+
+  // ── MODAL ELIMINAR ────────────────────────────────────────────────────────
+  function abrirModalElim(id, nombre, fecha) {
+    pendingDelId     = id;
+    pendingDelNombre = nombre;
+    pendingDelFecha  = fecha;
+    $('elimNombre').textContent = nombre;
+    $('elimFecha').textContent  = fecha ? fmtFecha(fecha) : '—';
+    $('modalEliminar').classList.add('open');
+  }
+  function cerrarModalElim() { $('modalEliminar').classList.remove('open'); pendingDelId = null; }
+  async function confirmarEliminar() {
+    if (!pendingDelId) return;
+    const btn = $('btnConfirmElim');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
+    try {
+      const res = await fetch(`${API_BASE}/registro-horas/${pendingDelId}`, { method: 'DELETE' });
+      if (!res.ok && res.status !== 204) throw new Error();
+      cerrarModalElim();
+      showToast('Registro eliminado correctamente', true);
+      await cargarRegistros(proyectoActual, $('filtroInicio').value || null, $('filtroFin').value || null);
+    } catch {
+      showToast('Error al eliminar el registro', false);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-trash"></i> Eliminar';
+    }
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────────
+  function fmtFecha(f) {
+    if (!f) return '—';
+    const [y, m, d] = f.split('-');
+    return `${d}/${m}/${y}`;
+  }
+  function showToast(msg, ok) {
+    const t = $('toast');
+    $('toastMsg').textContent = msg;
+    t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
+    const ic = $('toastIcon');
+    ic.style.color = ok ? 'var(--success)' : 'var(--danger)';
+    ic.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+  function cerrarSesion() { window.location.href = '../../index.html'; }
+
+  let lastScroll = 0;
+  const scrollBtn = $('scrollTop');
+  window.addEventListener('scroll', () => {
+    const c = window.scrollY;
+    document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
+    lastScroll = c <= 0 ? 0 : c;
+    scrollBtn.classList.toggle('visible', c > 200);
+  });
+
+  $('modalEliminar').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarModalElim(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModalElim(); });
+</script>
+</body>
+</html>

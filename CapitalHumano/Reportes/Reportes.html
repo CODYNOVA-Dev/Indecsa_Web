@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INDECSA – Reportes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #0B1F3A; --navy-mid: #152D50; --navy-dark: #0a1828;
+      --navy-card: #1a2e4a; --gold: #C8A96E; --white: #F8F9FC;
+      --muted: #8A9BB5; --success: #4CAF82; --danger: #E24B4A;
+      --blue: #4A90D9; --border: rgba(200,169,110,0.18);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--white); padding-top: 120px; min-height: 100vh; }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--navy-mid); border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo img { height: 38px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gold); letter-spacing: 1px; }
+    .header-tag { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+
+    nav {
+      position: fixed; top: 72px; left: 0; right: 0; z-index: 99;
+      background: var(--navy-dark); border-bottom: 1px solid rgba(200,169,110,0.12);
+      display: flex; align-items: center; padding: 0 2rem; height: 48px; gap: 4px;
+      transition: transform 0.25s ease;
+    }
+    body.nav-hidden nav { transform: translateY(-48px); }
+    .nav-link {
+      display: flex; align-items: center; gap: 7px; padding: 6px 12px;
+      border-radius: 6px; font-size: 13px; color: var(--muted); text-decoration: none;
+      transition: background 0.15s, color 0.15s; white-space: nowrap;
+    }
+    .nav-link:hover, .nav-link.active { background: rgba(200,169,110,0.1); color: var(--gold); }
+    .nav-sep { flex: 1; }
+    .nav-logout {
+      display: flex; align-items: center; gap: 7px; padding: 6px 14px;
+      border-radius: 6px; font-size: 13px; color: #F09595; cursor: pointer;
+      border: 1px solid rgba(226,75,74,0.25); background: none;
+      font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+    }
+    .nav-logout:hover { background: rgba(226,75,74,0.1); }
+
+    main { padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+
+    .page-header { text-align: center; margin-bottom: 2rem; }
+    .page-icon { font-size: 32px; color: var(--gold); margin-bottom: 10px; }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--white); margin-bottom: 6px; }
+    .page-header p { font-size: 13px; color: var(--muted); }
+
+    .report-card {
+      background: var(--navy-mid); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem; width: 100%; max-width: 560px;
+    }
+
+    .tipo-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.75rem; }
+    .tipo-pill {
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      border-radius: 10px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03); color: var(--muted);
+      font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer;
+      transition: all 0.18s; text-align: left;
+    }
+    .tipo-pill i { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+    .tipo-pill .pill-text { display: flex; flex-direction: column; }
+    .tipo-pill .pill-title { font-weight: 500; line-height: 1.3; }
+    .tipo-pill .pill-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .tipo-pill:hover { border-color: rgba(200,169,110,0.35); background: rgba(200,169,110,0.06); color: var(--white); }
+    .tipo-pill.active { border-color: var(--gold); background: rgba(200,169,110,0.12); color: var(--white); }
+    .tipo-pill.active i { color: var(--gold); }
+    .tipo-pill.active .pill-sub { color: rgba(200,169,110,0.7); }
+
+    .divider { width: 100%; height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+    .section-label {
+      font-size: 11px; color: var(--gold); letter-spacing: 1px;
+      text-transform: uppercase; font-weight: 500; margin-bottom: 1rem;
+    }
+
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+    select, input[type="date"] {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 12px; color: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
+      transition: border-color 0.2s;
+    }
+    select:focus, input:focus { border-color: var(--gold); }
+    select option { background: var(--navy-mid); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn-gen {
+      width: 100%; padding: 13px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, var(--gold), #a88540);
+      color: #0a1828; font-family: 'DM Sans', sans-serif; font-size: 14px;
+      font-weight: 600; cursor: pointer; margin-top: 1.25rem;
+      transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-gen:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-gen:not(:disabled):hover { opacity: 0.88; }
+
+    .history { width: 100%; max-width: 560px; margin-top: 1.5rem; }
+    .history-title {
+      font-size: 12px; color: var(--muted); letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .history-list { display: flex; flex-direction: column; gap: 8px; }
+    .history-item {
+      background: var(--navy-mid); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .history-item i { color: #f09595; font-size: 18px; flex-shrink: 0; }
+    .history-info { flex: 1; min-width: 0; }
+    .history-name { font-size: 13px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .history-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--navy-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 20px; font-size: 13px;
+      display: flex; align-items: center; gap: 10px; z-index: 400;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    .toast.ok { border-color: rgba(76,175,130,0.4); color: var(--success); }
+    .toast.err { border-color: rgba(226,75,74,0.4); color: #f09595; }
+    .toast.info { border-color: rgba(74,144,217,0.4); color: var(--blue); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="../../img/logo.png" alt="INDECSA" />
+    <span class="logo-text">INDECSA</span>
+  </div>
+  <span class="header-tag">Capital Humano</span>
+</header>
+
+<nav>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
+  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
+  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
+  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
+  <a class="nav-link active" href="Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
+  <div class="nav-sep"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div class="page-icon"><i class="fa-solid fa-file-pdf"></i></div>
+    <h1>Reportes</h1>
+    <p>Genera reportes en PDF de rendimiento, horas y avance de obra.</p>
+  </div>
+
+  <div class="report-card">
+
+    <div class="section-label"><i class="fa-solid fa-list"></i> Tipo de reporte</div>
+    <div class="tipo-group">
+      <button class="tipo-pill active" onclick="setTipo(this,'rendimiento')">
+        <i class="fa-solid fa-star-half-stroke"></i>
+        <div class="pill-text">
+          <span class="pill-title">Rendimiento por Trabajador</span>
+          <span class="pill-sub">Indicadores de desempeño y desviación por proyecto</span>
+        </div>
+      </button>
+      <button class="tipo-pill" onclick="setTipo(this,'horas')">
+        <i class="fa-solid fa-clock"></i>
+        <div class="pill-text">
+          <span class="pill-title">Horas por Proyecto</span>
+          <span class="pill-sub">Registro detallado de horas trabajadas con totales</span>
+        </div>
+      </button>
+      <button class="tipo-pill" onclick="setTipo(this,'avance')">
+        <i class="fa-solid fa-chart-line"></i>
+        <div class="pill-text">
+          <span class="pill-title">Avance de Obra</span>
+          <span class="pill-sub">Partidas ejecutadas, programadas y porcentaje de avance</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label"><i class="fa-solid fa-sliders"></i> Parámetros</div>
+
+    <div class="form-group" id="grpTrabajador">
+      <label>Trabajador *</label>
+      <select id="selTrabajador">
+        <option value="">Cargando trabajadores…</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="grpProyecto" style="display:none">
+      <label>Proyecto *</label>
+      <select id="selProyecto">
+        <option value="">Cargando proyectos…</option>
+      </select>
+    </div>
+
+    <div class="row-2">
+      <div class="form-group">
+        <label>Fecha inicio *</label>
+        <input type="date" id="inpDesde" />
+      </div>
+      <div class="form-group">
+        <label>Fecha fin *</label>
+        <input type="date" id="inpHasta" />
+      </div>
+    </div>
+
+    <button class="btn-gen" id="btnGen" onclick="generarPDF()">
+      <i class="fa-solid fa-file-arrow-down"></i> Generar PDF
+    </button>
+  </div>
+
+  <div class="history" id="historyWrap" style="display:none">
+    <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> Últimas descargas</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = 'http://localhost:8080/api/v1';
+  let tipoActual = 'rendimiento';
+  const HISTORY_KEY = 'indecsa_reportes_history';
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setDefaultDates();
+    cargarTrabajadores();
+    cargarProyectos();
+    renderHistory();
+    initNavHide();
+  });
+
+  function setDefaultDates() {
+    const hoy = new Date();
+    const hace30 = new Date(hoy);
+    hace30.setDate(hoy.getDate() - 30);
+    document.getElementById('inpDesde').value = hace30.toISOString().slice(0, 10);
+    document.getElementById('inpHasta').value = hoy.toISOString().slice(0, 10);
+  }
+
+  function initNavHide() {
+    let last = window.scrollY;
+    window.addEventListener('scroll', () => {
+      document.body.classList.toggle('nav-hidden', window.scrollY > last && window.scrollY > 80);
+      last = window.scrollY;
+    }, { passive: true });
+  }
+
+  async function cargarTrabajadores() {
+    try {
+      const r = await fetch(`${API}/trabajadores`);
+      const lista = await r.json();
+      const sel = document.getElementById('selTrabajador');
+      sel.innerHTML = '<option value="">— Selecciona trabajador —</option>';
+      lista.forEach(t => {
+        const o = document.createElement('option');
+        o.value = t.idTrabajador;
+        o.textContent = `${t.nombre} ${t.apellido}`;
+        sel.appendChild(o);
+      });
+    } catch {
+      document.getElementById('selTrabajador').innerHTML =
+        '<option value="">Error al cargar trabajadores</option>';
+    }
+  }
+
+  async function cargarProyectos() {
+    try {
+      const r = await fetch(`${API}/proyectos`);
+      const lista = await r.json();
+      const sel = document.getElementById('selProyecto');
+      sel.innerHTML = '<option value="">— Selecciona proyecto —</option>';
+      lista.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.idProyecto;
+        o.textContent = p.nombre;
+        sel.appendChild(o);
+      });
+    } catch {
+      document.getElementById('selProyecto').innerHTML =
+        '<option value="">Error al cargar proyectos</option>';
+    }
+  }
+
+  function setTipo(btn, tipo) {
+    document.querySelectorAll('.tipo-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    tipoActual = tipo;
+    document.getElementById('grpTrabajador').style.display = tipo === 'rendimiento' ? '' : 'none';
+    document.getElementById('grpProyecto').style.display  = tipo !== 'rendimiento' ? '' : 'none';
+  }
+
+  async function generarPDF() {
+    const desde = document.getElementById('inpDesde').value;
+    const hasta  = document.getElementById('inpHasta').value;
+
+    let id, nombre;
+    if (tipoActual === 'rendimiento') {
+      const sel = document.getElementById('selTrabajador');
+      id = sel.value;
+      nombre = sel.options[sel.selectedIndex]?.text || '';
+      if (!id) { toast('Selecciona un trabajador', 'err'); return; }
+    } else {
+      const sel = document.getElementById('selProyecto');
+      id = sel.value;
+      nombre = sel.options[sel.selectedIndex]?.text || '';
+      if (!id) { toast('Selecciona un proyecto', 'err'); return; }
+    }
+    if (!desde || !hasta) { toast('Selecciona el rango de fechas', 'err'); return; }
+
+    const btn = document.getElementById('btnGen');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF…';
+
+    const endpointMap = {
+      rendimiento: `reportes/rendimiento/trabajador/${id}`,
+      horas:       `reportes/horas/proyecto/${id}`,
+      avance:      `reportes/avance/proyecto/${id}`
+    };
+    const url = `${API}/${endpointMap[tipoActual]}?fechaInicio=${desde}&fechaFin=${hasta}`;
+    const nombreArchivo = `${tipoActual}_${nombre.replace(/\s+/g,'_')}_${desde}.pdf`;
+
+    try {
+      toast('Generando reporte…', 'info');
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const blob = await r.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+      toast(`PDF "${nombreArchivo}" descargado`, 'ok');
+      guardarHistorial(nombreArchivo, tipoActual, desde, hasta);
+      renderHistory();
+    } catch {
+      toast('Error al generar el reporte. Verifica la conexión.', 'err');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-file-arrow-down"></i> Generar PDF';
+    }
+  }
+
+  function guardarHistorial(nombre, tipo, desde, hasta) {
+    const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    h.unshift({ nombre, tipo, desde, hasta, ts: Date.now() });
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 8)));
+  }
+
+  function renderHistory() {
+    const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    const wrap = document.getElementById('historyWrap');
+    const list = document.getElementById('historyList');
+    if (!h.length) { wrap.style.display = 'none'; return; }
+    wrap.style.display = '';
+    list.innerHTML = h.map(item => {
+      const fecha = new Date(item.ts).toLocaleString('es-MX', { dateStyle:'short', timeStyle:'short' });
+      return `
+      <div class="history-item">
+        <i class="fa-solid fa-file-pdf"></i>
+        <div class="history-info">
+          <div class="history-name">${item.nombre}</div>
+          <div class="history-date">${fecha} · ${item.desde} → ${item.hasta}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function toast(msg, tipo) {
+    const el = document.getElementById('toast');
+    el.textContent = msg; el.className = `toast show ${tipo}`;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove('show'), 3500);
+  }
+
+  function cerrarSesion() {
+    sessionStorage.removeItem('empleado');
+    window.location.href = '../../index.html';
+  }
+</script>
+</body>
+</html>
