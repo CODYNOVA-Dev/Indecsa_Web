@@ -298,7 +298,7 @@
 
 <script>
 
-  const API = "https://indecsaspringboot-production.up.railway.app/api/v1/proyectos";
+  const API = "https://indecsaspringboot-production.up.railway.app/api/proyectos";
   let proyectos = [];
 
   async function cargarProyectos(){
@@ -320,12 +320,12 @@
     for (let p of proyectos) {
 
       // trabajadores
-      const resTrab = await fetch(`https://indecsaspringboot-production.up.railway.app/api/v1/asignaciones/trabajador-proyecto/proyecto/${p.id}`);
+      const resTrab = await fetch(`https://indecsaspringboot-production.up.railway.app/api/asignaciones-trabajador/proyecto/${p.id}`);
       const trabs = await resTrab.json();
       p.trabajadores = trabs.length;
 
       // contratista
-      const resCont = await fetch(`https://indecsaspringboot-production.up.railway.app/api/v1/asignaciones/proyecto-contratista/proyecto/${p.id}`);
+      const resCont = await fetch(`https://indecsaspringboot-production.up.railway.app/api/asignaciones-contratista/proyecto/${p.id}`);
       const conts = await resCont.json();
 
       const activo = conts.find(c => c.estatusContrato === "ACTIVO");

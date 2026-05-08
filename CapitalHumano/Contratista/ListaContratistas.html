@@ -330,7 +330,7 @@
   let contratistas=[];
 
   async function cargar(){
-    const res=await fetch("https://indecsaspringboot-production.up.railway.app/api/v1/contratistas");
+    const res=await fetch("https://indecsaspringboot-production.up.railway.app/api/contratistas");
     contratistas=await res.json();
     render(contratistas);
   }
