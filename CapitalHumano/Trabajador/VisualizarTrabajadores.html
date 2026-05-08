@@ -344,9 +344,18 @@
   let trabajadores=[];
 
   async function cargar(){
-    const res=await fetch("http://localhost:8080/api/v1/trabajadores");
-    trabajadores=await res.json();
-    render(trabajadores);
+    try {
+      const res=await fetch("http://localhost:8080/api/v1/trabajadores");
+      if (!res.ok) throw new Error();
+      trabajadores=await res.json();
+      render(trabajadores);
+    } catch {
+      document.getElementById("cardsGrid").innerHTML =
+        `<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:#8A9BB5">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size:32px;opacity:.4;display:block;margin-bottom:1rem"></i>
+          <p style="font-size:14px">No se pudo conectar con el servidor.<br>Verifica que el backend esté corriendo.</p>
+        </div>`;
+    }
   }
 
   function iniciales(nombre){
@@ -364,7 +373,14 @@
 
   function render(lista){
     const grid=document.getElementById("cardsGrid");
-
+    if (!lista.length) {
+      grid.innerHTML =
+        `<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:#8A9BB5">
+          <i class="fa-solid fa-users" style="font-size:32px;opacity:.4;display:block;margin-bottom:1rem"></i>
+          <p style="font-size:14px">No se encontraron trabajadores.</p>
+        </div>`;
+      return;
+    }
     grid.innerHTML=lista.map(t=>`
 
 <div class="worker-card c-${t.estadoTrabajador.toLowerCase()}" onclick="verDetalle(${t.idTrabajador})">

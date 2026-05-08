@@ -306,9 +306,7 @@
     const inicio     = a.fechaInicio      ? fmtFecha(a.fechaInicio)      : '—';
     const fin        = a.fechaFinEstimada ? fmtFecha(a.fechaFinEstimada) : '—';
     const obs        = a.observaciones    || '';
-    const cuadNombre = listaCuadrillas.length
-      ? (listaCuadrillas.length === 1 ? listaCuadrillas[0].nombreCuadrilla || 'Cuadrilla' : `${listaCuadrillas.length} cuadrillas`)
-      : 'Sin cuadrilla';
+    const cuadNombre = a.nombreCuadrilla || 'Sin cuadrilla';
     return `
       <div class="worker-card">
         <div class="wk-avatar">${avatar}</div>
