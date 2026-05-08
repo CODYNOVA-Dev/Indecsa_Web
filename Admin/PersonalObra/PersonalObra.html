@@ -17,6 +17,9 @@
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    .logo { display:flex; align-items:center; gap:12px; }
+    .logo img { height:38px; }
+    .logo-text { font-family:'Playfair Display',serif; font-size:20px; color:var(--gold); letter-spacing:1px; }
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .nav-link { display:flex; align-items:center; gap:7px; padding:6px 14px; border-radius:6px; font-size:12.5px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
@@ -24,8 +27,7 @@
     .nav-sep { flex:1; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
-    .nav-hidden header { transform:translateY(-72px); }
-    .nav-hidden nav    { transform:translateY(-72px); }
+    body.nav-hidden nav { transform:translateY(-48px); }
     .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
@@ -108,8 +110,11 @@
 <body>
 
 <header>
-  <img src="../../img/logo.png" height="52" alt="INDECSA" />
-  <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
+  <div class="logo">
+    <img src="../../img/logo.png" alt="INDECSA" />
+    <span class="logo-text">INDECSA</span>
+  </div>
+  <span class="header-tag">Administrador</span>
 </header>
 
 <nav>
@@ -225,6 +230,12 @@
     SUSPENDIDO:'Suspendido', FINALIZADO:'Finalizado', CANCELADO:'Cancelado'
   };
 
+  // ── AUTH ──────────────────────────────────────────────────────────────────
+  (function() {
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) { window.location.href = '../../index.html'; return; }
+  })();
+
   // ── INIT ──────────────────────────────────────────────────────────────────
   (async function init() { await cargarProyectos(); })();
 
@@ -328,9 +339,7 @@
     const inicio     = a.fechaInicio       ? fmtFecha(a.fechaInicio)       : '—';
     const fin        = a.fechaFinEstimada  ? fmtFecha(a.fechaFinEstimada)  : '—';
     const obs        = a.observaciones     || '';
-    const cuadNombre = listaCuadrillas.length
-      ? (listaCuadrillas.length === 1 ? listaCuadrillas[0].nombreCuadrilla || 'Cuadrilla' : `${listaCuadrillas.length} cuadrillas`)
-      : 'Sin cuadrilla';
+    const cuadNombre = a.nombreCuadrilla || 'Sin cuadrilla';
 
     return `
       <div class="worker-card">
@@ -373,7 +382,7 @@
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3500);
   }
-  function cerrarSesion() { window.location.href = '../../index.html'; }
+  function cerrarSesion() { sessionStorage.removeItem('empleado'); window.location.href = '../../index.html'; }
 
   let lastScroll = 0;
   const scrollBtn = $('scrollTop');

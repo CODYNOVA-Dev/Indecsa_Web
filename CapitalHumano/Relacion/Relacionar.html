@@ -302,7 +302,9 @@
   let proyectos = [];
 
   async function cargarProyectos(){
+    try {
     const res = await fetch(API);
+    if (!res.ok) throw new Error();
     const data = await res.json();
 
     proyectos = data.map(p => ({
@@ -332,6 +334,13 @@
 
     filtrar();
 
+    } catch {
+      document.getElementById("cardsGrid").innerHTML =
+        `<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:#8A9BB5">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size:32px;opacity:.4;display:block;margin-bottom:1rem"></i>
+          <p style="font-size:14px">No se pudo conectar con el servidor.<br>Verifica que el backend esté corriendo.</p>
+        </div>`;
+    }
   }
 
   function render(p){
@@ -363,7 +372,12 @@
       p.nombre.toLowerCase().includes(busqueda)
     );
 
-    document.getElementById("cardsGrid").innerHTML = f.map(render).join("");
+    document.getElementById("cardsGrid").innerHTML = f.length
+      ? f.map(render).join("")
+      : `<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:#8A9BB5">
+          <i class="fa-solid fa-diagram-project" style="font-size:32px;opacity:.4;display:block;margin-bottom:1rem"></i>
+          <p style="font-size:14px">No se encontraron proyectos con los filtros aplicados.</p>
+        </div>`;
   }
 
   function abrirProyecto(id){
