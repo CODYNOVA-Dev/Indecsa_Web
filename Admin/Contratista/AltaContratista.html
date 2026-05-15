@@ -6,6 +6,7 @@
   <title>INDECSA – Registrar Contratista</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/animations.css" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
@@ -35,7 +36,7 @@
 
     main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
 
-    .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp .3s ease both; }
+    .page-header { max-width:900px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp var(--dur-normal) var(--ease-out) both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(93,202,165,0.1); border:1px solid rgba(93,202,165,0.25); display:flex; align-items:center; justify-content:center; }
     .page-icon i { font-size:22px; color:var(--success); }
@@ -45,14 +46,19 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
-    .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:fadeUp .45s ease both; }
+    .form-card { max-width:900px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:scaleIn var(--dur-slow) var(--ease-spring) both; animation-delay:80ms; }
     .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(93,202,165,0.06) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
     .form-card-header h3 { font-size:14px; font-weight:500; color:var(--success); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
     .required-note { font-size:11px; color:var(--muted); }
     .required-note span { color:var(--danger); }
 
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
-    .form-section { display:flex; flex-direction:column; gap:1.25rem; }
+    .form-section { display:flex; flex-direction:column; gap:1.25rem; animation:fadeUp var(--dur-normal) var(--ease-out) both; }
+    .form-section:nth-child(1) { animation-delay:240ms; }
+    .form-section:nth-child(2) { animation-delay:320ms; }
+    .form-section:nth-child(3) { animation-delay:400ms; }
+    .form-section:nth-child(4) { animation-delay:480ms; }
+    .form-section:nth-child(5) { animation-delay:560ms; }
     .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
     .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
     .form-row { display:grid; gap:1rem; }
@@ -112,7 +118,6 @@
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     @media(max-width:680px) { .col-2{grid-template-columns:1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
   </style>
 </head>

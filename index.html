@@ -6,6 +6,7 @@
   <title>INDECSA – Inicio de sesión</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/animations.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -18,6 +19,13 @@
       --red: #e05555;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--navy); min-height: 100vh; }
+
+    @keyframes bgDrift {
+      0%   { background-position: 60% 40%; }
+      50%  { background-position: 45% 55%; }
+      100% { background-position: 60% 40%; }
+    }
+
     header {
       background: var(--navy-mid);
       border-bottom: 1px solid rgba(200,169,110,0.25);
@@ -26,6 +34,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      animation: fadeDown var(--dur-normal) var(--ease-out) both;
     }
     .logo-box {
       width: 180px; height: 48px;
@@ -40,6 +49,8 @@
       min-height: calc(100vh - 72px - 56px);
       padding: 2rem;
       background: radial-gradient(ellipse at 60% 40%, #1a2e4a 0%, var(--navy) 65%);
+      background-size: 200% 200%;
+      animation: bgDrift 12s var(--ease-smooth) infinite;
     }
     .login-card {
       background: var(--navy-mid);
@@ -48,11 +59,28 @@
       width: 100%; max-width: 420px;
       padding: 2.5rem;
       position: relative; overflow: hidden;
+      animation: fadeUp var(--dur-slow) var(--ease-spring) both;
+      animation-delay: 120ms;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  box-shadow    var(--dur-normal) var(--ease-smooth);
+    }
+    .login-card:focus-within {
+      border-color: rgba(200,169,110,0.4);
+      box-shadow: 0 0 0 1px rgba(200,169,110,0.15),
+                  0 24px 64px rgba(0,0,0,0.4);
     }
     .login-card::before {
       content: ''; position: absolute;
       top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .login-card::after {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(224,200,144,0.9), transparent);
+      transform: translateX(-100%);
+      animation: shimmer 3.5s var(--ease-smooth) infinite;
+      animation-delay: 1s;
     }
     .card-header { text-align: center; margin-bottom: 2rem; }
     .card-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--white); margin-bottom: 6px; }
@@ -68,11 +96,18 @@
       border-radius: 8px; padding: 12px 16px;
       font-size: 14px; color: var(--white);
       font-family: 'DM Sans', sans-serif;
-      outline: none; transition: border-color 0.2s;
+      outline: none;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  box-shadow   var(--dur-normal) var(--ease-smooth),
+                  background   var(--dur-normal) var(--ease-smooth);
     }
     .field input::placeholder { color: var(--text-muted); }
-    .field input:focus { border-color: var(--gold); }
-    .field input.error { border-color: var(--red); }
+    .field input:focus {
+      border-color: var(--gold);
+      background: rgba(200,169,110,0.04);
+      box-shadow: 0 0 0 3px rgba(200,169,110,0.1);
+    }
+    .field input.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(224,85,85,0.1); }
     .error-msg { display: none; color: var(--red); font-size: 12px; text-align: center; margin-bottom: 1rem; }
     .error-msg.visible { display: block; }
     .btn-login {
@@ -80,17 +115,27 @@
       padding: 14px; font-family: 'DM Sans', sans-serif;
       font-size: 14px; font-weight: 500; color: var(--navy);
       letter-spacing: 1px; text-transform: uppercase;
-      cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 0.5rem;
+      cursor: pointer; margin-top: 0.5rem;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background      var(--dur-normal) var(--ease-smooth),
+                  transform       var(--dur-fast)   var(--ease-smooth),
+                  box-shadow      var(--dur-normal) var(--ease-smooth);
     }
-    .btn-login:hover { background: var(--gold-light); }
-    .btn-login:active { transform: scale(0.98); }
-    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-login:hover {
+      background: var(--gold-light);
+      box-shadow: 0 6px 24px rgba(200,169,110,0.45);
+      transform: translateY(-1px);
+    }
+    .btn-login:active { transform: scale(0.98) translateY(0); box-shadow: none; }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
     .card-footer { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 12px; color: var(--text-muted); }
     .card-footer span { color: var(--gold); }
     footer {
       background: var(--navy-mid);
       border-top: 1px solid rgba(200,169,110,0.15);
       height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;
+      animation: fadeIn var(--dur-normal) var(--ease-out) both;
+      animation-delay: 300ms;
     }
     .footer-left { font-size: 12px; color: var(--text-muted); }
     .footer-contact { display: flex; gap: 24px; }
@@ -150,9 +195,8 @@
     const inputC     = document.getElementById('contrasena');
     const btn        = document.getElementById('btnLogin');
 
-    // Deshabilitar botón mientras carga
     btn.disabled = true;
-    btn.textContent = 'Verificando...';
+    btn.innerHTML = '<span class="spinner spinner-sm"></span> Verificando...';
 
     try {
       const response = await fetch(API_URL, {
@@ -185,7 +229,7 @@
       mostrarError(inputU, inputC, errorMsg);
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Iniciar sesión';
+      btn.innerHTML = 'Iniciar sesión';
     }
   }
 
@@ -193,10 +237,17 @@
     errorMsg.classList.add('visible');
     inputU.classList.add('error');
     inputC.classList.add('error');
+
+    const card = document.querySelector('.login-card');
+    card.classList.remove('is-shaking');
+    void card.offsetWidth; // fuerza reflow para reiniciar la animación
+    card.classList.add('is-shaking');
+
     setTimeout(() => {
       errorMsg.classList.remove('visible');
       inputU.classList.remove('error');
       inputC.classList.remove('error');
+      card.classList.remove('is-shaking');
       errorMsg.textContent = 'Usuario o contraseña incorrectos';
     }, 3000);
   }

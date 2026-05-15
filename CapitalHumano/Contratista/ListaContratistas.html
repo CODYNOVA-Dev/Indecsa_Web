@@ -7,6 +7,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/animations.css">
 
   <style>
 
@@ -174,9 +175,12 @@
       grid-template-columns:48px 1fr;
       gap:14px;
       cursor:pointer;
-      transition:.35s;
+      opacity:0;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  transform    var(--dur-normal) var(--ease-spring),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
       position:relative;
-      animation:cardFade .45s ease forwards;
     }
 
     .worker-card::before{
@@ -351,9 +355,9 @@
   function render(lista){
     const grid=document.getElementById("cardsGrid");
 
-    grid.innerHTML=lista.map(c=>`
+    grid.innerHTML=lista.map((c,i)=>`
 
-<div class="worker-card c-${c.estadoContratista.toLowerCase()}" onclick="verDetalle(${c.idContratista})">
+<div class="worker-card c-${c.estadoContratista.toLowerCase()}" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${60+i*55}ms" onclick="verDetalle(${c.idContratista})">
 
 <div class="avatar">${iniciales(c.nombreContratista)}</div>
 

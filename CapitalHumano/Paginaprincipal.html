@@ -7,6 +7,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/animations.css">
 
   <style>
 
@@ -38,6 +39,7 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
+      animation: fadeDown var(--dur-normal) var(--ease-out) both;
     }
 
     .header-tag{
@@ -56,6 +58,8 @@
       padding:0 2rem;
       height:48px;
       gap:6px;
+      animation: fadeDown var(--dur-normal) var(--ease-out) both;
+      animation-delay: 60ms;
     }
 
     .nav-link{
@@ -67,6 +71,8 @@
       font-size:13px;
       color:var(--muted);
       text-decoration:none;
+      transition: background var(--dur-normal) var(--ease-smooth),
+                  color     var(--dur-normal) var(--ease-smooth);
     }
 
     .nav-link:hover{
@@ -87,7 +93,10 @@
       cursor:pointer;
       border:1px solid rgba(226,75,74,0.25);
       background:none;
+      font-family:'DM Sans',sans-serif;
+      transition: background var(--dur-normal) var(--ease-smooth);
     }
+    .nav-logout:hover{ background:rgba(226,75,74,0.1); }
 
     main{
       flex:1;
@@ -98,7 +107,12 @@
       align-items:center;
     }
 
-    .top{text-align:center;margin-bottom:2rem;}
+    .top{
+      text-align:center;
+      margin-bottom:2rem;
+      animation: fadeUp var(--dur-normal) var(--ease-out) both;
+      animation-delay: 120ms;
+    }
 
     .top h2{
       font-family:'Playfair Display',serif;
@@ -128,37 +142,51 @@
       text-align:center;
       cursor:pointer;
       position:relative;
-      transition:.25s;
       overflow:hidden;
-
       opacity:0;
-      transform:translateY(12px);
-      animation:fadeUp .45s ease forwards;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  transform    var(--dur-normal) var(--ease-smooth),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
+      animation: fadeUp var(--dur-slow) var(--ease-spring) both;
     }
 
-    .mod-card:nth-child(1){animation-delay:.05s;}
-    .mod-card:nth-child(2){animation-delay:.1s;}
-    .mod-card:nth-child(3){animation-delay:.15s;}
-    .mod-card:nth-child(4){animation-delay:.2s;}
+    .mod-card:nth-child(1){animation-delay:150ms;}
+    .mod-card:nth-child(2){animation-delay:210ms;}
+    .mod-card:nth-child(3){animation-delay:270ms;}
+    .mod-card:nth-child(4){animation-delay:330ms;}
+    .mod-card:nth-child(5){animation-delay:390ms;}
+    .mod-card:nth-child(6){animation-delay:450ms;}
+    .mod-card:nth-child(7){animation-delay:510ms;}
+    .mod-card:nth-child(8){animation-delay:570ms;}
 
     .mod-card:hover{
-      transform:translateY(-4px) scale(1.02);
-      border-color:rgba(200,169,110,0.4);
+      transform:translateY(-5px);
+      border-color:rgba(200,169,110,0.45);
       background:#1a3560;
-      box-shadow:0 10px 25px rgba(0,0,0,0.25);
+      box-shadow:0 14px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(200,169,110,0.12);
     }
 
     .mod-card::before{
       content:'';
       position:absolute;
-      top:0;
-      left:0;
-      right:0;
+      top:0; left:0; right:0;
       height:3px;
       border-radius:14px 14px 0 0;
       background:linear-gradient(90deg,transparent,var(--gold),transparent);
       opacity:.6;
     }
+    .mod-card::after{
+      content:'';
+      position:absolute;
+      top:-50%; left:-65%;
+      width:35%; height:200%;
+      background:linear-gradient(90deg,transparent,rgba(200,169,110,0.07),transparent);
+      transform:skewX(-15deg);
+      transition: left 0.65s var(--ease-smooth);
+      pointer-events:none;
+    }
+    .mod-card:hover::after{ left:130%; }
 
     .mod-icon{
       width:76px;
@@ -170,12 +198,22 @@
       align-items:center;
       justify-content:center;
       margin-bottom:1.1rem;
-      transition:.3s;
+      transition: transform    var(--dur-normal) var(--ease-spring),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  border-color var(--dur-normal) var(--ease-smooth),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
     }
 
     .mod-icon i{
       font-size:32px;
       color:var(--gold);
+    }
+
+    .mod-card:hover .mod-icon{
+      transform:scale(1.1);
+      background:rgba(200,169,110,0.14);
+      border-color:rgba(200,169,110,0.4);
+      box-shadow:0 0 18px rgba(200,169,110,0.18);
     }
 
     .mod-card h3{
@@ -190,13 +228,6 @@
       line-height:1.6;
     }
 
-    @keyframes fadeUp{
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
     footer{
       background:var(--navy-mid);
       border-top:1px solid rgba(200,169,110,0.15);
@@ -205,6 +236,8 @@
       align-items:center;
       justify-content:space-between;
       padding:0 2rem;
+      animation: fadeIn var(--dur-normal) var(--ease-out) both;
+      animation-delay: 400ms;
     }
 
     .footer-left{

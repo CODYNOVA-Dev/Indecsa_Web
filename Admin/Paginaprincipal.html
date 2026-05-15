@@ -6,6 +6,7 @@
   <title>INDECSA – Administrador</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/animations.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -24,6 +25,7 @@
       border-bottom: 1px solid rgba(200,169,110,0.25);
       padding: 0 2rem; height: 72px;
       display: flex; align-items: center; justify-content: space-between;
+      animation: fadeDown var(--dur-normal) var(--ease-out) both;
     }
     .header-tag { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
 
@@ -32,6 +34,8 @@
       border-bottom: 1px solid rgba(200,169,110,0.15);
       display: flex; align-items: center;
       padding: 0 2rem; height: 52px; gap: 12px;
+      animation: fadeDown var(--dur-normal) var(--ease-out) both;
+      animation-delay: 60ms;
     }
     .nav-sep { flex: 1; }
     .profile-pill {
@@ -67,7 +71,7 @@
       display: flex; flex-direction: column; align-items: center;
     }
 
-    .top { text-align: center; margin-bottom: 2rem; }
+    .top { text-align: center; margin-bottom: 2rem; animation: fadeUp var(--dur-normal) var(--ease-out) both; animation-delay: 120ms; }
     .top h2 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 26px; margin-bottom: 6px; }
     .top p { color: var(--muted); font-size: 13px; }
 
@@ -90,15 +94,44 @@
       background: var(--navy-mid); border: 1px solid rgba(200,169,110,0.2);
       border-radius: 14px; padding: 1.75rem 1.5rem;
       position: relative; overflow: hidden;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  transform    var(--dur-normal) var(--ease-smooth),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
       display: flex; flex-direction: column; align-items: center; text-align: center;
       cursor: pointer;
+      opacity: 0;
+      animation: fadeUp var(--dur-slow) var(--ease-spring) both;
     }
+    .mod-card:nth-child(1) { animation-delay: 150ms; }
+    .mod-card:nth-child(2) { animation-delay: 210ms; }
+    .mod-card:nth-child(3) { animation-delay: 270ms; }
+    .mod-card:nth-child(4) { animation-delay: 330ms; }
+    .mod-card:nth-child(5) { animation-delay: 390ms; }
+    .mod-card:nth-child(6) { animation-delay: 450ms; }
+    .mod-card:nth-child(7) { animation-delay: 510ms; }
+    .mod-card:nth-child(8) { animation-delay: 570ms; }
+
     .mod-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
-    .mod-card:hover { border-color: rgba(200,169,110,0.5); background: #1a3560; }
+    .mod-card::after {
+      content: ''; position: absolute;
+      top: -50%; left: -65%;
+      width: 35%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(200,169,110,0.07), transparent);
+      transform: skewX(-15deg);
+      transition: left 0.65s var(--ease-smooth);
+      pointer-events: none;
+    }
+    .mod-card:hover::after { left: 130%; }
+    .mod-card:hover {
+      border-color: rgba(200,169,110,0.5);
+      background: #1a3560;
+      transform: translateY(-5px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(200,169,110,0.12);
+    }
 
     .new-badge {
       position: absolute; top: 14px; right: 14px;
@@ -112,8 +145,18 @@
       background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.2);
       display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem;
       pointer-events: none;
+      transition: transform    var(--dur-normal) var(--ease-spring),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  border-color var(--dur-normal) var(--ease-smooth),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
     }
     .mod-icon svg { width: 36px; height: 36px; }
+    .mod-card:hover .mod-icon {
+      transform: scale(1.1);
+      background: rgba(200,169,110,0.14);
+      border-color: rgba(200,169,110,0.4);
+      box-shadow: 0 0 18px rgba(200,169,110,0.18);
+    }
     .mod-card h3 { color: var(--white); font-size: 16px; font-weight: 500; margin-bottom: 8px; pointer-events: none; }
     .mod-card p  { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 1.25rem; flex: 1; pointer-events: none; }
     .divider { width: 100%; height: 1px; background: rgba(200,169,110,0.15); margin-bottom: 1rem; pointer-events: none; }
@@ -139,6 +182,8 @@
     footer {
       background: var(--navy-mid); border-top: 1px solid rgba(200,169,110,0.15);
       height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;
+      animation: fadeIn var(--dur-normal) var(--ease-out) both;
+      animation-delay: 400ms;
     }
     .footer-left { font-size: 12px; color: var(--muted); }
     .footer-contact { display: flex; gap: 24px; }
@@ -395,7 +440,10 @@
   } else {
     const iniciales = empleado.nombreEmpleado
       .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-    document.getElementById('avatar').textContent = iniciales;
+    const avatarEl = document.getElementById('avatar');
+    avatarEl.textContent = iniciales;
+    avatarEl.style.animation = 'avatarPop 0.5s var(--ease-spring) both';
+    avatarEl.style.animationDelay = '350ms';
     document.getElementById('profileNombre').textContent = empleado.nombreEmpleado;
     document.getElementById('profileRol').textContent =
       empleado.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';

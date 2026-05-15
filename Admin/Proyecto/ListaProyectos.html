@@ -6,6 +6,7 @@
   <title>INDECSA – Lista de Proyectos</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/animations.css" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
@@ -65,8 +66,8 @@
     @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
     .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:fadeUp .4s ease both; }
     /* tarjeta */
-    .proj-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:14px; padding:16px 18px; position:relative; cursor:pointer; transition:border-color .2s,background .2s,transform .15s,box-shadow .2s; animation:fadeUp .4s ease both; }
-    .proj-card:hover { border-color:rgba(175,169,236,0.4); background:#1a3560; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+    .proj-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:14px; padding:16px 18px; position:relative; cursor:pointer; opacity:0; transition:border-color var(--dur-normal) var(--ease-smooth),background var(--dur-normal) var(--ease-smooth),transform var(--dur-normal) var(--ease-smooth),box-shadow var(--dur-normal) var(--ease-smooth); }
+    .proj-card:hover { border-color:rgba(175,169,236,0.4); background:#1a3560; transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
     .pcard-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; padding-right:90px; }
     .pcard-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .pi-purple { background:rgba(175,169,236,0.12); border:1px solid rgba(175,169,236,0.25); }
@@ -194,7 +195,6 @@
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     @media(max-width:750px){.cards-grid{grid-template-columns:1fr}.toolbar{flex-direction:column;align-items:stretch}.toolbar-right{margin-left:0;flex-wrap:wrap}.page-header{flex-direction:column;align-items:flex-start}.pmeta{grid-template-columns:1fr}.det-grid{grid-template-columns:1fr}.det-footer{flex-direction:column}}
   </style>
 </head>
@@ -439,6 +439,8 @@
 
   /* ══ RENDER CARD ══ */
   function renderCard(p,idx) {
+    const delay = 60 + idx * 55;
+    const pulso = p.estatusProyecto === 'EN_CURSO' ? ' is-pulsing' : '';
     const ic=iconColors[idx%iconColors.length];
     const ico=iconSet[idx%iconSet.length];
     const ec=ESTATUS_CLS[p.estatusProyecto]||'';
@@ -446,7 +448,7 @@
     const ub=UBIC_LBL[p.estadoProyectoGeo]||p.estadoProyectoGeo||'—';
     const safeName=(p.nombreProyecto||'').replace(/'/g,"\\'");
     return `
-      <div class="proj-card" onclick="abrirDetalle(${p.idProyecto})">
+      <div class="proj-card" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${delay}ms" onclick="abrirDetalle(${p.idProyecto})">
         <div class="pcard-head">
           <div class="pcard-icon ${ic}"><i class="fa-solid ${ico}" style="color:inherit;font-size:16px"></i></div>
           <div><div class="pcard-name">${p.nombreProyecto}</div><div class="pcard-type">${p.tipoProyecto||'Sin tipo'}</div></div>
@@ -466,7 +468,7 @@
           </div>
           <div class="stars-mini">${estrellasMini(p.calificacionProyecto)}</div>
         </div>
-        <div class="estatus-badge ${ec}">${el}</div>
+        <div class="estatus-badge ${ec}${pulso}">${el}</div>
       </div>`;
   }
 
