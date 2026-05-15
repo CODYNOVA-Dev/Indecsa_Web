@@ -6,6 +6,7 @@
   <title>INDECSA – Cap. Humano</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/animations.css" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
@@ -68,8 +69,8 @@
 
     .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; animation:fadeUp .4s ease both; }
 
-    .emp-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:14px 16px; display:grid; grid-template-columns:46px 1fr; gap:12px; align-items:start; position:relative; cursor:pointer; transition:border-color .2s,background .2s,transform .15s,box-shadow .2s; animation:fadeUp .4s ease both; }
-    .emp-card:hover { border-color:rgba(175,169,236,0.45); background:#1a3560; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+    .emp-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:14px 16px; display:grid; grid-template-columns:46px 1fr; gap:12px; align-items:start; position:relative; cursor:pointer; opacity:0; transition:border-color var(--dur-normal) var(--ease-smooth),background var(--dur-normal) var(--ease-smooth),transform var(--dur-normal) var(--ease-smooth),box-shadow var(--dur-normal) var(--ease-smooth); }
+    .emp-card:hover { border-color:rgba(175,169,236,0.45); background:#1a3560; transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
 
     .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; margin-top:2px; }
     .av-purple { background:rgba(175,169,236,0.15); color:var(--purple); border:1px solid rgba(175,169,236,0.3); }
@@ -169,7 +170,6 @@
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     @media(max-width:700px){.cards-grid{grid-template-columns:1fr}.toolbar{flex-direction:column;align-items:stretch}.toolbar-right{margin-left:0}.page-header{flex-direction:column;align-items:flex-start}.det-grid{grid-template-columns:1fr}.det-footer{flex-direction:column}}
   </style>
 </head>
@@ -390,12 +390,13 @@
 
   /* ══ RENDER CARD ══ */
   function renderCard(e, idx) {
+    const delay = 60 + idx * 55;
     const av  = AV_COLORS[idx % AV_COLORS.length];
     const rol = e.rol?.nombreRol || '—';
     const rbc = rolBadgeClass(rol);
     const safeName = (e.nombreEmpleado||'').replace(/'/g,"\\'");
     return `
-      <div class="emp-card" onclick="abrirDetalle(${e.idEmpleado})">
+      <div class="emp-card" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${delay}ms" onclick="abrirDetalle(${e.idEmpleado})">
         <div class="avatar ${av}">${iniciales(e.nombreEmpleado)}</div>
         <div>
           <div class="ename">${e.nombreEmpleado}</div>

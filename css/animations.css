@@ -1,0 +1,252 @@
+/*
+ * INDECSA – Sistema de animaciones compartido
+ * Incluir en todas las páginas ANTES de los estilos inline de cada vista.
+ */
+
+/* ─────────────────────────────────────────
+   TOKENS DE TIMING Y EASING
+───────────────────────────────────────── */
+:root {
+  --dur-fast:    150ms;
+  --dur-normal:  300ms;
+  --dur-slow:    500ms;
+  --dur-xslow:   800ms;
+
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:    cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:     cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ─────────────────────────────────────────
+   KEYFRAMES
+───────────────────────────────────────── */
+
+/* Aparece subiendo desde abajo */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Aparece bajando desde arriba */
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade simple */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Entra deslizándose desde la izquierda */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Entra deslizándose desde la derecha */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Aparece escalando desde centro */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Sweep de brillo dorado (usar en pseudo-elementos con overflow: hidden) */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Shake horizontal — para estados de error */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-7px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-5px); }
+  60%       { transform: translateX(4px); }
+  75%       { transform: translateX(-2px); }
+  90%       { transform: translateX(1px); }
+}
+
+/* Pulso suave de opacidad (badges de estado activo) */
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* Pulso de escala para el avatar al cargar sesión */
+@keyframes avatarPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+/* Giro de 360° — para spinners de carga */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Flotación vertical suave — para íconos decorativos */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ─────────────────────────────────────────
+   CLASES DE ANIMACIÓN DE ENTRADA
+   Aplicar directamente al elemento.
+   Por defecto animation-fill-mode: both
+   para que el estado inicial se respete.
+───────────────────────────────────────── */
+.anim-fade-up {
+  animation: fadeUp var(--dur-normal) var(--ease-out) both;
+}
+.anim-fade-down {
+  animation: fadeDown var(--dur-normal) var(--ease-out) both;
+}
+.anim-fade-in {
+  animation: fadeIn var(--dur-normal) var(--ease-smooth) both;
+}
+.anim-slide-left {
+  animation: slideInLeft var(--dur-normal) var(--ease-out) both;
+}
+.anim-slide-right {
+  animation: slideInRight var(--dur-normal) var(--ease-out) both;
+}
+.anim-scale-in {
+  animation: scaleIn var(--dur-normal) var(--ease-spring) both;
+}
+
+/* ─────────────────────────────────────────
+   STAGGER — DELAYS EN CASCADA
+   Combinar con cualquier clase .anim-*
+   Ejemplo: <div class="anim-fade-up delay-3">
+───────────────────────────────────────── */
+.delay-1 { animation-delay: 60ms;  }
+.delay-2 { animation-delay: 120ms; }
+.delay-3 { animation-delay: 180ms; }
+.delay-4 { animation-delay: 240ms; }
+.delay-5 { animation-delay: 300ms; }
+.delay-6 { animation-delay: 360ms; }
+.delay-7 { animation-delay: 420ms; }
+.delay-8 { animation-delay: 480ms; }
+
+/* ─────────────────────────────────────────
+   UTILIDADES DE ESTADO
+───────────────────────────────────────── */
+
+/* Shake al agregar la clase .is-shaking */
+.is-shaking {
+  animation: shake 0.5s var(--ease-smooth) both;
+}
+
+/* Pulso continuo — badges "activo" */
+.is-pulsing {
+  animation: pulseSoft 2s var(--ease-smooth) infinite;
+}
+
+/* Spinner de carga */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(200, 169, 110, 0.25);
+  border-top-color: #C8A96E;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+.spinner-sm {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+}
+.spinner-lg {
+  width: 20px;
+  height: 20px;
+  border-width: 2.5px;
+}
+
+/* Flotación — íconos decorativos */
+.is-floating {
+  animation: float 3s var(--ease-smooth) infinite;
+}
+
+/* ─────────────────────────────────────────
+   SHIMMER HELPER
+   Requiere position: relative; overflow: hidden
+   en el elemento padre. Agrega .has-shimmer
+   y el pseudo-elemento hace el sweep.
+───────────────────────────────────────── */
+.has-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.has-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(200, 169, 110, 0.18) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2.2s var(--ease-smooth) infinite;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   REDUCIR MOVIMIENTO — ACCESIBILIDAD
+   Si el usuario prefiere menos animación,
+   se cortan todas las duraciones al mínimo.
+───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:   0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:  0.01ms !important;
+  }
+}

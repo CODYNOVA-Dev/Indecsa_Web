@@ -8,6 +8,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/animations.css">
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -170,22 +171,18 @@
       padding:16px;
       cursor:pointer;
       position:relative;
-      transition:.25s;
       opacity:0;
-      transform:translateY(10px);
-      animation:fadeUp .4s ease forwards;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  transform    var(--dur-normal) var(--ease-spring),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
     }
 
     .proj-card:hover{
       border-color:rgba(200,169,110,0.4);
       background:#1a3560;
-    }
-
-    @keyframes fadeUp{
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
+      transform:translateY(-3px);
+      box-shadow:0 10px 30px rgba(0,0,0,0.3);
     }
 
     .proj-card::before{
@@ -325,9 +322,9 @@
     filtrar();
   }
 
-  function render(p){
+  function render(p,i=0){
     return `
-    <div class="proj-card c-${p.estatusProyecto.toLowerCase()}" onclick="verProyecto(${p.idProyecto})">
+    <div class="proj-card c-${p.estatusProyecto.toLowerCase()}" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${60+i*55}ms" onclick="verProyecto(${p.idProyecto})">
 
       <div class="proj-name">${p.nombreProyecto}</div>
 
@@ -370,7 +367,7 @@
       );
     }
 
-    document.getElementById("cardsGrid").innerHTML = data.map(render).join("");
+    document.getElementById("cardsGrid").innerHTML = data.map((p,i)=>render(p,i)).join("");
 
     document.getElementById("contadorResultados").innerText =
       data.length + " proyecto" + (data.length==1?"":"s") + " encontrado" + (data.length==1?"":"s");

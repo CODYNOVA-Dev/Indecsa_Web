@@ -6,6 +6,7 @@
   <title>INDECSA – Lista de Trabajadores</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/animations.css" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -177,7 +178,7 @@
     @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 
     /* ── GRID ── */
-    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; animation: fadeUp .4s ease both; }
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
     /* ── TARJETA ── */
     .worker-card {
@@ -187,14 +188,17 @@
       display: grid; grid-template-columns: 42px 1fr;
       gap: 12px; align-items: start;
       position: relative; cursor: pointer;
-      transition: border-color .2s, background .2s, transform .15s, box-shadow .2s;
-      animation: fadeUp .4s ease both;
+      opacity: 0;
+      transition: border-color var(--dur-normal) var(--ease-smooth),
+                  background   var(--dur-normal) var(--ease-smooth),
+                  transform    var(--dur-normal) var(--ease-smooth),
+                  box-shadow   var(--dur-normal) var(--ease-smooth);
     }
     .worker-card:hover {
       border-color: rgba(200,169,110,0.45);
       background: #1a3560;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     .avatar {
@@ -222,10 +226,13 @@
       font-size: 11px; padding: 4px 11px; border-radius: 7px;
       cursor: pointer; border: 1px solid; text-decoration: none;
       display: flex; align-items: center; gap: 5px;
-      transition: background .15s; background: none;
+      transition: background var(--dur-fast) var(--ease-smooth),
+                  transform  var(--dur-fast) var(--ease-smooth);
+      background: none;
       font-family: 'DM Sans', sans-serif;
       position: relative; z-index: 2;
     }
+    .wact:hover { transform: scale(1.05); }
     .wact i { font-size: 10px; }
     .wact.edit  { color:var(--warning); border-color:rgba(250,199,117,0.25); background:rgba(250,199,117,0.06); }
     .wact.edit:hover  { background:rgba(250,199,117,0.12); }
@@ -386,9 +393,8 @@
       padding:10px 14px; outline:none; transition:border-color .2s, box-shadow .2s;
     }
     .code-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,169,110,0.08); }
-    .code-input.wrong { border-color:var(--danger)!important; animation:shake .35s ease; }
+    .code-input.wrong { border-color:var(--danger)!important; animation:shake .5s var(--ease-smooth); }
     .code-input.right { border-color:var(--success)!important; }
-    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
     .code-hint { font-size:11px; color:var(--muted); text-align:center; margin-bottom:1.2rem; }
     .modal-btn.elim { background:rgba(200,169,110,0.12); border:1px solid rgba(200,169,110,0.3); color:var(--gold); font-weight:600; }
     .modal-btn.elim:hover:not(:disabled) { background:rgba(200,169,110,0.2); }
@@ -424,7 +430,6 @@
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     @media(max-width:700px){
       .cards-grid{grid-template-columns:1fr}
       .toolbar{flex-direction:column;align-items:stretch}
@@ -759,8 +764,10 @@
     const cl = ESTADO_CLS[t.estadoTrabajador]||'';
     const lb = ESTADO_LBL[t.estadoTrabajador]||t.estadoTrabajador;
     const nom = (t.nombreTrabajador||'').replace(/'/g,"\\'");
+    const delay = 60 + i * 55;
+    const pulso = t.estadoTrabajador === 'ACTIVO' ? ' is-pulsing' : '';
     return `
-      <div class="worker-card" onclick="abrirDetalle(${t.idTrabajador})">
+      <div class="worker-card" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${delay}ms" onclick="abrirDetalle(${t.idTrabajador})">
         <div class="avatar ${av}">${iniciales(t.nombreTrabajador)}</div>
         <div>
           <div class="wname">${t.nombreTrabajador}</div>
@@ -786,7 +793,7 @@
             <div class="stars-mini">${miniStars(t.calificacionTrabajador)}</div>
           </div>
         </div>
-        <div class="status-badge ${cl}">${lb}</div>
+        <div class="status-badge ${cl}${pulso}">${lb}</div>
       </div>`;
   }
 
