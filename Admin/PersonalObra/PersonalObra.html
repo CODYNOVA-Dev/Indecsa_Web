@@ -210,7 +210,7 @@
 </div>
 
 <script>
-  const API_BASE = 'https://indecsaspringboot-production.up.railway.app/api/v1';
+  const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
   const $ = id => document.getElementById(id);
 
   let listaAsignaciones = [];
@@ -280,7 +280,7 @@
 
   async function cargarAsignaciones(idProyecto) {
     try {
-      const res = await fetch(`${API_BASE}/asignaciones-trabajador/proyecto/${idProyecto}`);
+      const res = await fetch(`${API_BASE}/asignaciones/trabajador-proyecto/proyecto/${idProyecto}`);
       listaAsignaciones = res.ok ? await res.json() : [];
     } catch { listaAsignaciones = []; }
   }
