@@ -349,7 +349,7 @@
 
   async function cargar(){
     try {
-      const res=await fetch("https://indecsaspringboot-production.up.railway.app/api/v1/trabajadores");
+      const res=await fetch("https://springbootindecsa-production.up.railway.app/api/trabajadores");
       if (!res.ok) throw new Error();
       trabajadores=await res.json();
       render(trabajadores);
