@@ -176,13 +176,13 @@
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link active" href="ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
   <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
   <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
   <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
-  <a class="nav-link active" href="Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
+  <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
@@ -316,8 +316,8 @@
 
 <script>
   const API_BASE  = 'https://springbootindecsa-production.up.railway.app/api';
-  const API_ASIG  = `${API_BASE}/asignaciones/trabajador-proyecto`;
-  const API_PC    = `${API_BASE}/asignaciones/proyecto-contratista`;
+  const API_ASIG  = `${API_BASE}/asignaciones-trabajador-proyecto`;
+  const API_PC    = `${API_BASE}/asignaciones-proyecto-contratista`;
   const $ = id => document.getElementById(id);
 
   const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
@@ -417,7 +417,6 @@
     $('detStars').innerHTML       = detStars(p.calificacionProyecto);
     $('detDesc').textContent      = p.descripcionProyecto||'Sin descripción';
 
-    // Reset async sections
     $('detTrabajadores').innerHTML = '<div class="det-empty">Cargando…</div>';
     $('detContratista').textContent = 'Cargando…';
     $('detCounter').innerHTML = '';
@@ -425,9 +424,9 @@
 
     // Cargar trabajadores
     try {
-      const resTrab = await fetch(`${API_ASIG}/proyecto/${id}`);
-      const asignados = await resTrab.json();
-      asignados.sort((a,b) => a.trabajador.especialidadTrabajador.localeCompare(b.trabajador.especialidadTrabajador));
+      const resTrab = await fetch(`${API_ASIG}?idProyecto=${id}`);
+      const asignados = resTrab.ok ? await resTrab.json() : [];
+      asignados.sort((a,b) => (a.trabajador?.especialidadTrabajador||'').localeCompare(b.trabajador?.especialidadTrabajador||''));
       $('detCounter').innerHTML = `<strong>${asignados.length}</strong> / 8 trabajadores asignados`;
       if (!asignados.length) {
         $('detTrabajadores').innerHTML = '<div class="det-empty">No hay trabajadores asignados</div>';
@@ -435,8 +434,8 @@
         $('detTrabajadores').innerHTML = `<div class="det-worker-list">${
           asignados.map(a => `
             <div class="det-worker-item">
-              <strong>${a.trabajador.nombreTrabajador}</strong>
-              <span>${a.trabajador.especialidadTrabajador}</span>
+              <strong>${a.trabajador?.nombreTrabajador || '—'}</strong>
+              <span>${a.trabajador?.especialidadTrabajador || '—'}</span>
             </div>`).join('')
         }</div>`;
       }
@@ -446,8 +445,8 @@
 
     // Cargar contratista
     try {
-      const resCont = await fetch(`${API_PC}/proyecto/${id}`);
-      const contratos = await resCont.json();
+      const resCont = await fetch(`${API_PC}?idProyecto=${id}`);
+      const contratos = resCont.ok ? await resCont.json() : [];
       const activo = contratos.find(c => c.estatusContrato === 'ACTIVO');
       $('detContratista').textContent = activo ? activo.contratista.nombreContratista : 'No asignado';
     } catch {
