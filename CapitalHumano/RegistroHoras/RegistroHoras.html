@@ -13,7 +13,6 @@
       --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
       --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
-      /* Color identitario: naranja */
       --orange:#F4A261;
     }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
@@ -35,15 +34,9 @@
     main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
     .page-wrap { max-width:1200px; margin:0 auto; }
 
-    /* PAGE HEADER — naranja */
     .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
-    .page-icon {
-      width:54px; height:54px; border-radius:14px;
-      background:rgba(244,162,97,0.12);
-      border:1px solid rgba(244,162,97,0.3);
-      display:flex; align-items:center; justify-content:center;
-    }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(244,162,97,0.12); border:1px solid rgba(244,162,97,0.3); display:flex; align-items:center; justify-content:center; }
     .page-icon i { font-size:22px; color:var(--orange); }
     .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
     .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
@@ -51,39 +44,27 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
-    /* Layout 2 columnas */
     .layout { display:grid; grid-template-columns:420px 1fr; gap:20px; align-items:start; }
 
-    /* Panel formulario — acento naranja */
     .form-panel { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:1.75rem; animation:fadeUp .35s ease both; position:sticky; top:130px; }
     .panel-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); margin-bottom:1.25rem; display:flex; align-items:center; gap:10px; }
     .panel-title i { font-size:14px; color:var(--orange); }
     .form-group { margin-bottom:1rem; }
     .form-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; display:block; }
-    .form-select, .form-input, .form-textarea {
+    .form-select, .form-input {
       width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2);
       border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px;
       padding:10px 14px; outline:none; transition:border-color .2s;
     }
     .form-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; padding-right:36px; cursor:pointer; background-color:rgba(255,255,255,0.04); }
-    .form-select:focus, .form-input:focus, .form-textarea:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(244,162,97,0.07); }
+    .form-select:focus, .form-input:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(244,162,97,0.07); }
     .form-select option { background:#152D50; }
     .form-select:disabled { opacity:.45; cursor:not-allowed; }
-    .form-textarea { resize:vertical; min-height:72px; }
-
-    /* Tipo periodo pills — naranja */
-    .period-pills { display:flex; gap:8px; }
-    .ppill { flex:1; }
-    .ppill input[type="radio"] { display:none; }
-    .ppill label { display:flex; align-items:center; justify-content:center; gap:6px; padding:9px 8px; border-radius:9px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; width:100%; }
-    .ppill input:checked + label { background:rgba(244,162,97,0.12); border-color:var(--orange); color:var(--orange); }
-    .ppill label:hover { background:rgba(244,162,97,0.06); border-color:var(--orange); color:var(--orange); }
 
     .btn-registrar { width:100%; padding:12px; border-radius:10px; background:linear-gradient(135deg,var(--orange),#c07030); color:var(--navy); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .2s,box-shadow .2s; margin-top:1.25rem; }
     .btn-registrar:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 24px rgba(244,162,97,0.3); }
     .btn-registrar:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
-    /* Panel registros */
     .records-panel { animation:fadeUp .4s ease both; }
     .records-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
     .records-title i { font-size:14px; color:var(--orange); }
@@ -99,22 +80,17 @@
     .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
     .results-info strong { color:var(--white); }
 
-    /* Tarjeta de registro — borde naranja */
     .record-card { background:var(--navy-card); border:1px solid rgba(244,162,97,0.14); border-radius:14px; padding:16px 18px; margin-bottom:10px; display:flex; align-items:flex-start; gap:14px; transition:border-color .2s,transform .15s; animation:fadeUp .3s ease both; }
     .record-card:hover { border-color:rgba(244,162,97,0.35); transform:translateY(-1px); }
     .rec-avatar { width:42px; height:42px; border-radius:50%; background:rgba(244,162,97,0.12); border:1px solid rgba(244,162,97,0.3); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; color:var(--orange); flex-shrink:0; }
     .rec-body { flex:1; min-width:0; }
     .rec-head { display:flex; align-items:center; gap:10px; margin-bottom:7px; flex-wrap:wrap; }
     .rec-nombre { font-size:14px; font-weight:600; color:var(--white); }
-    .period-badge { font-size:9px; padding:2px 9px; border-radius:20px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
-    .p-diario  { background:rgba(93,202,165,0.12); color:var(--success); border:1px solid rgba(93,202,165,0.3); }
-    .p-semanal { background:rgba(175,169,236,0.12); color:var(--purple); border:1px solid rgba(175,169,236,0.3); }
     .rec-meta { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .rec-chip { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--muted); }
     .rec-chip i { font-size:10px; color:var(--gold); }
     .rec-horas { font-size:20px; font-weight:700; color:var(--orange); line-height:1; }
     .rec-horas span { font-size:11px; color:var(--muted); font-weight:400; }
-    .rec-obs { font-size:11.5px; color:var(--muted); margin-top:7px; font-style:italic; line-height:1.5; }
 
     .skeleton-card { background:var(--navy-card); border:1px solid rgba(200,169,110,0.08); border-radius:14px; padding:18px; margin-bottom:10px; }
     .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
@@ -196,23 +172,18 @@
           </select>
         </div>
         <div class="form-group">
+          <label class="form-label">Registrado por *</label>
+          <select class="form-select" id="selEmpleado">
+            <option value="">— Selecciona empleado —</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label class="form-label">Fecha</label>
           <input class="form-input" type="date" id="inputFecha" />
         </div>
         <div class="form-group">
           <label class="form-label">Horas trabajadas</label>
           <input class="form-input" type="number" id="inputHoras" min="0.1" max="24" step="0.5" placeholder="0 – 24" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Tipo de periodo</label>
-          <div class="period-pills">
-            <div class="ppill"><input type="radio" name="tipoPeriodo" id="tp-diario" value="DIARIO" checked /><label for="tp-diario"><i class="fa-solid fa-sun"></i> Diario</label></div>
-            <div class="ppill"><input type="radio" name="tipoPeriodo" id="tp-semanal" value="SEMANAL" /><label for="tp-semanal"><i class="fa-solid fa-calendar-week"></i> Semanal</label></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Observaciones <span style="font-size:10px;color:var(--muted)">(opcional)</span></label>
-          <textarea class="form-textarea" id="inputObs" placeholder="Notas adicionales…"></textarea>
         </div>
         <button class="btn-registrar" id="btnRegistrar" onclick="registrar()">
           <i class="fa-solid fa-circle-check"></i> Registrar horas
@@ -260,11 +231,11 @@
 <script>
   const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
   const $ = id => document.getElementById(id);
-  let proyectoActual = null, listaAsignaciones = [], listaRegistros = [];
+  let proyectoActual = null, listaAsignaciones = [], listaRegistros = [], listaEmpleados = [];
 
   (async function init() {
     $('inputFecha').value = new Date().toISOString().split('T')[0];
-    await cargarProyectos();
+    await Promise.all([cargarProyectos(), cargarEmpleados()]);
   })();
 
   async function cargarProyectos() {
@@ -276,6 +247,22 @@
       sel.innerHTML = '<option value="">— Selecciona un proyecto —</option>';
       proyectos.forEach(p => { const o = document.createElement('option'); o.value = p.idProyecto; o.textContent = p.nombreProyecto; sel.appendChild(o); });
     } catch { showToast('Error al cargar proyectos', false); }
+  }
+
+  async function cargarEmpleados() {
+    try {
+      const res = await fetch(`${API_BASE}/empleados`);
+      if (!res.ok) throw new Error();
+      listaEmpleados = await res.json();
+      const sel = $('selEmpleado');
+      sel.innerHTML = '<option value="">— Selecciona empleado —</option>';
+      listaEmpleados.forEach(e => {
+        const o = document.createElement('option');
+        o.value = e.idEmpleado;
+        o.textContent = e.nombreEmpleado;
+        sel.appendChild(o);
+      });
+    } catch { showToast('Error al cargar empleados', false); }
   }
 
   async function onProyectoChange() {
@@ -341,13 +328,26 @@
   }
 
   function renderCard(r) {
-    const asig = listaAsignaciones.find(a => a.idAsignacionTp === r.idAsignacionTp);
-    const nombre = asig?.trabajador?.nombreTrabajador || r.nombreTrabajador || `Registro #${r.idRegistroHoras||r.id||'?'}`;
+    const idAtp = r.asignacionTrabajadorProyecto?.idAsignacionTp;
+    const asig = listaAsignaciones.find(a => a.idAsignacionTp === idAtp);
+    const nombre = asig?.trabajador?.nombreTrabajador
+      || r.asignacionTrabajadorProyecto?.trabajador?.nombreTrabajador
+      || `Registro #${r.idRegistro || '?'}`;
     const avatar = nombre.charAt(0).toUpperCase();
     const fecha = r.fechaRegistro ? fmtFecha(r.fechaRegistro) : '—';
     const horas = r.horasTrabajadas ?? '—';
-    const periodo = r.tipoPeriodo || '', periodoCls = periodo==='DIARIO'?'p-diario':'p-semanal';
-    return `<div class="record-card"><div class="rec-avatar">${avatar}</div><div class="rec-body"><div class="rec-head"><span class="rec-nombre">${nombre}</span>${periodo?`<span class="period-badge ${periodoCls}">${periodo}</span>`:''}</div><div class="rec-meta"><div class="rec-chip"><i class="fa-solid fa-calendar-day"></i>${fecha}</div><div class="rec-horas">${horas}<span> h</span></div></div>${r.observaciones?`<div class="rec-obs">"${r.observaciones}"</div>`:''}</div></div>`;
+    const registrador = r.empleadoRegistro?.nombreEmpleado || '';
+    return `<div class="record-card">
+      <div class="rec-avatar">${avatar}</div>
+      <div class="rec-body">
+        <div class="rec-head"><span class="rec-nombre">${nombre}</span></div>
+        <div class="rec-meta">
+          <div class="rec-chip"><i class="fa-solid fa-calendar-day"></i>${fecha}</div>
+          <div class="rec-horas">${horas}<span> h</span></div>
+          ${registrador ? `<div class="rec-chip"><i class="fa-solid fa-user-tie"></i>${registrador}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
   }
 
   function mostrarSkeleton() { $('recordsList').innerHTML=[1,2,3].map(()=>`<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`).join(''); $('resultsLabel').textContent='Cargando registros…'; }
@@ -355,23 +355,30 @@
   async function registrar() {
     if (!proyectoActual) { showToast('Selecciona un proyecto', false); return; }
     const idAsi=$('selTrabajador').value; if (!idAsi) { showToast('Selecciona un trabajador', false); return; }
+    const idEmpleado=$('selEmpleado').value; if (!idEmpleado) { showToast('Selecciona el empleado que registra', false); return; }
     const fecha=$('inputFecha').value; if (!fecha) { showToast('Selecciona una fecha', false); return; }
     const horasStr=$('inputHoras').value; if (!horasStr) { showToast('Ingresa las horas trabajadas', false); return; }
     const horas=parseFloat(horasStr); if (isNaN(horas)||horas<=0||horas>24) { showToast('Las horas deben estar entre 0.1 y 24', false); return; }
-    const tipoPeriodo=document.querySelector('input[name="tipoPeriodo"]:checked').value;
-    const obs=$('inputObs').value.trim();
-    const dto={idAsignacionTp:parseInt(idAsi),fechaRegistro:fecha,horasTrabajadas:horas,tipoPeriodo};
-    if (obs) dto.observaciones=obs;
+
+    const dto = {
+      asignacionTrabajadorProyecto: { idAsignacionTp: parseInt(idAsi) },
+      fechaRegistro: fecha,
+      horasTrabajadas: horas,
+      empleadoRegistro: { idEmpleado: parseInt(idEmpleado) }
+    };
+
     const btn=$('btnRegistrar'); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Registrando…';
     try {
       const res=await fetch(`${API_BASE}/registros-horas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dto)});
-      if (!res.ok) throw new Error(); showToast('Horas registradas correctamente',true); limpiarForm();
+      if (!res.ok) throw new Error();
+      showToast('Horas registradas correctamente',true);
+      limpiarForm();
       await cargarRegistros($('filtroInicio').value||null,$('filtroFin').value||null);
     } catch { showToast('Error al registrar las horas',false); }
     finally { btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-circle-check"></i> Registrar horas'; }
   }
 
-  function limpiarForm() { $('selTrabajador').value=''; $('inputFecha').value=new Date().toISOString().split('T')[0]; $('inputHoras').value=''; $('tp-diario').checked=true; $('inputObs').value=''; }
+  function limpiarForm() { $('selTrabajador').value=''; $('selEmpleado').value=''; $('inputFecha').value=new Date().toISOString().split('T')[0]; $('inputHoras').value=''; }
 
   async function buscarPorFecha() {
     if (!proyectoActual) { showToast('Selecciona un proyecto primero',false); return; }
