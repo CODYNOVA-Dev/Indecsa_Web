@@ -185,7 +185,7 @@
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
-  <a class="nav-link active" href="Contratista.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link active" href="ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
   <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
   <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
@@ -309,7 +309,7 @@
 
 <script>
   const API_BASE    = 'https://springbootindecsa-production.up.railway.app/api';
-  const API_PC      = `${API_BASE}/asignaciones/proyecto-contratista`;
+  const API_PC      = `${API_BASE}/asignaciones-proyecto-contratista`;
   const AV_COLORS   = ['av-green','av-blue','av-amber','av-purple','av-coral','av-teal'];
   const ESTADO_CLS  = { ACTIVO:'s-activo', INACTIVO:'s-inactivo', SUSPENDIDO:'s-suspendido' };
   const ESTADO_LBL  = { ACTIVO:'Activo', INACTIVO:'Inactivo', SUSPENDIDO:'Suspendido' };
@@ -410,24 +410,21 @@
     $('detExperiencia').textContent= c.experiencia||'Sin registrar';
     $('detDescripcion').textContent= c.descripcionContratista||'Sin registrar';
 
-    // Cargar proyectos asociados
     $('detProyectos').innerHTML = '<div class="det-empty">Cargando proyectos…</div>';
     $('modalDetalle').classList.add('open');
 
     try {
-      const res = await fetch(API_PC);
-      const relaciones = await res.json();
-      const proyectos = relaciones.filter(r =>
-        r.contratista.idContratista === id && r.estatusContrato === 'ACTIVO'
-      );
+      const res = await fetch(`${API_PC}?idContratista=${id}`);
+      const relaciones = res.ok ? await res.json() : [];
+      const proyectos = relaciones.filter(r => r.estatusContrato === 'ACTIVO');
       if (!proyectos.length) {
         $('detProyectos').innerHTML = '<div class="det-empty">No hay proyectos asociados</div>';
       } else {
         $('detProyectos').innerHTML = `<div class="det-proj-list">${
           proyectos.map(r => `
             <div class="det-proj-item">
-              <strong>${r.proyecto.nombreProyecto}</strong>
-              <span>${(r.proyecto.estatusProyecto||'').replace('_',' ')}</span>
+              <strong>${r.proyecto?.nombreProyecto || '—'}</strong>
+              <span>${(r.proyecto?.estatusProyecto||'').replace('_',' ')}</span>
             </div>`).join('')
         }</div>`;
       }
