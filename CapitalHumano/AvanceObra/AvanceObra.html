@@ -4,173 +4,133 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INDECSA – Avance de Obra</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
-      --navy: #0B1F3A; --navy-mid: #152D50; --navy-dark: #0a1828;
-      --navy-card: #1a2e4a; --gold: #C8A96E; --white: #F8F9FC;
-      --muted: #8A9BB5; --success: #4CAF82; --danger: #E24B4A;
-      --warning: #F0A500; --blue: #4A90D9; --border: rgba(200,169,110,0.18);
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
+      /* Color identitario: rosa */
+      --rose:#E8829A;
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--white); padding-top: 120px; min-height: 100vh; }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 12px; border-radius:6px; font-size:12.5px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; white-space:nowrap; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:12px; }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+    main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+    .page-wrap { max-width:1200px; margin:0 auto; }
 
-    header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: var(--navy-mid); border-bottom: 1px solid var(--border);
-      padding: 0 2rem; height: 72px;
-      display: flex; align-items: center; justify-content: space-between;
+    /* PAGE HEADER — rosa */
+    .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon {
+      width:54px; height:54px; border-radius:14px;
+      background:rgba(232,130,154,0.12);
+      border:1px solid rgba(232,130,154,0.3);
+      display:flex; align-items:center; justify-content:center;
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .logo img { height: 38px; }
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gold); letter-spacing: 1px; }
-    .header-tag { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+    .page-icon i { font-size:22px; color:var(--rose); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
 
-    nav {
-      position: fixed; top: 72px; left: 0; right: 0; z-index: 99;
-      background: var(--navy-dark); border-bottom: 1px solid rgba(200,169,110,0.12);
-      display: flex; align-items: center; padding: 0 2rem; height: 48px; gap: 4px;
-      transition: transform 0.25s ease;
-    }
-    body.nav-hidden nav { transform: translateY(-48px); }
-    .nav-link {
-      display: flex; align-items: center; gap: 7px; padding: 6px 12px;
-      border-radius: 6px; font-size: 13px; color: var(--muted); text-decoration: none;
-      transition: background 0.15s, color 0.15s; white-space: nowrap;
-    }
-    .nav-link:hover, .nav-link.active { background: rgba(200,169,110,0.1); color: var(--gold); }
-    .nav-sep { flex: 1; }
-    .nav-logout {
-      display: flex; align-items: center; gap: 7px; padding: 6px 14px;
-      border-radius: 6px; font-size: 13px; color: #F09595; cursor: pointer;
-      border: 1px solid rgba(226,75,74,0.25); background: none;
-      font-family: 'DM Sans', sans-serif; transition: background 0.2s;
-    }
-    .nav-logout:hover { background: rgba(226,75,74,0.1); }
+    /* Layout 2 columnas */
+    .layout { display:grid; grid-template-columns:420px 1fr; gap:1.5rem; align-items:start; }
 
-    main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+    /* Form panel — rosa */
+    .form-panel { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:1.75rem; position:sticky; top:130px; animation:fadeUp .35s ease both; }
+    .panel-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); margin-bottom:1.25rem; display:flex; align-items:center; gap:10px; }
+    .panel-title i { font-size:14px; color:var(--rose); }
+    .form-group { margin-bottom:1rem; }
+    .form-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; display:block; }
+    .form-select, .form-input, .form-textarea {
+      width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2);
+      border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px;
+      padding:10px 14px; outline:none; transition:border-color .2s; appearance:none;
+    }
+    .form-select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; padding-right:36px; cursor:pointer; background-color:rgba(255,255,255,0.04); }
+    .form-select:focus, .form-input:focus, .form-textarea:focus { border-color:var(--rose); box-shadow:0 0 0 3px rgba(232,130,154,0.07); }
+    .form-select option { background:#152D50; }
+    .form-select:disabled { opacity:.45; cursor:not-allowed; }
+    .form-textarea { resize:vertical; min-height:72px; }
+    .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
-    .page-header { margin-bottom: 1.75rem; }
-    .page-icon { font-size: 28px; color: var(--gold); margin-bottom: 8px; }
-    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--white); margin-bottom: 4px; }
-    .page-header p { font-size: 13px; color: var(--muted); }
+    .btn-submit { width:100%; padding:12px; border-radius:10px; background:linear-gradient(135deg,var(--rose),#b85070); color:var(--white); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .2s,box-shadow .2s; margin-top:1.25rem; }
+    .btn-submit:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 24px rgba(232,130,154,0.3); }
+    .btn-submit:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
-    .layout { display: grid; grid-template-columns: 420px 1fr; gap: 1.5rem; align-items: start; }
+    /* Records panel */
+    .records-panel { min-width:0; animation:fadeUp .4s ease both; }
+    .filter-bar { background:var(--navy-card); border:1px solid var(--border); border-radius:14px; padding:1rem 1.25rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:1rem; }
+    .filter-bar label { color:var(--muted); font-size:12px; white-space:nowrap; }
+    .filter-bar input { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px; outline:none; transition:border-color .2s; width:148px; }
+    .filter-bar input:focus { border-color:var(--rose); }
+    .btn-filter { padding:8px 16px; border-radius:9px; font-size:13px; font-weight:500; cursor:pointer; border:none; font-family:'DM Sans',sans-serif; transition:all .2s; display:flex; align-items:center; gap:6px; }
+    .btn-filter.primary { background:rgba(232,130,154,0.12); border:1px solid rgba(232,130,154,0.3); color:var(--rose); }
+    .btn-filter.primary:hover { background:rgba(232,130,154,0.2); }
+    .btn-filter.secondary { background:rgba(138,155,181,0.06); border:1px solid rgba(138,155,181,0.2); color:var(--muted); }
+    .btn-filter.secondary:hover { background:rgba(138,155,181,0.12); color:var(--white); }
 
-    .form-panel {
-      background: var(--navy-mid); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1.5rem; position: sticky; top: 136px;
-    }
-    .panel-title {
-      font-size: 13px; font-weight: 500; color: var(--gold);
-      letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 1.25rem;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.3px; }
-    select, input[type="text"], input[type="date"], input[type="number"], textarea {
-      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      border-radius: 8px; padding: 9px 12px; color: var(--white);
-      font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
-      transition: border-color 0.2s;
-    }
-    select:focus, input:focus, textarea:focus { border-color: var(--gold); }
-    select option { background: var(--navy-mid); }
-    select:disabled { opacity: 0.5; cursor: not-allowed; }
-    textarea { resize: vertical; min-height: 72px; }
-    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .btn-submit {
-      width: 100%; padding: 11px; border-radius: 8px; border: none;
-      background: linear-gradient(135deg, var(--gold), #a88540);
-      color: #0a1828; font-family: 'DM Sans', sans-serif; font-size: 13px;
-      font-weight: 600; cursor: pointer; margin-top: 4px;
-      transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-submit:not(:disabled):hover { opacity: 0.88; }
+    .records-list { display:flex; flex-direction:column; gap:10px; }
+    .avance-card { background:var(--navy-card); border:1px solid rgba(232,130,154,0.14); border-radius:14px; padding:1.25rem; transition:border-color .2s,transform .15s; }
+    .avance-card:hover { border-color:rgba(232,130,154,0.35); transform:translateY(-1px); }
+    .card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+    .card-partida { font-size:15px; font-weight:500; color:var(--white); line-height:1.3; }
+    .card-date { font-size:11px; color:var(--muted); white-space:nowrap; }
+    .card-qty { font-size:22px; font-weight:700; color:var(--rose); margin-bottom:6px; }
+    .card-qty span { font-size:13px; color:var(--muted); font-weight:400; margin-left:4px; }
+    .prog-wrap { margin-bottom:10px; }
+    .prog-bar-bg { width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; margin-bottom:4px; }
+    .prog-bar-fill { height:100%; background:var(--success); border-radius:99px; transition:width .6s ease; }
+    .prog-bar-fill.over { background:var(--warning); }
+    .prog-label { font-size:11px; color:var(--muted); }
+    .chip { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:99px; font-size:11px; font-weight:500; background:rgba(232,130,154,0.1); color:var(--rose); border:1px solid rgba(232,130,154,0.25); }
+    .card-obs { font-size:12px; color:var(--muted); font-style:italic; margin-top:8px; }
 
-    .records-panel { min-width: 0; }
-    .filter-bar {
-      background: var(--navy-mid); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1rem 1.25rem;
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-    .filter-bar label { color: var(--muted); font-size: 12px; white-space: nowrap; margin-bottom: 0; }
-    .filter-bar input { width: 148px; }
-    .btn-filter, .btn-clear {
-      padding: 8px 16px; border-radius: 7px; font-size: 12px; font-weight: 500;
-      cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
-    }
-    .btn-filter { background: var(--gold); color: #0a1828; }
-    .btn-filter:hover { opacity: 0.85; }
-    .btn-clear { background: rgba(255,255,255,0.07); color: var(--muted); border: 1px solid var(--border); }
-    .btn-clear:hover { background: rgba(255,255,255,0.12); }
-
-    .records-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .sk { border-radius: 8px; background: linear-gradient(90deg,#1e3050 25%,#254060 50%,#1e3050 75%); background-size:200% 100%; animation: pulse 1.4s ease infinite; }
-    .sk-line { height: 14px; margin-bottom: 8px; }
-    @keyframes pulse { 0%,100%{background-position:200% 0} 50%{background-position:-200% 0} }
-    .sk-card { background: var(--navy-mid); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
-
-    .avance-card {
-      background: var(--navy-mid); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.25rem;
-      transition: border-color 0.2s;
-    }
-    .avance-card:hover { border-color: rgba(200,169,110,0.35); }
-    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
-    .card-partida { font-size: 15px; font-weight: 500; color: var(--white); line-height: 1.3; }
-    .card-date { font-size: 11px; color: var(--muted); white-space: nowrap; }
-    .card-qty { font-size: 22px; font-weight: 500; color: var(--gold); margin-bottom: 6px; }
-    .card-qty span { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 4px; }
-    .prog-wrap { margin-bottom: 10px; }
-    .prog-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; margin-bottom: 4px; }
-    .prog-bar-fill { height: 100%; background: var(--success); border-radius: 99px; transition: width 0.6s ease; }
-    .prog-bar-fill.over { background: var(--warning); }
-    .prog-label { font-size: 11px; color: var(--muted); }
-    .card-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-    .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 500; }
-    .chip-cuadrilla { background: rgba(74,144,217,0.15); color: var(--blue); border: 1px solid rgba(74,144,217,0.25); }
-    .card-obs { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
-
-    .empty-state {
-      text-align: center; padding: 3rem 2rem;
-      background: var(--navy-mid); border: 1px solid var(--border); border-radius: 12px;
-    }
-    .empty-state i { font-size: 32px; color: var(--muted); opacity: 0.4; margin-bottom: 12px; display: block; }
-    .empty-state p { font-size: 13px; color: var(--muted); }
-
-    .toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: var(--navy-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 20px; font-size: 13px;
-      display: flex; align-items: center; gap: 10px; z-index: 400;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; white-space: nowrap;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
-    .toast.ok { border-color: rgba(76,175,130,0.4); color: var(--success); }
-    .toast.err { border-color: rgba(226,75,74,0.4); color: #f09595; }
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-      .form-panel { position: static; }
-    }
-    @media (max-width: 600px) {
-      .filter-bar { flex-direction: column; align-items: stretch; }
-      .filter-bar input { width: 100%; }
-    }
+    .skeleton-card { background:var(--navy-card); border:1px solid rgba(200,169,110,0.08); border-radius:14px; padding:18px; margin-bottom:10px; }
+    .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
+    .sk-line { height:10px; margin-bottom:10px; }
+    .sk-w90{width:90%} .sk-w70{width:70%} .sk-w50{width:50%}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+    .empty-state { text-align:center; padding:3rem 2rem; background:var(--navy-card); border:1px solid var(--border); border-radius:14px; }
+    .empty-state i { font-size:32px; color:rgba(232,130,154,0.25); margin-bottom:1rem; display:block; }
+    .empty-state p { font-size:14px; color:var(--muted); }
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.form-panel{position:static}}
+    @media(max-width:600px){.filter-bar{flex-direction:column;align-items:stretch}.filter-bar input{width:100%}}
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <img src="../../img/logo.png" alt="INDECSA" />
-    <span class="logo-text">INDECSA</span>
-  </div>
-  <span class="header-tag">Capital Humano</span>
+  <img src="../../img/logo.png" height="52" alt="INDECSA" />
+  <div class="header-tag">Capital Humano</div>
 </header>
 
 <nav>
@@ -188,299 +148,174 @@
 </nav>
 
 <main>
-  <div class="page-header">
-    <div class="page-icon"><i class="fa-solid fa-chart-line"></i></div>
-    <h1>Avance de Obra</h1>
-    <p>Registra y consulta el avance de partidas por proyecto.</p>
-  </div>
+  <div class="page-wrap">
 
-  <div class="layout">
-
-    <!-- FORM -->
-    <div class="form-panel">
-      <div class="panel-title"><i class="fa-solid fa-plus"></i> Registrar Avance</div>
-
-      <div class="form-group">
-        <label>Proyecto *</label>
-        <select id="selProyecto" onchange="onProyecto()">
-          <option value="">— Selecciona proyecto —</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Cuadrilla</label>
-        <select id="selCuadrilla" disabled>
-          <option value="">Sin cuadrilla</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Nombre de partida *</label>
-        <input type="text" id="inpPartida" placeholder="Ej. Excavación, Colado, Mampostería…" />
-      </div>
-
-      <div class="row-2">
-        <div class="form-group">
-          <label>Cantidad ejecutada *</label>
-          <input type="number" id="inpEjecutada" min="0.01" step="0.01" placeholder="0.00" />
-        </div>
-        <div class="form-group">
-          <label>Unidad *</label>
-          <select id="selUnidad">
-            <option value="m2">m²</option>
-            <option value="m3">m³</option>
-            <option value="ml">ml</option>
-            <option value="piezas">piezas</option>
-            <option value="porcentaje">%</option>
-          </select>
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="page-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+          <div class="page-title">Avance de Obra</div>
+          <div class="page-sub">Registra y consulta el avance de partidas por proyecto</div>
         </div>
       </div>
-
-      <div class="row-2">
-        <div class="form-group">
-          <label>Cantidad programada</label>
-          <input type="number" id="inpProgramada" min="0" step="0.01" placeholder="0.00 (opc.)" />
-        </div>
-        <div class="form-group">
-          <label>Fecha de registro *</label>
-          <input type="date" id="inpFecha" />
-        </div>
+      <div class="breadcrumb">
+        <a href="../Paginaprincipal.html">Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Avance de Obra</span>
       </div>
-
-      <div class="form-group">
-        <label>Observaciones</label>
-        <textarea id="inpObs" placeholder="Notas adicionales…"></textarea>
-      </div>
-
-      <button class="btn-submit" id="btnSubmit" onclick="registrar()" disabled>
-        <i class="fa-solid fa-floppy-disk"></i> Registrar avance
-      </button>
     </div>
 
-    <!-- RECORDS -->
-    <div class="records-panel">
-      <div class="filter-bar">
-        <label><i class="fa-solid fa-filter"></i> Filtrar:</label>
-        <label>Desde</label>
-        <input type="date" id="fDesde" />
-        <label>Hasta</label>
-        <input type="date" id="fHasta" />
-        <button class="btn-filter" onclick="aplicarFiltro()"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
-        <button class="btn-clear" onclick="limpiarFiltro()"><i class="fa-solid fa-xmark"></i> Limpiar</button>
+    <div class="layout">
+
+      <!-- FORM -->
+      <div class="form-panel">
+        <div class="panel-title"><i class="fa-solid fa-plus"></i> Registrar Avance</div>
+
+        <div class="form-group">
+          <label class="form-label">Proyecto *</label>
+          <select class="form-select" id="selProyecto" onchange="onProyecto()">
+            <option value="">— Selecciona proyecto —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cuadrilla</label>
+          <select class="form-select" id="selCuadrilla" disabled>
+            <option value="">Sin cuadrilla</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nombre de partida *</label>
+          <input class="form-input" type="text" id="inpPartida" placeholder="Ej. Excavación, Colado, Mampostería…" />
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label class="form-label">Cantidad ejecutada *</label>
+            <input class="form-input" type="number" id="inpEjecutada" min="0.01" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Unidad *</label>
+            <select class="form-select" id="selUnidad">
+              <option value="m2">m²</option>
+              <option value="m3">m³</option>
+              <option value="ml">ml</option>
+              <option value="piezas">piezas</option>
+              <option value="porcentaje">%</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label class="form-label">Cantidad programada</label>
+            <input class="form-input" type="number" id="inpProgramada" min="0" step="0.01" placeholder="0.00 (opc.)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fecha de registro *</label>
+            <input class="form-input" type="date" id="inpFecha" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observaciones</label>
+          <textarea class="form-textarea" id="inpObs" placeholder="Notas adicionales…"></textarea>
+        </div>
+        <button class="btn-submit" id="btnSubmit" onclick="registrar()" disabled>
+          <i class="fa-solid fa-floppy-disk"></i> Registrar avance
+        </button>
       </div>
-      <div id="recordsList" class="records-list">
-        <div class="empty-state">
-          <i class="fa-solid fa-chart-line"></i>
-          <p>Selecciona un proyecto para ver los avances registrados</p>
+
+      <!-- RECORDS -->
+      <div class="records-panel">
+        <div class="filter-bar">
+          <label><i class="fa-solid fa-filter"></i> Filtrar:</label>
+          <label>Desde</label><input type="date" id="fDesde" />
+          <label>Hasta</label><input type="date" id="fHasta" />
+          <button class="btn-filter primary" onclick="aplicarFiltro()"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
+          <button class="btn-filter secondary" onclick="limpiarFiltro()"><i class="fa-solid fa-xmark"></i> Limpiar</button>
+        </div>
+        <div id="recordsList" class="records-list">
+          <div class="empty-state"><i class="fa-solid fa-chart-line"></i><p>Selecciona un proyecto para ver los avances registrados</p></div>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<div class="toast" id="toast"></div>
+<footer>
+  <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
+  <div class="footer-contact">
+    <a href="mailto:contacto@indecsa.com"><i class="fa-solid fa-envelope"></i>contacto@indecsa.com</a>
+    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+  </div>
+</footer>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg">OK</span></div>
 
 <script>
-  const API = 'https://springbootindecsa-production.up.railway.app/api';
-  let idProyectoActual = null;
+  const API='https://springbootindecsa-production.up.railway.app/api';
+  const $=id=>document.getElementById(id);
+  let idProyectoActual=null;
 
-  window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('inpFecha').value = hoy();
-    cargarProyectos();
-    initNavHide();
-  });
+  window.addEventListener('DOMContentLoaded',()=>{ $('inpFecha').value=hoy(); cargarProyectos(); initNavHide(); });
+  function hoy(){return new Date().toISOString().slice(0,10);}
+  function initNavHide(){let last=window.scrollY; window.addEventListener('scroll',()=>{document.body.classList.toggle('nav-hidden',window.scrollY>last&&window.scrollY>80);last=window.scrollY;},{passive:true});}
 
-  function hoy() { return new Date().toISOString().slice(0, 10); }
-
-  function initNavHide() {
-    let last = window.scrollY;
-    window.addEventListener('scroll', () => {
-      document.body.classList.toggle('nav-hidden', window.scrollY > last && window.scrollY > 80);
-      last = window.scrollY;
-    }, { passive: true });
+  async function cargarProyectos(){
+    try{ const r=await fetch(`${API}/proyectos`); const lista=await r.json(); const sel=$('selProyecto'); lista.forEach(p=>{const o=document.createElement('option');o.value=p.idProyecto;o.textContent=p.nombreProyecto;sel.appendChild(o);}); }
+    catch{showToast('No se pudieron cargar los proyectos','err');}
   }
 
-  async function cargarProyectos() {
-    try {
-      const r = await fetch(`${API}/proyectos`);
-      const lista = await r.json();
-      const sel = document.getElementById('selProyecto');
-      lista.forEach(p => {
-        const o = document.createElement('option');
-        o.value = p.idProyecto; o.textContent = p.nombreProyecto;
-        sel.appendChild(o);
-      });
-    } catch { toast('No se pudieron cargar los proyectos', 'err'); }
+  async function onProyecto(){
+    const id=$('selProyecto').value; idProyectoActual=id||null;
+    if(!id){resetCuadrillas();$('btnSubmit').disabled=true;mostrarVacio('Selecciona un proyecto para ver los avances');return;}
+    $('btnSubmit').disabled=false; mostrarSkeletons();
+    await Promise.all([cargarCuadrillas(id),cargarAvances(id)]);
+  }
+  function resetCuadrillas(){const s=$('selCuadrilla');s.innerHTML='<option value="">Sin cuadrilla</option>';s.disabled=true;}
+  async function cargarCuadrillas(id){try{const r=await fetch(`${API}/cuadrillas/proyecto/${id}`);const l=await r.json();const s=$('selCuadrilla');s.innerHTML='<option value="">Sin cuadrilla</option>';l.forEach(c=>{const o=document.createElement('option');o.value=c.idCuadrilla;o.textContent=c.nombreCuadrilla;s.appendChild(o);});s.disabled=false;}catch{resetCuadrillas();}}
+  async function cargarAvances(id,desde,hasta){let url=`${API}/avance-partida/proyecto/${id}`;const p=new URLSearchParams();if(desde)p.set('fechaInicio',desde);if(hasta)p.set('fechaFin',hasta);if([...p].length)url+='?'+p;try{const r=await fetch(url);renderAvances(await r.json());}catch{showToast('Error al cargar avances','err');mostrarVacio('No se pudieron cargar los avances');}}
+
+  function renderAvances(lista){
+    if(!lista.length){mostrarVacio('No hay avances registrados para este proyecto');return;}
+    $('recordsList').innerHTML=lista.map(cardHTML).join('');
+  }
+  function cardHTML(a){
+    const pct=a.cantidadProgramada>0?Math.min(100,(a.cantidadEjecutada/a.cantidadProgramada)*100):null;
+    const over=pct!==null&&pct>=100;
+    const unidad=a.unidadMedida==='porcentaje'?'%':a.unidadMedida;
+    const progHTML=pct!==null?`<div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar-fill${over?' over':''}" style="width:${pct.toFixed(1)}%"></div></div><div class="prog-label">${pct.toFixed(1)}% de ${a.cantidadProgramada} ${unidad} programado</div></div>`:'';
+    const cuadrillaChip=a.nombreCuadrilla?`<span class="chip"><i class="fa-solid fa-people-group"></i> ${a.nombreCuadrilla}</span>`:'';
+    return `<div class="avance-card"><div class="card-top"><div class="card-partida">${a.nombrePartida}</div><div class="card-date"><i class="fa-regular fa-calendar"></i> ${a.fechaRegistro}</div></div><div class="card-qty">${a.cantidadEjecutada}<span>${unidad}</span></div>${progHTML}<div>${cuadrillaChip}</div>${a.observaciones?`<div class="card-obs"><i class="fa-solid fa-comment-dots"></i> ${a.observaciones}</div>`:''}</div>`;
+  }
+  function mostrarSkeletons(){$('recordsList').innerHTML=[1,2,3].map(()=>`<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`).join('');}
+  function mostrarVacio(msg){$('recordsList').innerHTML=`<div class="empty-state"><i class="fa-solid fa-chart-line"></i><p>${msg}</p></div>`;}
+
+  function aplicarFiltro(){if(!idProyectoActual)return;mostrarSkeletons();cargarAvances(idProyectoActual,$('fDesde').value,$('fHasta').value);}
+  function limpiarFiltro(){$('fDesde').value='';$('fHasta').value='';if(idProyectoActual){mostrarSkeletons();cargarAvances(idProyectoActual);}}
+
+  async function registrar(){
+    const idProy=$('selProyecto').value, idCuad=$('selCuadrilla').value||null;
+    const partida=$('inpPartida').value.trim();
+    const ejecutada=parseFloat($('inpEjecutada').value);
+    const unidad=$('selUnidad').value;
+    const programada=parseFloat($('inpProgramada').value)||null;
+    const fecha=$('inpFecha').value, obs=$('inpObs').value.trim()||null;
+    if(!partida){showToast('El nombre de partida es obligatorio','err');return;}
+    if(!ejecutada||ejecutada<=0){showToast('La cantidad ejecutada debe ser mayor a 0','err');return;}
+    if(!fecha){showToast('Selecciona la fecha de registro','err');return;}
+    const btn=$('btnSubmit');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Guardando…';
+    try{
+      const r=await fetch(`${API}/avance-partida`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idProyecto:parseInt(idProy),idCuadrilla:idCuad?parseInt(idCuad):null,nombrePartida:partida,fechaRegistro:fecha,cantidadEjecutada:ejecutada,unidadMedida:unidad,cantidadProgramada:programada,observaciones:obs})});
+      if(!r.ok)throw new Error();
+      showToast('Avance registrado correctamente','ok');
+      $('inpPartida').value='';$('inpEjecutada').value='';$('inpProgramada').value='';$('inpObs').value='';$('inpFecha').value=hoy();$('selCuadrilla').value='';$('selUnidad').value='m2';
+      mostrarSkeletons();await cargarAvances(idProy);
+    }catch{showToast('Error al registrar el avance','err');}
+    finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> Registrar avance';}
   }
 
-  async function onProyecto() {
-    const id = document.getElementById('selProyecto').value;
-    idProyectoActual = id || null;
-    const btnSubmit = document.getElementById('btnSubmit');
-    if (!id) {
-      resetCuadrillas(); btnSubmit.disabled = true;
-      mostrarVacio('Selecciona un proyecto para ver los avances registrados');
-      return;
-    }
-    btnSubmit.disabled = false;
-    mostrarSkeletons();
-    await Promise.all([cargarCuadrillas(id), cargarAvances(id)]);
-  }
-
-  function resetCuadrillas() {
-    const sel = document.getElementById('selCuadrilla');
-    sel.innerHTML = '<option value="">Sin cuadrilla</option>';
-    sel.disabled = true;
-  }
-
-  async function cargarCuadrillas(idProy) {
-    try {
-      const r = await fetch(`${API}/cuadrillas/proyecto/${idProy}`);
-      const lista = await r.json();
-      const sel = document.getElementById('selCuadrilla');
-      sel.innerHTML = '<option value="">Sin cuadrilla</option>';
-      lista.forEach(c => {
-        const o = document.createElement('option');
-        o.value = c.idCuadrilla; o.textContent = c.nombreCuadrilla;
-        sel.appendChild(o);
-      });
-      sel.disabled = false;
-    } catch { resetCuadrillas(); }
-  }
-
-  async function cargarAvances(idProy, desde, hasta) {
-    let url = `${API}/avance-partida/proyecto/${idProy}`;
-    const params = new URLSearchParams();
-    if (desde) params.set('fechaInicio', desde);
-    if (hasta)  params.set('fechaFin', hasta);
-    if ([...params].length) url += '?' + params.toString();
-    try {
-      const r = await fetch(url);
-      renderAvances(await r.json());
-    } catch {
-      toast('Error al cargar avances', 'err');
-      mostrarVacio('No se pudieron cargar los avances');
-    }
-  }
-
-  function renderAvances(lista) {
-    if (!lista.length) { mostrarVacio('No hay avances registrados para este proyecto'); return; }
-    document.getElementById('recordsList').innerHTML = lista.map(cardHTML).join('');
-  }
-
-  function cardHTML(a) {
-    const pct = a.cantidadProgramada > 0
-      ? Math.min(100, (a.cantidadEjecutada / a.cantidadProgramada) * 100) : null;
-    const over = pct !== null && pct >= 100;
-    const unidad = a.unidadMedida === 'porcentaje' ? '%' : a.unidadMedida;
-    const progHTML = pct !== null ? `
-      <div class="prog-wrap">
-        <div class="prog-bar-bg"><div class="prog-bar-fill ${over ? 'over' : ''}" style="width:${pct.toFixed(1)}%"></div></div>
-        <div class="prog-label">${pct.toFixed(1)}% de ${a.cantidadProgramada} ${unidad} programado</div>
-      </div>` : '';
-    const cuadrillaChip = a.nombreCuadrilla
-      ? `<span class="chip chip-cuadrilla"><i class="fa-solid fa-people-group"></i> ${a.nombreCuadrilla}</span>` : '';
-    const obsHTML = a.observaciones
-      ? `<div class="card-obs"><i class="fa-solid fa-comment-dots"></i> ${a.observaciones}</div>` : '';
-    return `
-    <div class="avance-card">
-      <div class="card-top">
-        <div class="card-partida">${a.nombrePartida}</div>
-        <div class="card-date"><i class="fa-regular fa-calendar"></i> ${a.fechaRegistro}</div>
-      </div>
-      <div class="card-qty">${a.cantidadEjecutada}<span>${unidad}</span></div>
-      ${progHTML}
-      <div class="card-meta">${cuadrillaChip}</div>
-      ${obsHTML}
-    </div>`;
-  }
-
-  function mostrarSkeletons() {
-    document.getElementById('recordsList').innerHTML = [1,2,3].map(() => `
-      <div class="sk-card">
-        <div class="sk sk-line" style="width:60%"></div>
-        <div class="sk sk-line" style="width:40%"></div>
-        <div class="sk sk-line" style="width:80%;height:8px;margin-top:10px"></div>
-      </div>`).join('');
-  }
-
-  function mostrarVacio(msg) {
-    document.getElementById('recordsList').innerHTML = `
-      <div class="empty-state"><i class="fa-solid fa-chart-line"></i><p>${msg}</p></div>`;
-  }
-
-  function aplicarFiltro() {
-    if (!idProyectoActual) return;
-    mostrarSkeletons();
-    cargarAvances(idProyectoActual, document.getElementById('fDesde').value, document.getElementById('fHasta').value);
-  }
-
-  function limpiarFiltro() {
-    document.getElementById('fDesde').value = '';
-    document.getElementById('fHasta').value = '';
-    if (idProyectoActual) { mostrarSkeletons(); cargarAvances(idProyectoActual); }
-  }
-
-  async function registrar() {
-    const idProy    = document.getElementById('selProyecto').value;
-    const idCuad    = document.getElementById('selCuadrilla').value || null;
-    const partida   = document.getElementById('inpPartida').value.trim();
-    const ejecutada = parseFloat(document.getElementById('inpEjecutada').value);
-    const unidad    = document.getElementById('selUnidad').value;
-    const programada = parseFloat(document.getElementById('inpProgramada').value) || null;
-    const fecha     = document.getElementById('inpFecha').value;
-    const obs       = document.getElementById('inpObs').value.trim() || null;
-
-    if (!partida) { toast('El nombre de partida es obligatorio', 'err'); return; }
-    if (!ejecutada || ejecutada <= 0) { toast('La cantidad ejecutada debe ser mayor a 0', 'err'); return; }
-    if (!fecha) { toast('Selecciona la fecha de registro', 'err'); return; }
-
-    const btn = document.getElementById('btnSubmit');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando…';
-
-    try {
-      const r = await fetch(`${API}/avance-partida`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          idProyecto: parseInt(idProy),
-          idCuadrilla: idCuad ? parseInt(idCuad) : null,
-          nombrePartida: partida, fechaRegistro: fecha,
-          cantidadEjecutada: ejecutada, unidadMedida: unidad,
-          cantidadProgramada: programada, observaciones: obs
-        })
-      });
-      if (!r.ok) throw new Error();
-      toast('Avance registrado correctamente', 'ok');
-      document.getElementById('inpPartida').value = '';
-      document.getElementById('inpEjecutada').value = '';
-      document.getElementById('inpProgramada').value = '';
-      document.getElementById('inpObs').value = '';
-      document.getElementById('inpFecha').value = hoy();
-      document.getElementById('selCuadrilla').value = '';
-      document.getElementById('selUnidad').value = 'm2';
-      mostrarSkeletons();
-      await cargarAvances(idProy);
-    } catch {
-      toast('Error al registrar el avance', 'err');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Registrar avance';
-    }
-  }
-
-  function toast(msg, tipo) {
-    const el = document.getElementById('toast');
-    el.textContent = msg; el.className = `toast show ${tipo}`;
-    clearTimeout(el._t);
-    el._t = setTimeout(() => el.classList.remove('show'), 3200);
-  }
-
-  function cerrarSesion() {
-    sessionStorage.removeItem('empleado');
-    window.location.href = '../../index.html';
-  }
+  function showToast(msg,tipo){const t=$('toast');$('toastMsg').textContent=msg;const ok=tipo==='ok';t.style.borderColor=ok?'var(--success)':'var(--danger)';const ic=$('toastIcon');ic.style.color=ok?'var(--success)':'var(--danger)';ic.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+  function cerrarSesion(){window.location.href='../../index.html';}
+  let lastScroll=0;const scrollBtn=$('scrollTop');
+  window.addEventListener('scroll',()=>{const c=window.scrollY;document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80);lastScroll=c<=0?0:c;scrollBtn.classList.toggle('visible',c>200);});
 </script>
 </body>
 </html>

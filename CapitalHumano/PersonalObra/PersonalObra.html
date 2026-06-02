@@ -13,12 +13,14 @@
       --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
       --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
+      /* Color identitario: celeste */
+      --cyan:#5BC0DE;
     }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
-    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 14px; border-radius:6px; font-size:12.5px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 12px; border-radius:6px; font-size:12.5px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; white-space:nowrap; }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:12px; }
     .nav-sep { flex:1; }
@@ -32,35 +34,44 @@
     .scroll-top i { font-size:16px; color:var(--navy); }
     main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
     .page-wrap { max-width:1100px; margin:0 auto; }
+
+    /* PAGE HEADER — celeste */
     .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
-    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(93,202,165,0.1); border:1px solid rgba(93,202,165,0.25); display:flex; align-items:center; justify-content:center; }
-    .page-icon i { font-size:22px; color:var(--success); }
+    .page-icon {
+      width:54px; height:54px; border-radius:14px;
+      background:rgba(91,192,222,0.12);
+      border:1px solid rgba(91,192,222,0.3);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .page-icon i { font-size:22px; color:var(--cyan); }
     .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
     .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
     .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
+    /* TOOLBAR */
     .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; flex-wrap:wrap; }
     .filter-group { display:flex; flex-direction:column; gap:5px; }
     .filter-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
     .filter-select { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 34px 9px 13px; appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; transition:border-color .2s; background-color:rgba(255,255,255,0.04); }
-    .filter-select:focus { outline:none; border-color:var(--gold); }
+    .filter-select:focus { outline:none; border-color:var(--cyan); }
     .filter-select option { background:#152D50; }
     .filter-select.wide { min-width:220px; }
     .search-wrap { position:relative; min-width:220px; }
     .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .search-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px 9px 36px; outline:none; transition:border-color .2s; }
     .search-input::placeholder { color:rgba(138,155,181,0.5); }
-    .search-input:focus { border-color:var(--gold); }
+    .search-input:focus { border-color:var(--cyan); }
     .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
     .results-info strong { color:var(--white); }
 
+    /* GRID + TARJETA — celeste */
     .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:fadeUp .4s ease both; }
-    .worker-card { background:var(--navy-card); border:1px solid rgba(93,202,165,0.12); border-radius:14px; padding:16px 18px; display:flex; align-items:flex-start; gap:14px; transition:border-color .2s,transform .15s; animation:fadeUp .3s ease both; }
-    .worker-card:hover { border-color:rgba(93,202,165,0.3); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
-    .wk-avatar { width:46px; height:46px; border-radius:50%; background:rgba(93,202,165,0.12); border:1px solid rgba(93,202,165,0.3); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:600; color:var(--success); flex-shrink:0; }
+    .worker-card { background:var(--navy-card); border:1px solid rgba(91,192,222,0.14); border-radius:14px; padding:16px 18px; display:flex; align-items:flex-start; gap:14px; transition:border-color .2s,transform .15s; animation:fadeUp .3s ease both; }
+    .worker-card:hover { border-color:rgba(91,192,222,0.35); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+    .wk-avatar { width:46px; height:46px; border-radius:50%; background:rgba(91,192,222,0.12); border:1px solid rgba(91,192,222,0.3); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:600; color:var(--cyan); flex-shrink:0; }
     .wk-body { flex:1; min-width:0; }
     .wk-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
     .wk-nombre { font-size:14px; font-weight:600; color:var(--white); }
@@ -71,7 +82,7 @@
     .e-suspendido  { background:rgba(250,199,117,0.12); color:var(--warning); border:1px solid rgba(250,199,117,0.3); }
     .e-finalizado  { background:rgba(175,169,236,0.12); color:var(--purple);  border:1px solid rgba(175,169,236,0.3); }
     .e-cancelado   { background:rgba(240,149,149,0.1);  color:var(--danger);  border:1px solid rgba(240,149,149,0.3); }
-    .wk-puesto { font-size:12px; color:var(--gold); margin-bottom:8px; }
+    .wk-puesto { font-size:12px; color:var(--cyan); margin-bottom:8px; }
     .wk-meta { display:flex; gap:12px; flex-wrap:wrap; }
     .wk-chip { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--muted); }
     .wk-chip i { font-size:10px; color:var(--gold); }
@@ -82,11 +93,9 @@
     .sk-line { height:10px; margin-bottom:10px; }
     .sk-w90{width:90%} .sk-w70{width:70%} .sk-w50{width:50%}
     @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-
     .empty-state { grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--muted); }
-    .empty-state i { font-size:36px; color:rgba(93,202,165,0.2); margin-bottom:1rem; display:block; }
+    .empty-state i { font-size:36px; color:rgba(91,192,222,0.2); margin-bottom:1rem; display:block; }
     .empty-state p { font-size:14px; }
-
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     .toast i { font-size:16px; }
@@ -173,10 +182,7 @@
     </div>
 
     <div class="cards-grid" id="cardsGrid">
-      <div class="empty-state">
-        <i class="fa-solid fa-hard-hat"></i>
-        <p>Selecciona un proyecto para ver el personal asignado</p>
-      </div>
+      <div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>Selecciona un proyecto para ver el personal asignado</p></div>
     </div>
 
   </div>
@@ -189,165 +195,64 @@
     <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
   </div>
 </footer>
-
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <i class="fa-solid fa-chevron-up"></i>
-</button>
-
-<div class="toast" id="toast">
-  <i id="toastIcon" class="fa-solid fa-circle-check"></i>
-  <span id="toastMsg">OK</span>
-</div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg">OK</span></div>
 
 <script>
   const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
   const $ = id => document.getElementById(id);
-
-  let listaAsignaciones = [];
-  let listaCuadrillas   = [];
-  let proyectoActual    = null;
-
-  const ESTATUS_CLS = {
-    ACTIVO:'e-activo', VACACIONES:'e-vacaciones', INCAPACIDAD:'e-incapacidad',
-    SUSPENDIDO:'e-suspendido', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado'
-  };
-  const ESTATUS_LBL = {
-    ACTIVO:'Activo', VACACIONES:'Vacaciones', INCAPACIDAD:'Incapacidad',
-    SUSPENDIDO:'Suspendido', FINALIZADO:'Finalizado', CANCELADO:'Cancelado'
-  };
+  let listaAsignaciones=[], listaCuadrillas=[], proyectoActual=null;
+  const ESTATUS_CLS = { ACTIVO:'e-activo', VACACIONES:'e-vacaciones', INCAPACIDAD:'e-incapacidad', SUSPENDIDO:'e-suspendido', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
+  const ESTATUS_LBL = { ACTIVO:'Activo', VACACIONES:'Vacaciones', INCAPACIDAD:'Incapacidad', SUSPENDIDO:'Suspendido', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
 
   (async function init() { await cargarProyectos(); })();
 
   async function cargarProyectos() {
     try {
-      const res = await fetch(`${API_BASE}/proyectos`);
-      if (!res.ok) throw new Error();
-      const proyectos = await res.json();
-      const sel = $('selProyecto');
-      sel.innerHTML = '<option value="">— Selecciona un proyecto —</option>';
-      proyectos.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.idProyecto;
-        opt.textContent = p.nombreProyecto;
-        sel.appendChild(opt);
-      });
-    } catch {
-      showToast('Error al cargar proyectos', false);
-    }
+      const res=await fetch(`${API_BASE}/proyectos`); if(!res.ok) throw new Error();
+      const proyectos=await res.json(); const sel=$('selProyecto');
+      sel.innerHTML='<option value="">— Selecciona un proyecto —</option>';
+      proyectos.forEach(p=>{ const o=document.createElement('option'); o.value=p.idProyecto; o.textContent=p.nombreProyecto; sel.appendChild(o); });
+    } catch { showToast('Error al cargar proyectos',false); }
   }
 
   async function onProyectoChange() {
-    const idProyecto = $('selProyecto').value;
-    if (!idProyecto) {
-      proyectoActual = null;
-      listaAsignaciones = [];
-      listaCuadrillas   = [];
-      $('cardsGrid').innerHTML = `<div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>Selecciona un proyecto para ver el personal asignado</p></div>`;
-      $('resultsLabel').textContent = 'Selecciona un proyecto para ver el personal';
-      return;
-    }
-    proyectoActual = parseInt(idProyecto);
-    mostrarSkeleton();
+    const id=$('selProyecto').value;
+    if (!id) { proyectoActual=null; listaAsignaciones=[]; listaCuadrillas=[]; $('cardsGrid').innerHTML=`<div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>Selecciona un proyecto para ver el personal asignado</p></div>`; $('resultsLabel').textContent='Selecciona un proyecto para ver el personal'; return; }
+    proyectoActual=parseInt(id); mostrarSkeleton();
     await Promise.all([cargarAsignaciones(proyectoActual), cargarCuadrillas(proyectoActual)]);
     filtrar();
   }
 
-  async function cargarAsignaciones(idProyecto) {
-    try {
-      const res = await fetch(`${API_BASE}/asignaciones/trabajador-proyecto/proyecto/${idProyecto}`);
-      listaAsignaciones = res.ok ? await res.json() : [];
-    } catch { listaAsignaciones = []; }
-  }
-
-  async function cargarCuadrillas(idProyecto) {
-    try {
-      const res = await fetch(`${API_BASE}/cuadrillas/proyecto/${idProyecto}`);
-      listaCuadrillas = res.ok ? await res.json() : [];
-    } catch { listaCuadrillas = []; }
-  }
+  async function cargarAsignaciones(id) { try { const r=await fetch(`${API_BASE}/asignaciones/trabajador-proyecto/proyecto/${id}`); listaAsignaciones=r.ok?await r.json():[]; } catch { listaAsignaciones=[]; } }
+  async function cargarCuadrillas(id) { try { const r=await fetch(`${API_BASE}/cuadrillas/proyecto/${id}`); listaCuadrillas=r.ok?await r.json():[]; } catch { listaCuadrillas=[]; } }
 
   function filtrar() {
-    const estatus = $('selEstatus').value;
-    const q       = $('inputBuscar').value.toLowerCase().trim();
-    const filtradas = listaAsignaciones.filter(a => {
-      const okEstatus = !estatus || a.estatusAsignacion === estatus;
-      const nombre    = (a.nombreTrabajador || '').toLowerCase();
-      const puesto    = (a.puestoEnProyecto  || '').toLowerCase();
-      const okTexto   = !q || nombre.includes(q) || puesto.includes(q);
-      return okEstatus && okTexto;
-    });
-    renderCards(filtradas);
+    const estatus=$('selEstatus').value, q=$('inputBuscar').value.toLowerCase().trim();
+    const f=listaAsignaciones.filter(a=>(!estatus||a.estatusAsignacion===estatus)&&(!q||(a.nombreTrabajador||'').toLowerCase().includes(q)||(a.puestoEnProyecto||'').toLowerCase().includes(q)));
+    renderCards(f);
   }
 
   function renderCards(lista) {
-    const grid = $('cardsGrid');
-    const lbl  = $('resultsLabel');
-    if (!lista.length) {
-      const msg = !proyectoActual
-        ? 'Selecciona un proyecto para ver el personal asignado'
-        : listaAsignaciones.length === 0
-          ? 'No hay personal asignado a este proyecto'
-          : 'Ningún registro coincide con los filtros';
-      grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>${msg}</p></div>`;
-      lbl.textContent = 'Sin resultados';
-      return;
-    }
-    lbl.innerHTML = `<strong>${lista.length}</strong> trabajador${lista.length !== 1 ? 'es' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
-    grid.innerHTML = lista.map(a => renderCard(a)).join('');
+    const grid=$('cardsGrid'), lbl=$('resultsLabel');
+    if (!lista.length) { const msg=!proyectoActual?'Selecciona un proyecto':listaAsignaciones.length===0?'No hay personal asignado a este proyecto':'Ningún registro coincide con los filtros'; grid.innerHTML=`<div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>${msg}</p></div>`; lbl.textContent='Sin resultados'; return; }
+    lbl.innerHTML=`<strong>${lista.length}</strong> trabajador${lista.length!==1?'es':''} encontrado${lista.length!==1?'s':''}`;
+    grid.innerHTML=lista.map(a=>renderCard(a)).join('');
   }
 
   function renderCard(a) {
-    const nombre     = a.nombreTrabajador || `Trabajador #${a.idTrabajador}`;
-    const avatar     = nombre.charAt(0).toUpperCase();
-    const puesto     = a.puestoEnProyecto  || 'Sin puesto asignado';
-    const estatus    = a.estatusAsignacion || '';
-    const estatusCls = ESTATUS_CLS[estatus] || 'e-cancelado';
-    const estatusLbl = ESTATUS_LBL[estatus] || estatus || '—';
-    const inicio     = a.fechaInicio      ? fmtFecha(a.fechaInicio)      : '—';
-    const fin        = a.fechaFinEstimada ? fmtFecha(a.fechaFinEstimada) : '—';
-    const obs        = a.observaciones    || '';
-    const cuadNombre = a.nombreCuadrilla || 'Sin cuadrilla';
-    return `
-      <div class="worker-card">
-        <div class="wk-avatar">${avatar}</div>
-        <div class="wk-body">
-          <div class="wk-head">
-            <span class="wk-nombre">${nombre}</span>
-            <span class="estatus-badge ${estatusCls}">${estatusLbl}</span>
-          </div>
-          <div class="wk-puesto">${puesto}</div>
-          <div class="wk-meta">
-            <div class="wk-chip"><i class="fa-solid fa-calendar-day"></i>${inicio} → ${fin}</div>
-            <div class="wk-chip"><i class="fa-solid fa-people-group"></i>${cuadNombre}</div>
-          </div>
-          ${obs ? `<div class="wk-obs">"${obs}"</div>` : ''}
-        </div>
-      </div>`;
+    const nombre=a.nombreTrabajador||`Trabajador #${a.idTrabajador}`, avatar=nombre.charAt(0).toUpperCase();
+    const puesto=a.puestoEnProyecto||'Sin puesto asignado', estatus=a.estatusAsignacion||'';
+    const eCls=ESTATUS_CLS[estatus]||'e-cancelado', eLbl=ESTATUS_LBL[estatus]||estatus||'—';
+    return `<div class="worker-card"><div class="wk-avatar">${avatar}</div><div class="wk-body"><div class="wk-head"><span class="wk-nombre">${nombre}</span><span class="estatus-badge ${eCls}">${eLbl}</span></div><div class="wk-puesto">${puesto}</div><div class="wk-meta"><div class="wk-chip"><i class="fa-solid fa-calendar-day"></i>${a.fechaInicio?fmtFecha(a.fechaInicio):'—'} → ${a.fechaFinEstimada?fmtFecha(a.fechaFinEstimada):'—'}</div><div class="wk-chip"><i class="fa-solid fa-people-group"></i>${a.nombreCuadrilla||'Sin cuadrilla'}</div></div>${a.observaciones?`<div class="wk-obs">"${a.observaciones}"</div>`:''}</div></div>`;
   }
 
-  function mostrarSkeleton() {
-    $('cardsGrid').innerHTML = [1,2,3,4].map(() =>
-      `<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`
-    ).join('');
-    $('resultsLabel').textContent = 'Cargando personal…';
-  }
-
-  function fmtFecha(f) { if (!f) return '—'; const [y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
-  function showToast(msg, ok) {
-    const t=$('toast'); $('toastMsg').textContent=msg;
-    t.style.borderColor=ok?'var(--success)':'var(--danger)';
-    const ic=$('toastIcon'); ic.style.color=ok?'var(--success)':'var(--danger)';
-    ic.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation';
-    t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
-  }
-  function cerrarSesion() { window.location.href = '../../index.html'; }
-
+  function mostrarSkeleton() { $('cardsGrid').innerHTML=[1,2,3,4].map(()=>`<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`).join(''); $('resultsLabel').textContent='Cargando personal…'; }
+  function fmtFecha(f) { if(!f)return'—'; const[y,m,d]=f.split('-'); return`${d}/${m}/${y}`; }
+  function showToast(msg,ok) { const t=$('toast'); $('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--danger)'; const ic=$('toastIcon'); ic.style.color=ok?'var(--success)':'var(--danger)'; ic.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500); }
+  function cerrarSesion() { window.location.href='../../index.html'; }
   let lastScroll=0; const scrollBtn=$('scrollTop');
-  window.addEventListener('scroll',()=>{
-    const c=window.scrollY;
-    document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80);
-    lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200);
-  });
+  window.addEventListener('scroll',()=>{ const c=window.scrollY; document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80); lastScroll=c<=0?0:c; scrollBtn.classList.toggle('visible',c>200); });
 </script>
 </body>
 </html>
