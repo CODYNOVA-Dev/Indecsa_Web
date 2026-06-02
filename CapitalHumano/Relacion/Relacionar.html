@@ -612,7 +612,12 @@
     const res = await fetch(API_PC, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ idProyecto: proyectoActual.idProyecto, idContratista: idCont, estatusContrato: 'ACTIVO' })
+      body: JSON.stringify({
+        proyecto: { idProyecto: proyectoActual.idProyecto },
+        contratista: { idContratista: idCont },
+        estatusContrato: 'ACTIVO',
+        personalAsignado: 1
+      })
     });
 
     if (!res.ok) { showToast('Error al asignar contratista', false); return; }
@@ -648,10 +653,10 @@
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        idTrabajador: idTrab,
-        idProyecto: proyectoActual.idProyecto,
-        idAsignacionPc: contratoActivo.idAsignacionPc,
-        rolEnProyecto: 'Operativo'
+        trabajador: { idTrabajador: idTrab },
+        proyecto: { idProyecto: proyectoActual.idProyecto },
+        asignacionProyectoContratista: { idAsignacionPc: contratoActivo.idAsignacionPc },
+        estatusAsignacion: 'ACTIVO'
       })
     });
 
