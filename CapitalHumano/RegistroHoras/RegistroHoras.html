@@ -196,12 +196,6 @@
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Cuadrilla <span style="font-size:10px;color:var(--muted)">(opcional)</span></label>
-          <select class="form-select" id="selCuadrilla" disabled>
-            <option value="">Sin cuadrilla</option>
-          </select>
-        </div>
-        <div class="form-group">
           <label class="form-label">Fecha</label>
           <input class="form-input" type="date" id="inputFecha" />
         </div>
@@ -266,7 +260,7 @@
 <script>
   const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
   const $ = id => document.getElementById(id);
-  let proyectoActual = null, listaAsignaciones = [], listaCuadrillas = [], listaRegistros = [];
+  let proyectoActual = null, listaAsignaciones = [], listaRegistros = [];
 
   (async function init() {
     $('inputFecha').value = new Date().toISOString().split('T')[0];
@@ -286,36 +280,58 @@
 
   async function onProyectoChange() {
     const idProyecto = $('selProyecto').value;
-    if (!idProyecto) { proyectoActual = null; resetSelectores(); $('recordsList').innerHTML = `<div class="empty-state"><i class="fa-solid fa-clock"></i><p>Selecciona un proyecto para cargar los registros de horas</p></div>`; $('resultsLabel').textContent = 'Selecciona un proyecto para ver registros'; return; }
+    if (!idProyecto) {
+      proyectoActual = null; resetSelectores();
+      $('recordsList').innerHTML = `<div class="empty-state"><i class="fa-solid fa-clock"></i><p>Selecciona un proyecto para cargar los registros de horas</p></div>`;
+      $('resultsLabel').textContent = 'Selecciona un proyecto para ver registros';
+      return;
+    }
     proyectoActual = parseInt(idProyecto);
     mostrarSkeleton();
-    await Promise.all([cargarAsignaciones(proyectoActual), cargarCuadrillas(proyectoActual), cargarRegistros(proyectoActual)]);
+    await cargarAsignaciones(proyectoActual);
+    await cargarRegistros($('filtroInicio').value||null, $('filtroFin').value||null);
   }
 
-  async function cargarAsignaciones(id) { try { const r = await fetch(`${API_BASE}/asignaciones/trabajador-proyecto/proyecto/${id}`); listaAsignaciones = r.ok ? await r.json() : []; } catch { listaAsignaciones = []; } renderSelectTrabajador(); }
-  async function cargarCuadrillas(id) { try { const r = await fetch(`${API_BASE}/cuadrillas/proyecto/${id}`); listaCuadrillas = r.ok ? await r.json() : []; } catch { listaCuadrillas = []; } renderSelectCuadrilla(); }
-  async function cargarRegistros(id, fi, ff) {
+  async function cargarAsignaciones(id) {
     try {
-      let url = `${API_BASE}/registro-horas/proyecto/${id}`;
-      const p = []; if (fi) p.push(`fechaInicio=${fi}`); if (ff) p.push(`fechaFin=${ff}`);
-      if (p.length) url += '?' + p.join('&');
-      const r = await fetch(url); listaRegistros = r.ok ? await r.json() : [];
-    } catch { listaRegistros = []; } renderRegistros();
+      const r = await fetch(`${API_BASE}/asignaciones-trabajador-proyecto?idProyecto=${id}`);
+      listaAsignaciones = r.ok ? await r.json() : [];
+    } catch { listaAsignaciones = []; }
+    renderSelectTrabajador();
+  }
+
+  async function cargarRegistros(fi, ff) {
+    try {
+      const ids = listaAsignaciones.map(a => a.idAsignacionTp);
+      if (!ids.length) { listaRegistros = []; renderRegistros(); return; }
+      const results = await Promise.all(ids.map(async asigId => {
+        const r = await fetch(`${API_BASE}/registros-horas?idAsignacionTp=${asigId}`);
+        return r.ok ? await r.json() : [];
+      }));
+      listaRegistros = results.flat();
+      if (fi) listaRegistros = listaRegistros.filter(r => r.fechaRegistro >= fi);
+      if (ff) listaRegistros = listaRegistros.filter(r => r.fechaRegistro <= ff);
+    } catch { listaRegistros = []; }
+    renderRegistros();
   }
 
   function renderSelectTrabajador() {
     const sel = $('selTrabajador');
     if (!listaAsignaciones.length) { sel.innerHTML = '<option value="">Sin trabajadores asignados</option>'; sel.disabled = true; return; }
     sel.innerHTML = '<option value="">— Selecciona trabajador —</option>';
-    listaAsignaciones.forEach(a => { const o = document.createElement('option'); o.value = a.idAsignacionTp; o.textContent = a.nombreTrabajador || `Trabajador #${a.idTrabajador}`; sel.appendChild(o); });
+    listaAsignaciones.forEach(a => {
+      const o = document.createElement('option');
+      o.value = a.idAsignacionTp;
+      o.textContent = a.trabajador?.nombreTrabajador || `Trabajador #${a.trabajador?.idTrabajador || a.idAsignacionTp}`;
+      sel.appendChild(o);
+    });
     sel.disabled = false;
   }
-  function renderSelectCuadrilla() {
-    const sel = $('selCuadrilla'); sel.innerHTML = '<option value="">Sin cuadrilla</option>';
-    listaCuadrillas.forEach(c => { const o = document.createElement('option'); o.value = c.idCuadrilla; o.textContent = c.nombreCuadrilla || `Cuadrilla #${c.idCuadrilla}`; sel.appendChild(o); });
-    sel.disabled = false;
+
+  function resetSelectores() {
+    const st=$('selTrabajador'); st.innerHTML='<option value="">— Selecciona primero un proyecto —</option>'; st.disabled=true;
+    listaAsignaciones=[];
   }
-  function resetSelectores() { const st=$('selTrabajador'); st.innerHTML='<option value="">— Selecciona primero un proyecto —</option>'; st.disabled=true; const sc=$('selCuadrilla'); sc.innerHTML='<option value="">Sin cuadrilla</option>'; sc.disabled=true; listaAsignaciones=[]; listaCuadrillas=[]; }
 
   function renderRegistros() {
     const list=$('recordsList'), lbl=$('resultsLabel');
@@ -323,12 +339,17 @@
     lbl.innerHTML=`<strong>${listaRegistros.length}</strong> registro${listaRegistros.length!==1?'s':''} encontrado${listaRegistros.length!==1?'s':''}`;
     list.innerHTML=listaRegistros.map(r=>renderCard(r)).join('');
   }
+
   function renderCard(r) {
-    const nombre=r.nombreTrabajador||`Trabajador #${r.idTrabajador}`, avatar=nombre.charAt(0).toUpperCase();
-    const fecha=r.fechaRegistro?fmtFecha(r.fechaRegistro):'—', horas=r.horasTrabajadas??'—';
-    const periodo=r.tipoPeriodo||'', periodoCls=periodo==='DIARIO'?'p-diario':'p-semanal';
-    return `<div class="record-card"><div class="rec-avatar">${avatar}</div><div class="rec-body"><div class="rec-head"><span class="rec-nombre">${nombre}</span>${periodo?`<span class="period-badge ${periodoCls}">${periodo}</span>`:''}</div><div class="rec-meta"><div class="rec-chip"><i class="fa-solid fa-calendar-day"></i>${fecha}</div>${r.nombreCuadrilla?`<div class="rec-chip"><i class="fa-solid fa-people-group"></i>${r.nombreCuadrilla}</div>`:''}<div class="rec-horas">${horas}<span> h</span></div></div>${r.observaciones?`<div class="rec-obs">"${r.observaciones}"</div>`:''}</div></div>`;
+    const asig = listaAsignaciones.find(a => a.idAsignacionTp === r.idAsignacionTp);
+    const nombre = asig?.trabajador?.nombreTrabajador || r.nombreTrabajador || `Registro #${r.idRegistroHoras||r.id||'?'}`;
+    const avatar = nombre.charAt(0).toUpperCase();
+    const fecha = r.fechaRegistro ? fmtFecha(r.fechaRegistro) : '—';
+    const horas = r.horasTrabajadas ?? '—';
+    const periodo = r.tipoPeriodo || '', periodoCls = periodo==='DIARIO'?'p-diario':'p-semanal';
+    return `<div class="record-card"><div class="rec-avatar">${avatar}</div><div class="rec-body"><div class="rec-head"><span class="rec-nombre">${nombre}</span>${periodo?`<span class="period-badge ${periodoCls}">${periodo}</span>`:''}</div><div class="rec-meta"><div class="rec-chip"><i class="fa-solid fa-calendar-day"></i>${fecha}</div><div class="rec-horas">${horas}<span> h</span></div></div>${r.observaciones?`<div class="rec-obs">"${r.observaciones}"</div>`:''}</div></div>`;
   }
+
   function mostrarSkeleton() { $('recordsList').innerHTML=[1,2,3].map(()=>`<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`).join(''); $('resultsLabel').textContent='Cargando registros…'; }
 
   async function registrar() {
@@ -338,22 +359,29 @@
     const horasStr=$('inputHoras').value; if (!horasStr) { showToast('Ingresa las horas trabajadas', false); return; }
     const horas=parseFloat(horasStr); if (isNaN(horas)||horas<=0||horas>24) { showToast('Las horas deben estar entre 0.1 y 24', false); return; }
     const tipoPeriodo=document.querySelector('input[name="tipoPeriodo"]:checked').value;
-    const idCuadrilla=$('selCuadrilla').value||null, obs=$('inputObs').value.trim();
+    const obs=$('inputObs').value.trim();
     const dto={idAsignacionTp:parseInt(idAsi),fechaRegistro:fecha,horasTrabajadas:horas,tipoPeriodo};
-    if (idCuadrilla) dto.idCuadrilla=parseInt(idCuadrilla);
     if (obs) dto.observaciones=obs;
     const btn=$('btnRegistrar'); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Registrando…';
     try {
-      const res=await fetch(`${API_BASE}/registro-horas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dto)});
+      const res=await fetch(`${API_BASE}/registros-horas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dto)});
       if (!res.ok) throw new Error(); showToast('Horas registradas correctamente',true); limpiarForm();
-      await cargarRegistros(proyectoActual,$('filtroInicio').value||null,$('filtroFin').value||null);
+      await cargarRegistros($('filtroInicio').value||null,$('filtroFin').value||null);
     } catch { showToast('Error al registrar las horas',false); }
     finally { btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-circle-check"></i> Registrar horas'; }
   }
-  function limpiarForm() { $('selTrabajador').value=''; $('selCuadrilla').value=''; $('inputFecha').value=new Date().toISOString().split('T')[0]; $('inputHoras').value=''; $('tp-diario').checked=true; $('inputObs').value=''; }
 
-  async function buscarPorFecha() { if (!proyectoActual) { showToast('Selecciona un proyecto primero',false); return; } mostrarSkeleton(); await cargarRegistros(proyectoActual,$('filtroInicio').value||null,$('filtroFin').value||null); }
-  async function limpiarFiltros() { $('filtroInicio').value=''; $('filtroFin').value=''; if (proyectoActual) { mostrarSkeleton(); await cargarRegistros(proyectoActual); } }
+  function limpiarForm() { $('selTrabajador').value=''; $('inputFecha').value=new Date().toISOString().split('T')[0]; $('inputHoras').value=''; $('tp-diario').checked=true; $('inputObs').value=''; }
+
+  async function buscarPorFecha() {
+    if (!proyectoActual) { showToast('Selecciona un proyecto primero',false); return; }
+    mostrarSkeleton();
+    await cargarRegistros($('filtroInicio').value||null,$('filtroFin').value||null);
+  }
+  async function limpiarFiltros() {
+    $('filtroInicio').value=''; $('filtroFin').value='';
+    if (proyectoActual) { mostrarSkeleton(); await cargarRegistros(null, null); }
+  }
 
   function fmtFecha(f) { if(!f)return'—'; const[y,m,d]=f.split('-'); return`${d}/${m}/${y}`; }
   function showToast(msg,ok) { const t=$('toast'); $('toastMsg').textContent=msg; t.style.borderColor=ok?'var(--success)':'var(--danger)'; const ic=$('toastIcon'); ic.style.color=ok?'var(--success)':'var(--danger)'; ic.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500); }
