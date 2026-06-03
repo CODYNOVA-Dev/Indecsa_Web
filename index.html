@@ -185,7 +185,7 @@
 </footer>
 
 <script>
-  const API_URL = 'https://springbootindecsa-production.up.railway.app/api/empleados/login';
+  const API_URL = 'https://springbootindecsa-production.up.railway.app/api/auth/login';
 
   async function iniciarSesion() {
     const correo     = document.getElementById('usuario').value.trim();
@@ -208,6 +208,8 @@
         })
       });
 
+      if (!response.ok) { mostrarError(inputU, inputC, errorMsg); return; }
+
       const data = await response.json();
 
       if (data.idEmpleado) {
@@ -218,13 +220,14 @@
           window.location.href = 'Admin/Paginaprincipal.html';
         } else if (rol === 'CAPITAL_HUMANO') {
           window.location.href = 'CapitalHumano/Paginaprincipal.html';
+        } else {
+          window.location.href = 'CapitalHumano/Paginaprincipal.html';
         }
-      }  else if (!data.idEmpleado) {
-      mostrarError(inputU, inputC, errorMsg);
-    }
+      } else {
+        mostrarError(inputU, inputC, errorMsg);
+      }
 
     } catch (error) {
-      // Error de conexión con el servidor
       errorMsg.textContent = 'No se pudo conectar con el servidor';
       mostrarError(inputU, inputC, errorMsg);
     } finally {
@@ -240,7 +243,7 @@
 
     const card = document.querySelector('.login-card');
     card.classList.remove('is-shaking');
-    void card.offsetWidth; // fuerza reflow para reiniciar la animación
+    void card.offsetWidth;
     card.classList.add('is-shaking');
 
     setTimeout(() => {
