@@ -29,6 +29,13 @@
     .nav-hidden header { transform:translateY(-72px); }
     .nav-hidden nav    { transform:translateY(-72px); }
 
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:6px 14px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .avatar { width:32px; height:32px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--gold); font-weight:500; }
+    .profile-info { display:flex; flex-direction:column; }
+    .profile-name { font-size:13px; color:var(--white); font-weight:500; line-height:1.2; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:0.5px; line-height:1.4; }
+    .nav-div { width:1px; height:24px; background:rgba(200,169,110,0.2); }
+
     .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
@@ -217,12 +224,21 @@
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link active" href="Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
+  <a class="nav-link" href="../Cuadrilla/Cuadrillas.html"><i class="fa-solid fa-layer-group"></i> Cuadrillas</a>
   <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
   <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
   <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
 
   <div class="nav-sep"></div>
+  <div class="profile-pill" id="navProfilePill" style="display:none">
+    <div class="avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">—</span>
+      <span class="profile-role">Capital Humano</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
@@ -256,7 +272,7 @@
             <option value="">Todos</option>
             <option value="PLANEACION">Planeación</option>
             <option value="EN_CURSO">En curso</option>
-            <option value="PAUSADO">Pausado</option>
+            <option value="PENDIENTE">Pendiente</option>
             <option value="FINALIZADO">Finalizado</option>
             <option value="CANCELADO">Cancelado</option>
           </select>
@@ -367,6 +383,8 @@
 <div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg">OK</span></div>
 
 <script>
+  (function(){const _e=JSON.parse(sessionStorage.getItem('empleado'));if(_e){const _i=_e.nombreEmpleado.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();document.getElementById('navAvatar').textContent=_i;document.getElementById('navNombre').textContent=_e.nombreEmpleado;document.getElementById('navProfilePill').style.display='flex';}})();
+
   const API_BASE        = 'https://springbootindecsa-production.up.railway.app/api';
   const API_PROY        = `${API_BASE}/proyectos`;
   const API_TRAB        = `${API_BASE}/trabajadores`;
@@ -376,8 +394,8 @@
 
   const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
   const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
-  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en_curso', PAUSADO:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
-  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
+  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en_curso', PENDIENTE:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
+  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PENDIENTE:'Pendiente', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
 
   const $ = id => document.getElementById(id);
 
@@ -603,6 +621,15 @@
     }
   }
 
+  /* ─── DETECCIÓN DE EMPALME ─── */
+  function fechasEmpalman(iniA, finA, iniB, finB) {
+    const startA = iniA || '0000-01-01';
+    const endA   = finA  || '9999-12-31';
+    const startB = iniB  || '0000-01-01';
+    const endB   = finB  || '9999-12-31';
+    return startA <= endB && startB <= endA;
+  }
+
   /* ─── ACCIONES CONTRATISTA ─── */
   async function asignarContratista() {
     if (contratoActivo) { showToast('Este proyecto ya tiene contratista', false); return; }
@@ -646,7 +673,24 @@
     const idTrab = parseInt($('trabajadorSelect').value);
     if (!idTrab) { showToast('Selecciona un trabajador', false); return; }
     if (asignados.some(a => a.trabajador?.idTrabajador === idTrab)) {
-      showToast('Ese trabajador ya está asignado', false); return;
+      showToast('Ese trabajador ya está asignado a este proyecto', false); return;
+    }
+
+    // Verificar empalme de fechas con otras obras
+    const r2 = await fetch(`${API_ASIG}?idTrabajador=${idTrab}`);
+    const todasAsig = r2.ok ? await r2.json() : [];
+    const activas = todasAsig.filter(a =>
+      a.proyecto?.idProyecto !== proyectoActual.idProyecto &&
+      a.estatusAsignacion === 'ACTIVO'
+    );
+    for (const a of activas) {
+      const iniExist = a.proyecto?.fechaEstimadaInicio || a.fechaInicio;
+      const finExist = a.proyecto?.fechaEstimadaFin    || a.fechaFinEstimada;
+      if (fechasEmpalman(iniExist, finExist, proyectoActual.fechaEstimadaInicio, proyectoActual.fechaEstimadaFin)) {
+        const pNom = a.proyecto?.nombreProyecto || `Proyecto #${a.proyecto?.idProyecto}`;
+        showToast(`Trabajador activo en "${pNom}" con fechas que se empalman`, false);
+        return;
+      }
     }
 
     const res = await fetch(API_ASIG, {
@@ -656,7 +700,9 @@
         trabajador: { idTrabajador: idTrab },
         proyecto: { idProyecto: proyectoActual.idProyecto },
         asignacionProyectoContratista: { idAsignacionPc: contratoActivo.idAsignacionPc },
-        estatusAsignacion: 'ACTIVO'
+        estatusAsignacion: 'ACTIVO',
+        fechaInicio: proyectoActual.fechaEstimadaInicio || null,
+        fechaFinEstimada: proyectoActual.fechaEstimadaFin || null
       })
     });
 

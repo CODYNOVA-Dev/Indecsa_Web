@@ -13,7 +13,6 @@
       --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
       --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
-      /* Color identitario: celeste */
       --cyan:#5BC0DE;
     }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
@@ -35,15 +34,9 @@
     main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
     .page-wrap { max-width:1100px; margin:0 auto; }
 
-    /* PAGE HEADER — celeste */
     .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
-    .page-icon {
-      width:54px; height:54px; border-radius:14px;
-      background:rgba(91,192,222,0.12);
-      border:1px solid rgba(91,192,222,0.3);
-      display:flex; align-items:center; justify-content:center;
-    }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(91,192,222,0.12); border:1px solid rgba(91,192,222,0.3); display:flex; align-items:center; justify-content:center; }
     .page-icon i { font-size:22px; color:var(--cyan); }
     .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
     .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
@@ -51,7 +44,6 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
-    /* TOOLBAR */
     .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; flex-wrap:wrap; }
     .filter-group { display:flex; flex-direction:column; gap:5px; }
     .filter-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
@@ -67,7 +59,6 @@
     .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
     .results-info strong { color:var(--white); }
 
-    /* GRID + TARJETA — celeste */
     .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:fadeUp .4s ease both; }
     .worker-card { background:var(--navy-card); border:1px solid rgba(91,192,222,0.14); border-radius:14px; padding:16px 18px; display:flex; align-items:flex-start; gap:14px; transition:border-color .2s,transform .15s; animation:fadeUp .3s ease both; }
     .worker-card:hover { border-color:rgba(91,192,222,0.35); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
@@ -82,11 +73,10 @@
     .e-suspendido  { background:rgba(250,199,117,0.12); color:var(--warning); border:1px solid rgba(250,199,117,0.3); }
     .e-finalizado  { background:rgba(175,169,236,0.12); color:var(--purple);  border:1px solid rgba(175,169,236,0.3); }
     .e-cancelado   { background:rgba(240,149,149,0.1);  color:var(--danger);  border:1px solid rgba(240,149,149,0.3); }
-    .wk-puesto { font-size:12px; color:var(--cyan); margin-bottom:8px; }
+    .wk-especialidad { font-size:12px; color:var(--cyan); margin-bottom:8px; }
     .wk-meta { display:flex; gap:12px; flex-wrap:wrap; }
     .wk-chip { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--muted); }
     .wk-chip i { font-size:10px; color:var(--gold); }
-    .wk-obs { font-size:11px; color:var(--muted); margin-top:7px; font-style:italic; line-height:1.5; }
 
     .skeleton-card { background:var(--navy-card); border:1px solid rgba(200,169,110,0.08); border-radius:14px; padding:18px; }
     .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
@@ -171,7 +161,7 @@
         <div class="filter-label">Buscar</div>
         <div class="search-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input class="search-input" type="text" id="inputBuscar" placeholder="Nombre, puesto…" oninput="filtrar()" />
+          <input class="search-input" type="text" id="inputBuscar" placeholder="Nombre, especialidad…" oninput="filtrar()" />
         </div>
       </div>
     </div>
@@ -235,15 +225,19 @@
     const estatus=$('selEstatus').value, q=$('inputBuscar').value.toLowerCase().trim();
     const f=listaAsignaciones.filter(a=>{
       const nombre=(a.trabajador?.nombreTrabajador||'').toLowerCase();
-      const puesto=(a.puestoEnProyecto||'').toLowerCase();
-      return (!estatus||a.estatusAsignacion===estatus)&&(!q||nombre.includes(q)||puesto.includes(q));
+      const especialidad=(a.trabajador?.especialidadTrabajador||'').toLowerCase();
+      return (!estatus||a.estatusAsignacion===estatus)&&(!q||nombre.includes(q)||especialidad.includes(q));
     });
     renderCards(f);
   }
 
   function renderCards(lista) {
     const grid=$('cardsGrid'), lbl=$('resultsLabel');
-    if (!lista.length) { const msg=!proyectoActual?'Selecciona un proyecto':listaAsignaciones.length===0?'No hay personal asignado a este proyecto':'Ningún registro coincide con los filtros'; grid.innerHTML=`<div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>${msg}</p></div>`; lbl.textContent='Sin resultados'; return; }
+    if (!lista.length) {
+      const msg=!proyectoActual?'Selecciona un proyecto':listaAsignaciones.length===0?'No hay personal asignado a este proyecto':'Ningún registro coincide con los filtros';
+      grid.innerHTML=`<div class="empty-state"><i class="fa-solid fa-hard-hat"></i><p>${msg}</p></div>`;
+      lbl.textContent='Sin resultados'; return;
+    }
     lbl.innerHTML=`<strong>${lista.length}</strong> trabajador${lista.length!==1?'es':''} encontrado${lista.length!==1?'s':''}`;
     grid.innerHTML=lista.map(a=>renderCard(a)).join('');
   }
@@ -251,9 +245,27 @@
   function renderCard(a) {
     const nombre=a.trabajador?.nombreTrabajador||`Trabajador #${a.trabajador?.idTrabajador||a.idAsignacionTp}`;
     const avatar=nombre.charAt(0).toUpperCase();
-    const puesto=a.puestoEnProyecto||'Sin puesto asignado', estatus=a.estatusAsignacion||'';
+    const especialidad=a.trabajador?.especialidadTrabajador||a.puestoEnProyecto||'Sin especialidad';
+    const estatus=a.estatusAsignacion||'';
     const eCls=ESTATUS_CLS[estatus]||'e-cancelado', eLbl=ESTATUS_LBL[estatus]||estatus||'—';
-    return `<div class="worker-card"><div class="wk-avatar">${avatar}</div><div class="wk-body"><div class="wk-head"><span class="wk-nombre">${nombre}</span><span class="estatus-badge ${eCls}">${eLbl}</span></div><div class="wk-puesto">${puesto}</div><div class="wk-meta"><div class="wk-chip"><i class="fa-solid fa-calendar-day"></i>${a.fechaInicio?fmtFecha(a.fechaInicio):'—'} → ${a.fechaFinEstimada?fmtFecha(a.fechaFinEstimada):'—'}</div></div>${a.observaciones?`<div class="wk-obs">"${a.observaciones}"</div>`:''}</div></div>`;
+    const fechaIni=a.proyecto?.fechaEstimadaInicio||a.fechaInicio;
+    const fechaFin=a.proyecto?.fechaEstimadaFin||a.fechaFinEstimada;
+    return `<div class="worker-card">
+      <div class="wk-avatar">${avatar}</div>
+      <div class="wk-body">
+        <div class="wk-head">
+          <span class="wk-nombre">${nombre}</span>
+          <span class="estatus-badge ${eCls}">${eLbl}</span>
+        </div>
+        <div class="wk-especialidad"><i class="fa-solid fa-briefcase" style="font-size:10px;margin-right:4px;"></i>${especialidad}</div>
+        <div class="wk-meta">
+          <div class="wk-chip">
+            <i class="fa-solid fa-calendar-range"></i>
+            ${fechaIni?fmtFecha(fechaIni):'—'} → ${fechaFin?fmtFecha(fechaFin):'Sin fecha fin'}
+          </div>
+        </div>
+      </div>
+    </div>`;
   }
 
   function mostrarSkeleton() { $('cardsGrid').innerHTML=[1,2,3,4].map(()=>`<div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div></div>`).join(''); $('resultsLabel').textContent='Cargando personal…'; }
