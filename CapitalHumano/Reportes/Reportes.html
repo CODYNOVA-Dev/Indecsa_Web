@@ -6,6 +6,8 @@
   <title>INDECSA – Reportes</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -140,7 +142,7 @@
 
 <header>
   <div class="logo">
-    <img src="../../img/logo.png" alt="INDECSA" /></div>
+    <img src="../../img/logo.png" alt="INDECSA" id="logoImg" /></div>
   <span class="header-tag">Capital Humano</span>
 </header>
 
@@ -150,6 +152,7 @@
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
+  <a class="nav-link" href="../Cuadrilla/Cuadrillas.html"><i class="fa-solid fa-layer-group"></i> Cuadrillas</a>
   <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
   <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
   <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
@@ -162,7 +165,7 @@
   <div class="page-header">
     <div class="page-icon"><i class="fa-solid fa-file-pdf"></i></div>
     <h1>Reportes</h1>
-    <p>Genera reportes en PDF de rendimiento, horas y avance de obra.</p>
+    <p>Genera reportes profesionales en PDF de rendimiento, horas y avance de obra.</p>
   </div>
 
   <div class="report-card">
@@ -238,6 +241,7 @@
   const API = 'https://springbootindecsa-production.up.railway.app/api';
   let tipoActual = 'rendimiento';
   const HISTORY_KEY = 'indecsa_reportes_history';
+  let logoBase64 = null;
 
   window.addEventListener('DOMContentLoaded', () => {
     setDefaultDates();
@@ -245,7 +249,22 @@
     cargarProyectos();
     renderHistory();
     initNavHide();
+    preloadLogo();
   });
+
+  function preloadLogo() {
+    const img = document.getElementById('logoImg');
+    const canvas = document.createElement('canvas');
+    const tryConvert = () => {
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      try { logoBase64 = canvas.toDataURL('image/png'); } catch {}
+    };
+    if (img.complete && img.naturalWidth > 0) tryConvert();
+    else img.addEventListener('load', tryConvert);
+  }
 
   function setDefaultDates() {
     const hoy = new Date();
@@ -307,9 +326,14 @@
     document.getElementById('grpProyecto').style.display  = tipo !== 'rendimiento' ? '' : 'none';
   }
 
+  function formatFechaMX(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00');
+    return d.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+  }
+
   async function generarPDF() {
     const desde = document.getElementById('inpDesde').value;
-    const hasta  = document.getElementById('inpHasta').value;
+    const hasta = document.getElementById('inpHasta').value;
 
     let id, nombre;
     if (tipoActual === 'rendimiento') {
@@ -335,30 +359,208 @@
       avance:      `reportes/avance/proyecto/${id}`
     };
     const url = `${API}/${endpointMap[tipoActual]}?fechaInicio=${desde}&fechaFin=${hasta}`;
-    const nombreArchivo = `${tipoActual}_${nombre.replace(/\s+/g,'_')}_${desde}.pdf`;
+    const nombreArchivo = `INDECSA_${tipoActual}_${nombre.replace(/\s+/g,'_')}_${desde}.pdf`;
 
     try {
-      toast('Generando reporte…', 'info');
+      toast('Obteniendo datos del reporte…', 'info');
       const r = await fetch(url);
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const blob = await r.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = nombreArchivo;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(blobUrl);
+
+      const contentType = r.headers.get('content-type') || '';
+
+      if (contentType.includes('application/pdf')) {
+        const blob = await r.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl; a.download = nombreArchivo;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(blobUrl);
+      } else {
+        const data = await r.json();
+        buildFormalPDF(data, tipoActual, nombre, desde, hasta, nombreArchivo);
+      }
+
       toast(`PDF "${nombreArchivo}" descargado`, 'ok');
       guardarHistorial(nombreArchivo, tipoActual, desde, hasta);
       renderHistory();
-    } catch {
+    } catch (e) {
+      console.error(e);
       toast('Error al generar el reporte. Verifica la conexión.', 'err');
     } finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-file-arrow-down"></i> Generar PDF';
     }
+  }
+
+  function buildFormalPDF(data, tipo, nombre, desde, hasta, filename) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+    const W = doc.internal.pageSize.getWidth();
+    const H = doc.internal.pageSize.getHeight();
+    const marginL = 18;
+    const marginR = 18;
+    const contentW = W - marginL - marginR;
+    let y = 16;
+
+    const NAVY = [11, 31, 58];
+    const GOLD = [200, 169, 110];
+    const GRAY = [100, 110, 130];
+    const WHITE = [255, 255, 255];
+    const LIGHT_BG = [245, 243, 238];
+
+    function addHeader() {
+      doc.setFillColor(...NAVY);
+      doc.rect(0, 0, W, 38, 'F');
+
+      doc.setFillColor(...GOLD);
+      doc.rect(0, 38, W, 1.2, 'F');
+
+      if (logoBase64) {
+        try { doc.addImage(logoBase64, 'PNG', marginL, 6, 26, 26); } catch {}
+      }
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(20);
+      doc.setTextColor(...WHITE);
+      doc.text('INDECSA', logoBase64 ? marginL + 30 : marginL, 19);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(180, 190, 210);
+      doc.text('Ingeniería, Desarrollo y Consultoría S.A. de C.V.', logoBase64 ? marginL + 30 : marginL, 26);
+
+      const tipoLabel = { rendimiento: 'Reporte de Rendimiento', horas: 'Reporte de Horas', avance: 'Reporte de Avance de Obra' };
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...GOLD);
+      doc.text(tipoLabel[tipo] || 'Reporte', W - marginR, 19, { align: 'right' });
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(180, 190, 210);
+      doc.text(`Generado: ${new Date().toLocaleDateString('es-MX', { day:'2-digit', month:'long', year:'numeric' })}`, W - marginR, 26, { align: 'right' });
+
+      y = 46;
+    }
+
+    function addFooter(pageNum, totalPages) {
+      doc.setDrawColor(...GOLD);
+      doc.setLineWidth(0.3);
+      doc.line(marginL, H - 16, W - marginR, H - 16);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...GRAY);
+      doc.text('INDECSA – Capital Humano | Documento generado automáticamente', marginL, H - 11);
+      doc.text(`Página ${pageNum} de ${totalPages}`, W - marginR, H - 11, { align: 'right' });
+    }
+
+    function addInfoBox(label, value, x, boxW) {
+      doc.setFillColor(...LIGHT_BG);
+      doc.roundedRect(x, y, boxW, 16, 2, 2, 'F');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...GRAY);
+      doc.text(label, x + 4, y + 5);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(...NAVY);
+      doc.text(String(value), x + 4, y + 12);
+    }
+
+    addHeader();
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(...NAVY);
+    const tipoTitles = { rendimiento: 'Rendimiento por Trabajador', horas: 'Horas por Proyecto', avance: 'Avance de Obra' };
+    doc.text(tipoTitles[tipo], marginL, y);
+    y += 8;
+
+    const halfW = (contentW - 6) / 2;
+    addInfoBox(tipo === 'rendimiento' ? 'Trabajador' : 'Proyecto', nombre, marginL, halfW);
+    addInfoBox('Período', `${formatFechaMX(desde)}  –  ${formatFechaMX(hasta)}`, marginL + halfW + 6, halfW);
+    y += 22;
+
+    const rows = Array.isArray(data) ? data : (data.registros || data.datos || data.items || [data]);
+
+    if (tipo === 'rendimiento') {
+      const head = [['#', 'Proyecto', 'Horas Trab.', 'Horas Esp.', 'Rendimiento', 'Desviación']];
+      const body = rows.map((r, i) => [
+        i + 1,
+        r.nombreProyecto || r.proyecto || '—',
+        r.horasTrabajadas ?? r.horas ?? '—',
+        r.horasEsperadas ?? '—',
+        r.rendimiento ? `${r.rendimiento}%` : '—',
+        r.desviacion ? `${r.desviacion}%` : '—'
+      ]);
+      doc.autoTable({
+        startY: y, head, body, theme: 'grid', margin: { left: marginL, right: marginR },
+        headStyles: { fillColor: NAVY, textColor: WHITE, fontSize: 8, fontStyle: 'bold', halign: 'center' },
+        bodyStyles: { fontSize: 8, textColor: [40, 50, 70], halign: 'center' },
+        alternateRowStyles: { fillColor: [248, 246, 242] },
+        columnStyles: { 0: { cellWidth: 10 }, 1: { halign: 'left' } },
+        styles: { cellPadding: 3, lineColor: [220, 215, 205], lineWidth: 0.2 }
+      });
+    } else if (tipo === 'horas') {
+      const head = [['#', 'Trabajador', 'Cuadrilla', 'Fecha', 'Horas', 'Tipo Período', 'Observaciones']];
+      const body = rows.map((r, i) => [
+        i + 1,
+        r.nombreTrabajador || r.trabajador || '—',
+        r.nombreCuadrilla || r.cuadrilla || '—',
+        r.fechaRegistro || r.fecha || '—',
+        r.horasTrabajadas ?? r.horas ?? '—',
+        r.tipoPeriodo || r.periodo || '—',
+        r.observaciones || '—'
+      ]);
+      doc.autoTable({
+        startY: y, head, body, theme: 'grid', margin: { left: marginL, right: marginR },
+        headStyles: { fillColor: NAVY, textColor: WHITE, fontSize: 7, fontStyle: 'bold', halign: 'center' },
+        bodyStyles: { fontSize: 7, textColor: [40, 50, 70] },
+        alternateRowStyles: { fillColor: [248, 246, 242] },
+        columnStyles: { 0: { cellWidth: 8, halign: 'center' }, 6: { cellWidth: 36 } },
+        styles: { cellPadding: 2.5, lineColor: [220, 215, 205], lineWidth: 0.2 }
+      });
+    } else if (tipo === 'avance') {
+      const head = [['#', 'Partida', 'Cuadrilla', 'Ejecutada', 'Programada', 'Unidad', '% Avance', 'Fecha']];
+      const body = rows.map((r, i) => {
+        const pct = r.cantidadProgramada > 0 ? ((r.cantidadEjecutada / r.cantidadProgramada) * 100).toFixed(1) + '%' : '—';
+        return [
+          i + 1,
+          r.nombrePartida || r.partida || '—',
+          r.nombreCuadrilla || '—',
+          r.cantidadEjecutada ?? '—',
+          r.cantidadProgramada ?? '—',
+          r.unidadMedida || '—',
+          pct,
+          r.fechaRegistro || r.fecha || '—'
+        ];
+      });
+      doc.autoTable({
+        startY: y, head, body, theme: 'grid', margin: { left: marginL, right: marginR },
+        headStyles: { fillColor: NAVY, textColor: WHITE, fontSize: 7, fontStyle: 'bold', halign: 'center' },
+        bodyStyles: { fontSize: 7, textColor: [40, 50, 70], halign: 'center' },
+        alternateRowStyles: { fillColor: [248, 246, 242] },
+        columnStyles: { 0: { cellWidth: 8 }, 1: { halign: 'left', cellWidth: 34 } },
+        styles: { cellPadding: 2.5, lineColor: [220, 215, 205], lineWidth: 0.2 }
+      });
+    }
+
+    const totalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 8 : y + 10;
+    if (totalY < H - 30) {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...NAVY);
+      doc.text(`Total de registros: ${rows.length}`, marginL, totalY);
+    }
+
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      addFooter(i, totalPages);
+    }
+
+    doc.save(filename);
   }
 
   function guardarHistorial(nombre, tipo, desde, hasta) {
