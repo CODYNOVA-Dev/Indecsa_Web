@@ -256,7 +256,7 @@
             <option value="">Todos</option>
             <option value="PLANEACION">Planeación</option>
             <option value="EN_CURSO">En curso</option>
-            <option value="PAUSADO">Pausado</option>
+            <option value="PENDIENTE">Pendiente</option>
             <option value="FINALIZADO">Finalizado</option>
             <option value="CANCELADO">Cancelado</option>
           </select>
@@ -376,8 +376,8 @@
 
   const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
   const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
-  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en_curso', PAUSADO:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
-  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
+  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en_curso', PENDIENTE:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
+  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PENDIENTE:'Pendiente', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
 
   const $ = id => document.getElementById(id);
 
@@ -603,6 +603,15 @@
     }
   }
 
+  /* ─── DETECCIÓN DE EMPALME ─── */
+  function fechasEmpalman(iniA, finA, iniB, finB) {
+    const startA = iniA || '0000-01-01';
+    const endA   = finA  || '9999-12-31';
+    const startB = iniB  || '0000-01-01';
+    const endB   = finB  || '9999-12-31';
+    return startA <= endB && startB <= endA;
+  }
+
   /* ─── ACCIONES CONTRATISTA ─── */
   async function asignarContratista() {
     if (contratoActivo) { showToast('Este proyecto ya tiene contratista', false); return; }
@@ -646,7 +655,24 @@
     const idTrab = parseInt($('trabajadorSelect').value);
     if (!idTrab) { showToast('Selecciona un trabajador', false); return; }
     if (asignados.some(a => a.trabajador?.idTrabajador === idTrab)) {
-      showToast('Ese trabajador ya está asignado', false); return;
+      showToast('Ese trabajador ya está asignado a este proyecto', false); return;
+    }
+
+    // Verificar empalme de fechas con otras obras
+    const r2 = await fetch(`${API_ASIG}?idTrabajador=${idTrab}`);
+    const todasAsig = r2.ok ? await r2.json() : [];
+    const activas = todasAsig.filter(a =>
+      a.proyecto?.idProyecto !== proyectoActual.idProyecto &&
+      a.estatusAsignacion === 'ACTIVO'
+    );
+    for (const a of activas) {
+      const iniExist = a.proyecto?.fechaEstimadaInicio || a.fechaInicio;
+      const finExist = a.proyecto?.fechaEstimadaFin    || a.fechaFinEstimada;
+      if (fechasEmpalman(iniExist, finExist, proyectoActual.fechaEstimadaInicio, proyectoActual.fechaEstimadaFin)) {
+        const pNom = a.proyecto?.nombreProyecto || `Proyecto #${a.proyecto?.idProyecto}`;
+        showToast(`Trabajador activo en "${pNom}" con fechas que se empalman`, false);
+        return;
+      }
     }
 
     const res = await fetch(API_ASIG, {
@@ -656,7 +682,9 @@
         trabajador: { idTrabajador: idTrab },
         proyecto: { idProyecto: proyectoActual.idProyecto },
         asignacionProyectoContratista: { idAsignacionPc: contratoActivo.idAsignacionPc },
-        estatusAsignacion: 'ACTIVO'
+        estatusAsignacion: 'ACTIVO',
+        fechaInicio: proyectoActual.fechaEstimadaInicio || null,
+        fechaFinEstimada: proyectoActual.fechaEstimadaFin || null
       })
     });
 
