@@ -367,12 +367,12 @@
 <div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg">OK</span></div>
 
 <script>
-  const API_BASE        = 'http://localhost:8080/api/v1';
+  const API_BASE        = 'https://springbootindecsa-production.up.railway.app/api';
   const API_PROY        = `${API_BASE}/proyectos`;
   const API_TRAB        = `${API_BASE}/trabajadores`;
   const API_CONT        = `${API_BASE}/contratistas`;
-  const API_ASIG        = `${API_BASE}/asignaciones/trabajador-proyecto`;
-  const API_PC          = `${API_BASE}/asignaciones/proyecto-contratista`;
+  const API_ASIG        = `${API_BASE}/asignaciones-trabajador-proyecto`;
+  const API_PC          = `${API_BASE}/asignaciones-proyecto-contratista`;
 
   const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
   const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
@@ -384,7 +384,6 @@
   let proyectos = [];
   let todosContratistas = [];
   let todosTrabajadores = [];
-  // Estado del modal
   let proyectoActual = null;
   let contratoActivo = null;
   let asignados = [];
@@ -396,14 +395,13 @@
       if (!res.ok) throw new Error();
       const data = await res.json();
 
-      // Carga rápida de resumen para las tarjetas
       proyectos = await Promise.all(data.map(async (p, i) => {
         const [resTrab, resCont] = await Promise.all([
-          fetch(`${API_ASIG}/proyecto/${p.idProyecto}`),
-          fetch(`${API_PC}/proyecto/${p.idProyecto}`)
+          fetch(`${API_ASIG}?idProyecto=${p.idProyecto}`),
+          fetch(`${API_PC}?idProyecto=${p.idProyecto}`)
         ]);
-        const trabs = await resTrab.json();
-        const conts = await resCont.json();
+        const trabs = resTrab.ok ? await resTrab.json() : [];
+        const conts = resCont.ok ? await resCont.json() : [];
         const activo = conts.find(c => c.estatusContrato === 'ACTIVO');
         return {
           ...p,
@@ -474,7 +472,6 @@
     if (!p) return;
     proyectoActual = p;
 
-    // Header del modal
     const ic  = iconColors[p._idx % iconColors.length];
     const ico = iconSet[p._idx % iconSet.length];
     const icon = $('modalIcon');
@@ -487,7 +484,6 @@
     badge.className   = `estatus-badge ${ESTATUS_CLS[p.estatusProyecto]||''}`;
     badge.style.cssText = 'position:static;display:inline-block';
 
-    // Reset
     $('contratistaSelect').innerHTML = '<option>Cargando…</option>';
     $('trabajadorSelect').innerHTML  = '<option>Cargando…</option>';
     $('tablaTrabajadores').innerHTML = '<tr><td colspan="3" class="asig-empty">Cargando…</td></tr>';
@@ -495,7 +491,6 @@
     $('contRow').style.display = 'flex';
     $('modalAsig').classList.add('open');
 
-    // Cargar datos en paralelo
     await Promise.all([
       cargarContratoProyecto(idProyecto),
       cargarContratistas(p),
@@ -513,14 +508,14 @@
 
   /* ─── CARGAS DEL MODAL ─── */
   async function cargarContratoProyecto(id) {
-    const res = await fetch(`${API_PC}/proyecto/${id}`);
-    const data = await res.json();
+    const res = await fetch(`${API_PC}?idProyecto=${id}`);
+    const data = res.ok ? await res.json() : [];
     contratoActivo = data.find(c => c.estatusContrato === 'ACTIVO') || null;
   }
 
   async function cargarContratistas(p) {
     const res = await fetch(API_CONT);
-    const data = await res.json();
+    const data = res.ok ? await res.json() : [];
     todosContratistas = data.filter(c =>
       c.estadoContratista === 'ACTIVO' &&
       (c.ubicacionContratista||'').toUpperCase() === (p.estadoProyectoGeo||'').toUpperCase()
@@ -529,18 +524,18 @@
 
   async function cargarTrabajadores(p) {
     const res = await fetch(API_TRAB);
-    const data = await res.json();
+    const data = res.ok ? await res.json() : [];
     todosTrabajadores = data
       .filter(t =>
         t.estadoTrabajador === 'ACTIVO' &&
         (t.ubicacionTrabajador||'').toUpperCase() === (p.estadoProyectoGeo||'').toUpperCase()
       )
-      .sort((a,b) => a.especialidadTrabajador.localeCompare(b.especialidadTrabajador));
+      .sort((a,b) => (a.especialidadTrabajador||'').localeCompare(b.especialidadTrabajador||''));
   }
 
   async function cargarAsignados(id) {
-    const res = await fetch(`${API_ASIG}/proyecto/${id}`);
-    asignados = await res.json();
+    const res = await fetch(`${API_ASIG}?idProyecto=${id}`);
+    asignados = res.ok ? await res.json() : [];
   }
 
   /* ─── RENDER SELECTS Y TABLA ─── */
@@ -575,8 +570,8 @@
     } else {
       tbody.innerHTML = asignados.map(a => `
         <tr>
-          <td>${a.trabajador.nombreTrabajador}</td>
-          <td class="muted-td">${a.trabajador.especialidadTrabajador}</td>
+          <td>${a.trabajador?.nombreTrabajador || `Trabajador #${a.trabajador?.idTrabajador}`}</td>
+          <td class="muted-td">${a.trabajador?.especialidadTrabajador || '—'}</td>
           <td style="text-align:center">
             <button class="btn-asig btn-danger" style="padding:5px 12px;font-size:11px;" onclick="eliminarTrabajador(${a.idAsignacionTp})">
               <i class="fa-solid fa-trash"></i>
@@ -617,7 +612,12 @@
     const res = await fetch(API_PC, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ idProyecto: proyectoActual.idProyecto, idContratista: idCont, estatusContrato: 'ACTIVO' })
+      body: JSON.stringify({
+        proyecto: { idProyecto: proyectoActual.idProyecto },
+        contratista: { idContratista: idCont },
+        estatusContrato: 'ACTIVO',
+        personalAsignado: 1
+      })
     });
 
     if (!res.ok) { showToast('Error al asignar contratista', false); return; }
@@ -645,7 +645,7 @@
 
     const idTrab = parseInt($('trabajadorSelect').value);
     if (!idTrab) { showToast('Selecciona un trabajador', false); return; }
-    if (asignados.some(a => a.trabajador.idTrabajador === idTrab)) {
+    if (asignados.some(a => a.trabajador?.idTrabajador === idTrab)) {
       showToast('Ese trabajador ya está asignado', false); return;
     }
 
@@ -653,10 +653,10 @@
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        idTrabajador: idTrab,
-        idProyecto: proyectoActual.idProyecto,
-        idAsignacionPc: contratoActivo.idAsignacionPc,
-        rolEnProyecto: 'Operativo'
+        trabajador: { idTrabajador: idTrab },
+        proyecto: { idProyecto: proyectoActual.idProyecto },
+        asignacionProyectoContratista: { idAsignacionPc: contratoActivo.idAsignacionPc },
+        estatusAsignacion: 'ACTIVO'
       })
     });
 
@@ -682,13 +682,12 @@
 
   /* ─── HELPERS ─── */
   async function refrescarTarjeta(idProyecto) {
-    // Actualiza el resumen de la tarjeta en el grid sin recargar todo
     const [resTrab, resCont] = await Promise.all([
-      fetch(`${API_ASIG}/proyecto/${idProyecto}`),
-      fetch(`${API_PC}/proyecto/${idProyecto}`)
+      fetch(`${API_ASIG}?idProyecto=${idProyecto}`),
+      fetch(`${API_PC}?idProyecto=${idProyecto}`)
     ]);
-    const trabs = await resTrab.json();
-    const conts = await resCont.json();
+    const trabs = resTrab.ok ? await resTrab.json() : [];
+    const conts = resCont.ok ? await resCont.json() : [];
     const activo = conts.find(c => c.estatusContrato === 'ACTIVO');
     const p = proyectos.find(x => x.idProyecto === idProyecto);
     if (p) {

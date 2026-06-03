@@ -272,7 +272,7 @@
       lista.forEach(t => {
         const o = document.createElement('option');
         o.value = t.idTrabajador;
-        o.textContent = `${t.nombre} ${t.apellido}`;
+        o.textContent = t.nombreTrabajador || `Trabajador #${t.idTrabajador}`;
         sel.appendChild(o);
       });
     } catch {
