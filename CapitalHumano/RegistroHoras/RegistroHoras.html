@@ -26,6 +26,14 @@
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
     .nav-hidden nav    { transform:translateY(-72px); }
+
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:6px 14px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .avatar { width:32px; height:32px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--gold); font-weight:500; }
+    .profile-info { display:flex; flex-direction:column; }
+    .profile-name { font-size:13px; color:var(--white); font-weight:500; line-height:1.2; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:0.5px; line-height:1.4; }
+    .nav-div { width:1px; height:24px; background:rgba(200,169,110,0.2); }
+
     .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
@@ -42,10 +50,8 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
-    /* Layout 2 columnas */
     .layout { display:grid; grid-template-columns:420px 1fr; gap:20px; align-items:start; }
 
-    /* Panel formulario */
     .form-panel { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:1.75rem; animation:fadeUp .35s ease both; position:sticky; top:130px; }
     .panel-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); margin-bottom:1.25rem; display:flex; align-items:center; gap:10px; }
     .panel-title i { font-size:14px; color:var(--blue); }
@@ -62,7 +68,6 @@
     .form-select:disabled { opacity:.45; cursor:not-allowed; }
     .form-textarea { resize:vertical; min-height:72px; }
 
-    /* Tipo periodo pills */
     .period-pills { display:flex; gap:8px; }
     .ppill { flex:1; }
     .ppill input[type="radio"] { display:none; }
@@ -74,7 +79,6 @@
     .btn-registrar:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 24px rgba(133,183,235,0.3); }
     .btn-registrar:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
-    /* Panel registros */
     .records-panel { animation:fadeUp .4s ease both; }
     .records-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
     .records-title i { font-size:14px; color:var(--blue); }
@@ -90,7 +94,6 @@
     .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
     .results-info strong { color:var(--white); }
 
-    /* Tarjeta de registro */
     .record-card { background:var(--navy-card); border:1px solid rgba(133,183,235,0.12); border-radius:14px; padding:16px 18px; margin-bottom:10px; display:flex; align-items:flex-start; gap:14px; transition:border-color .2s,transform .15s; animation:fadeUp .3s ease both; }
     .record-card:hover { border-color:rgba(133,183,235,0.3); transform:translateY(-1px); }
     .rec-avatar { width:42px; height:42px; border-radius:50%; background:rgba(133,183,235,0.12); border:1px solid rgba(133,183,235,0.3); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; color:var(--blue); flex-shrink:0; }
@@ -107,7 +110,6 @@
     .rec-horas span { font-size:11px; color:var(--muted); font-weight:400; }
     .rec-obs { font-size:11.5px; color:var(--muted); margin-top:7px; font-style:italic; line-height:1.5; }
 
-    /* Skeleton */
     .skeleton-card { background:var(--navy-card); border:1px solid rgba(200,169,110,0.08); border-radius:14px; padding:18px; margin-bottom:10px; }
     .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
     .sk-line { height:10px; margin-bottom:10px; }
@@ -145,11 +147,20 @@
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
+  <a class="nav-link" href="../Cuadrilla/Cuadrillas.html"><i class="fa-solid fa-layer-group"></i> Cuadrillas</a>
   <a class="nav-link active" href="RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
   <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
   <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
+  <div class="profile-pill" id="navProfilePill" style="display:none">
+    <div class="avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">—</span>
+      <span class="profile-role">Capital Humano</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
@@ -284,6 +295,8 @@
 </div>
 
 <script>
+  (function(){const _e=JSON.parse(sessionStorage.getItem('empleado'));if(_e){const _i=_e.nombreEmpleado.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();document.getElementById('navAvatar').textContent=_i;document.getElementById('navNombre').textContent=_e.nombreEmpleado;document.getElementById('navProfilePill').style.display='flex';}})();
+
   const API_BASE = 'https://indecsaspringboot-production.up.railway.app/api';
   const $ = id => document.getElementById(id);
 
@@ -292,13 +305,11 @@
   let listaCuadrillas   = [];
   let listaRegistros    = [];
 
-  // ── INIT ──────────────────────────────────────────────────────────────────
   (async function init() {
     $('inputFecha').value = new Date().toISOString().split('T')[0];
     await cargarProyectos();
   })();
 
-  // ── PROYECTOS ─────────────────────────────────────────────────────────────
   async function cargarProyectos() {
     try {
       const res = await fetch(`${API_BASE}/proyectos`);
@@ -317,7 +328,6 @@
     }
   }
 
-  // ── CAMBIO DE PROYECTO ────────────────────────────────────────────────────
   async function onProyectoChange() {
     const idProyecto = $('selProyecto').value;
     if (!idProyecto) {
@@ -365,7 +375,6 @@
     renderRegistros();
   }
 
-  // ── RENDER SELECTORES ─────────────────────────────────────────────────────
   function renderSelectTrabajador() {
     const sel = $('selTrabajador');
     if (!listaAsignaciones.length) {
@@ -406,7 +415,6 @@
     listaCuadrillas   = [];
   }
 
-  // ── RENDER REGISTROS ──────────────────────────────────────────────────────
   function renderRegistros() {
     const list = $('recordsList');
     const lbl  = $('resultsLabel');
@@ -454,7 +462,6 @@
     $('resultsLabel').textContent = 'Cargando registros…';
   }
 
-  // ── REGISTRAR ─────────────────────────────────────────────────────────────
   async function registrar() {
     if (!proyectoActual)       { showToast('Selecciona un proyecto', false); return; }
     const idAsignacion = $('selTrabajador').value;
@@ -504,7 +511,6 @@
     $('inputObs').value      = '';
   }
 
-  // ── FILTROS ───────────────────────────────────────────────────────────────
   async function buscarPorFecha() {
     if (!proyectoActual) { showToast('Selecciona un proyecto primero', false); return; }
     mostrarSkeleton();
@@ -520,7 +526,6 @@
     }
   }
 
-  // ── HELPERS ───────────────────────────────────────────────────────────────
   function fmtFecha(f) {
     if (!f) return '—';
     const [y, m, d] = f.split('-');
@@ -531,8 +536,8 @@
     $('toastMsg').textContent = msg;
     t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
     const ic = $('toastIcon');
-    ic.style.color = ok ? 'var(--success)' : 'var(--danger)';
-    ic.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    ic.style.color   = ok ? 'var(--success)' : 'var(--danger)';
+    ic.className     = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3500);
   }
