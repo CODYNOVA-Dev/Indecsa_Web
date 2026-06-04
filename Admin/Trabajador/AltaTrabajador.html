@@ -22,6 +22,12 @@
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -102,7 +108,7 @@
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
-    @media(max-width:680px){.col-2{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}}
+    @media(max-width:680px){.col-2{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}.profile-info{display:none}}
   </style>
 </head>
 <body>
@@ -113,17 +119,36 @@
 </header>
 
 <nav>
-  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
-  <a class="nav-link active" href="VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
-  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
-  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
-  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
-  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
-  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
-  <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html">
+    <i class="fa-solid fa-users-gear"></i> Cap. Humano
+  </a>
+  <a class="nav-link active" href="VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
+  </a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+  <a class="nav-link" href="../Reportes/Reportes.html">
+    <i class="fa-solid fa-file-pdf"></i> Reportes
+  </a>
   <div class="nav-sep"></div>
-  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
+  <button class="nav-logout" onclick="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
 </nav>
 
 <main>
@@ -152,6 +177,7 @@
 
     <form class="form-body" id="formAlta" novalidate>
 
+      <!-- ── INFORMACIÓN PERSONAL ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-circle-user" style="color:var(--gold);font-size:11px"></i> Información personal</div>
         <div class="form-row col-2">
@@ -162,14 +188,37 @@
             </div>
             <span class="field-error">El nombre es obligatorio (máx. 100 caracteres)</span>
           </div>
+          <div class="field" id="field-curp">
+            <label>CURP <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-id-card"></i>
+              <input type="text" id="curp" placeholder="Ej. JUGA900101HDFR001" maxlength="18" style="text-transform:uppercase" />
+            </div>
+            <span class="field-error">El CURP es obligatorio (máx. 18 caracteres)</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-rfc">
+            <label>RFC <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i>
+              <input type="text" id="rfc" placeholder="Ej. JUGA900101A01" maxlength="13" style="text-transform:uppercase" />
+            </div>
+            <span class="field-error">El RFC es obligatorio (máx. 13 caracteres)</span>
+          </div>
+          <div class="field" id="field-nacionalidad">
+            <label>Nacionalidad <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-flag"></i>
+              <input type="text" id="nacionalidad" placeholder="Ej. Mexicana" maxlength="50" />
+            </div>
+            <span class="field-error">La nacionalidad es obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
           <div class="field">
             <label>NSS</label>
             <div class="input-wrap"><i class="fa-solid fa-id-badge"></i>
               <input type="text" id="nssTrabajador" placeholder="Ej. 12345678901" maxlength="15" />
             </div>
           </div>
-        </div>
-        <div class="form-row col-2">
           <div class="field" id="field-telefono">
             <label>Teléfono <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-phone"></i>
@@ -177,6 +226,8 @@
             </div>
             <span class="field-error">El teléfono es obligatorio (máx. 15 caracteres)</span>
           </div>
+        </div>
+        <div class="form-row col-1">
           <div class="field" id="field-correo">
             <label>Correo electrónico <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-envelope"></i>
@@ -189,6 +240,67 @@
 
       <div class="form-divider"></div>
 
+      <!-- ── DOMICILIO (se crea aparte) ── -->
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-house" style="color:var(--gold);font-size:11px"></i> Domicilio</div>
+        <div class="form-row col-2">
+          <div class="field" id="field-calle">
+            <label>Calle <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-road"></i>
+              <input type="text" id="calle" placeholder="Ej. Mar Mediterráneo" maxlength="100" />
+            </div>
+            <span class="field-error">La calle es obligatoria</span>
+          </div>
+          <div class="field" id="field-numExt">
+            <label>Número exterior <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-hashtag"></i>
+              <input type="text" id="numExt" placeholder="Ej. 227" maxlength="10" />
+            </div>
+            <span class="field-error">El número exterior es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-colonia">
+            <label>Colonia <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-map"></i>
+              <input type="text" id="colonia" placeholder="Ej. Popotla" maxlength="100" />
+            </div>
+            <span class="field-error">La colonia es obligatoria</span>
+          </div>
+          <div class="field" id="field-codPost">
+            <label>Código postal <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-envelopes-bulk"></i>
+              <input type="text" id="codPost" placeholder="Ej. 11400" maxlength="5" inputmode="numeric" />
+            </div>
+            <span class="field-error">El código postal debe tener 4 o 5 dígitos</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-munAlc">
+            <label>Municipio / Alcaldía <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-building"></i>
+              <input type="text" id="munAlc" placeholder="Ej. Miguel Hidalgo" maxlength="100" />
+            </div>
+            <span class="field-error">El municipio o alcaldía es obligatorio</span>
+          </div>
+          <div class="field" id="field-estadoDom">
+            <label>Estado <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="estadoDomicilio">
+                <option value="" disabled selected>Selecciona un estado…</option>
+                <option value="1">Ciudad de México (CDMX)</option>
+                <option value="2">Hidalgo</option>
+                <option value="3">Puebla</option>
+              </select>
+            </div>
+            <span class="field-error">El estado es obligatorio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── INFORMACIÓN PROFESIONAL ── -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Información profesional</div>
         <div class="form-row col-2">
@@ -215,12 +327,9 @@
         </div>
         <div class="form-row col-2">
           <div class="field" id="field-ubicacion">
-            <label>Ubicación <span class="req">*</span></label>
+            <label>Ubicación de trabajo <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
-              <!--
-                Values EXACTOS del enum Ubicacion en Java:
-                CDMX | Hidalgo | Puebla
-              -->
+              <!-- Values EXACTOS del enum Ubicacion en Java: CDMX | Hidalgo | Puebla -->
               <select id="ubicacionTrabajador">
                 <option value="" disabled selected>Selecciona una ubicación…</option>
                 <option value="CDMX">CDMX</option>
@@ -268,7 +377,7 @@
     <div class="form-footer">
       <div class="form-footer-left">
         <i class="fa-solid fa-circle-info"></i>
-        <span>El trabajador será registrado con estado <strong style="color:var(--success)">Activo</strong> por defecto</span>
+        <span>Primero se crea el <strong style="color:var(--success)">domicilio</strong> y luego el trabajador con estado <strong style="color:var(--success)">Activo</strong></span>
       </div>
       <div class="form-footer-right">
         <button class="btn btn-ghost" type="button" onclick="limpiarFormulario()"><i class="fa-solid fa-eraser"></i> Limpiar</button>
@@ -295,51 +404,61 @@
 
 <script>
   const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
+  const $ = id => document.getElementById(id);
 
-  /*
-    Normaliza ubicación al valor EXACTO del enum Java:
-    CDMX | Hidalgo | Puebla
-  */
+  /* ── Perfil en navbar ── */
+  (function() {
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) return;
+    const ini = (emp.nombreEmpleado || '').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    $('navAvatar').textContent = ini || '--';
+    $('navNombre').textContent = emp.nombreEmpleado || 'Usuario';
+    $('navRol').textContent    = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
+
+  /* Normaliza ubicación al valor EXACTO del enum Java: CDMX | Hidalgo | Puebla */
   function normalizarUbicacion(val) {
-    const mapa = {
-      'CDMX'    : 'CDMX',
-      'cdmx'    : 'CDMX',
-      'HIDALGO' : 'Hidalgo',
-      'hidalgo' : 'Hidalgo',
-      'Hidalgo' : 'Hidalgo',
-      'PUEBLA'  : 'Puebla',
-      'puebla'  : 'Puebla',
-      'Puebla'  : 'Puebla'
-    };
+    const mapa = { 'CDMX':'CDMX','cdmx':'CDMX','HIDALGO':'Hidalgo','hidalgo':'Hidalgo','Hidalgo':'Hidalgo','PUEBLA':'Puebla','puebla':'Puebla','Puebla':'Puebla' };
     return mapa[val] !== undefined ? mapa[val] : val;
   }
 
+  /* ── Estrellas ── */
   const starLabels = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
   let currentStar = 0;
   const stars = document.querySelectorAll('.star-btn');
   stars.forEach(s => {
     s.addEventListener('click', () => {
       currentStar = parseInt(s.dataset.val);
-      document.getElementById('calificacionTrabajador').value = currentStar;
+      $('calificacionTrabajador').value = currentStar;
       paintStars(currentStar);
-      document.getElementById('starLabel').textContent = starLabels[currentStar];
+      $('starLabel').textContent = starLabels[currentStar];
     });
     s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
     s.addEventListener('mouseleave', () => paintStars(currentStar));
   });
   function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
 
+  /* ── Validación ── */
   function validar() {
     let ok = true;
     [
-      { id:'nombreTrabajador',       fid:'field-nombre',      check: v => v.trim().length > 0 && v.length <= 100 },
-      { id:'telefonoTrabajador',     fid:'field-telefono',    check: v => v.trim().length > 0 && v.length <= 15 },
-      { id:'correoTrabajador',       fid:'field-correo',      check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) && v.length <= 100 },
-      { id:'especialidadTrabajador', fid:'field-especialidad',check: v => v.trim().length > 0 },
-      { id:'fechaIngreso',           fid:'field-fecha',       check: v => v.trim().length > 0 },
-      { id:'ubicacionTrabajador',    fid:'field-ubicacion',   check: v => v.trim().length > 0 },
+      { id:'nombreTrabajador',       fid:'field-nombre',       check: v => v.trim().length > 0 && v.length <= 100 },
+      { id:'curp',                   fid:'field-curp',         check: v => v.trim().length > 0 && v.length <= 18 },
+      { id:'rfc',                    fid:'field-rfc',          check: v => v.trim().length > 0 && v.length <= 13 },
+      { id:'nacionalidad',           fid:'field-nacionalidad', check: v => v.trim().length > 0 },
+      { id:'telefonoTrabajador',     fid:'field-telefono',     check: v => v.trim().length > 0 && v.length <= 15 },
+      { id:'correoTrabajador',       fid:'field-correo',       check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) && v.length <= 100 },
+      { id:'calle',                  fid:'field-calle',        check: v => v.trim().length > 0 },
+      { id:'numExt',                 fid:'field-numExt',       check: v => v.trim().length > 0 },
+      { id:'colonia',                fid:'field-colonia',      check: v => v.trim().length > 0 },
+      { id:'codPost',                fid:'field-codPost',      check: v => /^\d{4,5}$/.test(v.trim()) },
+      { id:'munAlc',                 fid:'field-munAlc',       check: v => v.trim().length > 0 },
+      { id:'estadoDomicilio',        fid:'field-estadoDom',    check: v => v.trim().length > 0 },
+      { id:'especialidadTrabajador', fid:'field-especialidad', check: v => v.trim().length > 0 },
+      { id:'fechaIngreso',           fid:'field-fecha',        check: v => v.trim().length > 0 },
+      { id:'ubicacionTrabajador',    fid:'field-ubicacion',    check: v => v.trim().length > 0 },
     ].forEach(({ id, fid, check }) => {
-      const el = document.getElementById(id), fe = document.getElementById(fid);
+      const el = $(id), fe = $(fid);
       if (!fe) return;
       if (!check(el ? el.value : '')) { fe.classList.add('has-error'); ok = false; }
       else fe.classList.remove('has-error');
@@ -352,24 +471,63 @@
     el.addEventListener('change', () => el.closest('.field')?.classList.remove('has-error'));
   });
 
+  /* ── Registrar (domicilio aparte → luego trabajador) ── */
   async function registrarTrabajador() {
     if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
-    const btn = document.getElementById('btnGuardar');
+    const btn = $('btnGuardar');
     setLoading(btn, true);
-    const payload = {
-      nombreTrabajador:       document.getElementById('nombreTrabajador').value.trim(),
-      nssTrabajador:          document.getElementById('nssTrabajador').value.trim() || null,
-      telefonoTrabajador:     document.getElementById('telefonoTrabajador').value.trim(),
-      correoTrabajador:       document.getElementById('correoTrabajador').value.trim(),
-      especialidadTrabajador: document.getElementById('especialidadTrabajador').value,
-      fechaIngreso:           document.getElementById('fechaIngreso').value,
-      experiencia:            document.getElementById('experiencia').value.trim() || null,
-      descripcionTrabajador:  document.getElementById('descripcionTrabajador').value.trim() || null,
-      calificacionTrabajador: currentStar > 0 ? currentStar : null,
-      /* Normalizado para coincidir con enum Java: CDMX | Hidalgo | Puebla */
-      ubicacionTrabajador:    normalizarUbicacion(document.getElementById('ubicacionTrabajador').value),
+
+    const idEstado = parseInt($('estadoDomicilio').value, 10);
+    const idEstadoVal = Number.isNaN(idEstado) ? null : idEstado;
+    const cp = $('codPost').value.trim();
+
+    // 1) Crear domicilio
+    const domicilioPayload = {
+      calle:   $('calle').value.trim(),
+      numExt:  $('numExt').value.trim(),
+      colonia: $('colonia').value.trim(),
+      codPost: cp ? parseInt(cp, 10) : null,
+      munAlc:  $('munAlc').value.trim(),
+      // varias formas del estado por compatibilidad con el backend
+      estado:    idEstadoVal != null ? { idEstado: idEstadoVal } : null,
+      idEstado:  idEstadoVal,
+      id_estado: idEstadoVal
     };
+
     try {
+      const resDom = await fetch(`${API_BASE}/domicilios`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(domicilioPayload)
+      });
+      if (!resDom.ok && resDom.status !== 201) {
+        const e = await resDom.json().catch(() => ({}));
+        throw new Error(e.message || e.error || `Error ${resDom.status} al crear el domicilio`);
+      }
+      const dom = await resDom.json();
+      const idDomicilio = dom.idDomicilio;
+
+      // 2) Crear trabajador con referencia al domicilio recién creado
+      const payload = {
+        nombreTrabajador:       $('nombreTrabajador').value.trim(),
+        curp:                   $('curp').value.trim().toUpperCase(),
+        rfc:                    $('rfc').value.trim().toUpperCase(),
+        nacionalidad:           $('nacionalidad').value.trim(),
+        nssTrabajador:          $('nssTrabajador').value.trim() || null,
+        telefonoTrabajador:     $('telefonoTrabajador').value.trim(),
+        correoTrabajador:       $('correoTrabajador').value.trim(),
+        especialidadTrabajador: $('especialidadTrabajador').value,
+        fechaIngreso:           $('fechaIngreso').value,
+        experiencia:            $('experiencia').value.trim() || null,
+        descripcionTrabajador:  $('descripcionTrabajador').value.trim() || null,
+        calificacionTrabajador: currentStar > 0 ? currentStar : null,
+        ubicacionTrabajador:    normalizarUbicacion($('ubicacionTrabajador').value),
+        // referencia al domicilio (varias formas por compatibilidad)
+        idDomicilio:   idDomicilio,
+        id_domicilio:  idDomicilio,
+        domicilio:     { idDomicilio: idDomicilio }
+      };
+
       const res = await fetch(`${API_BASE}/trabajadores`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -381,23 +539,26 @@
         limpiarFormulario();
       } else {
         const err = await res.json().catch(() => ({}));
-        showToast(err.message || err.error || `Error ${res.status}`, false);
+        throw new Error(err.message || err.error || `Error ${res.status}`);
       }
-    } catch(e) { showToast('No se pudo conectar con el servidor', false); }
-    finally { setLoading(btn, false); }
+    } catch(e) {
+      showToast(e.message || 'No se pudo conectar con el servidor', false);
+    } finally {
+      setLoading(btn, false);
+    }
   }
 
   function limpiarFormulario() {
-    document.getElementById('formAlta').reset();
+    $('formAlta').reset();
     currentStar = 0; paintStars(0);
-    document.getElementById('starLabel').textContent = 'Sin calificar';
-    document.getElementById('calificacionTrabajador').value = '';
+    $('starLabel').textContent = 'Sin calificar';
+    $('calificacionTrabajador').value = '';
     document.querySelectorAll('.field').forEach(f => f.classList.remove('has-error'));
   }
   function setLoading(btn, on) { btn.disabled = on; btn.classList.toggle('loading', on); btn.querySelector('.btn-label').textContent = on ? 'Registrando…' : 'Registrar trabajador'; }
-  function showToast(msg, ok) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; const ic = document.getElementById('toastIcon'); ic.style.color = ok ? 'var(--success)' : 'var(--danger)'; ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
-  function cerrarSesion() { window.location.href = '../../index.html'; }
-  let lastScroll = 0; const scrollBtn = document.getElementById('scrollTop');
+  function showToast(msg, ok) { const t = $('toast'); $('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; const ic = $('toastIcon'); ic.style.color = ok ? 'var(--success)' : 'var(--danger)'; ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
+  function cerrarSesion() { sessionStorage.removeItem('empleado'); window.location.href = '../../index.html'; }
+  let lastScroll = 0; const scrollBtn = $('scrollTop');
   window.addEventListener('scroll', () => { const c = window.scrollY; document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80); lastScroll = c <= 0 ? 0 : c; scrollBtn.classList.toggle('visible', c > 200); });
 </script>
 </body>

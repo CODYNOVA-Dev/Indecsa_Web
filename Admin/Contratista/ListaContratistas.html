@@ -27,6 +27,12 @@
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -86,7 +92,8 @@
     .worker-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:14px 16px; display:grid; grid-template-columns:42px 1fr; gap:12px; align-items:start; position:relative; cursor:pointer; opacity:0; transition:border-color var(--dur-normal) var(--ease-smooth),background var(--dur-normal) var(--ease-smooth),transform var(--dur-normal) var(--ease-smooth),box-shadow var(--dur-normal) var(--ease-smooth); }
     .worker-card:hover { border-color:rgba(200,169,110,0.45); background:#1a3560; transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
 
-    .avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0; margin-top:2px; }
+    .avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0; margin-top:2px; overflow:hidden; }
+    .avatar img { width:100%; height:100%; object-fit:cover; }
     .av-green  { background:rgba(93,202,165,0.15);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
     .av-blue   { background:rgba(133,183,235,0.15); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
     .av-amber  { background:rgba(250,199,117,0.15); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
@@ -127,19 +134,18 @@
     .retry-btn { display:inline-flex; align-items:center; gap:7px; margin-top:1rem; padding:9px 20px; border-radius:9px; background:rgba(200,169,110,0.1); border:1px solid rgba(200,169,110,0.2); color:var(--gold); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:background .2s; }
     .retry-btn:hover { background:rgba(200,169,110,0.18); }
 
-    /* ══════════════════════════════════════
-       MODALES – base
-    ══════════════════════════════════════ */
+    /* ── MODALES base ── */
     .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; }
     .modal-overlay.open { opacity:1; pointer-events:auto; }
     .modal { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:2rem; width:90%; transform:translateY(20px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); max-height:90vh; overflow-y:auto; }
     .modal-overlay.open .modal { transform:translateY(0); }
 
     /* ── MODAL DETALLE ── */
-    #modalDetalle .modal { max-width:580px; }
+    #modalDetalle .modal { max-width:600px; }
 
     .det-header { display:flex; align-items:center; gap:16px; padding-bottom:1.25rem; margin-bottom:1.25rem; border-bottom:1px solid var(--border); }
-    .det-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; }
+    .det-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; overflow:hidden; }
+    .det-avatar img { width:100%; height:100%; object-fit:cover; }
     .det-info { flex:1; min-width:0; }
     .det-name { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); }
     .det-sub  { font-size:13px; color:var(--muted); margin-top:3px; }
@@ -222,6 +228,7 @@
       .page-header{flex-direction:column;align-items:flex-start}
       .det-grid{grid-template-columns:1fr}
       .det-footer{flex-direction:column}
+      .profile-info{display:none}
     }
   </style>
 </head>
@@ -232,38 +239,27 @@
   <div class="header-tag">Gestión de proyectos &amp; contratistas</div>
 </header>
 
-<!-- ══════════════════════════════════════
-     NAVBAR — rutas desde Admin/Contratista/
-══════════════════════════════════════ -->
 <nav>
-  <a class="nav-link" href="../Paginaprincipal.html">
-    <i class="fa-solid fa-house"></i> Inicio
-  </a>
-  <a class="nav-link" href="../CapHumano/ListaCap.html">
-    <i class="fa-solid fa-users-gear"></i> Cap. Humano
-  </a>
-  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
-    <i class="fa-solid fa-user"></i> Trabajadores
-  </a>
-  <a class="nav-link active" href="ListaContratistas.html">
-    <i class="fa-solid fa-people-group"></i> Contratistas
-  </a>
-  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
-    <i class="fa-solid fa-diagram-project"></i> Proyectos
-  </a>
-  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
-  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
-  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link active" href="ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
-  <button class="nav-logout" onclick="cerrarSesion()">
-    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-  </button>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
 <main>
   <div class="page-wrap">
-
     <div class="page-header">
       <div class="page-header-left">
         <div class="page-icon"><i class="fa-solid fa-people-group"></i></div>
@@ -286,8 +282,7 @@
       <div class="toolbar-right">
         <div class="search-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input class="search-input" type="text" id="busqueda"
-                 placeholder="Buscar por nombre o RFC…" oninput="filtrar()" />
+          <input class="search-input" type="text" id="busqueda" placeholder="Buscar por nombre o RFC…" oninput="filtrar()" />
         </div>
         <div class="filter-group">
           <div class="filter-label">Estado</div>
@@ -302,9 +297,9 @@
           <div class="filter-label">Ubicación</div>
           <select class="filter-select" id="filtroUbicacion" onchange="filtrar()">
             <option value="">Todas</option>
-            <option value="CDMX">CDMX</option>
-            <option value="Hidalgo">Hidalgo</option>
-            <option value="Puebla">Puebla</option>
+            <option value="1">CDMX</option>
+            <option value="2">Hidalgo</option>
+            <option value="3">Puebla</option>
           </select>
         </div>
       </div>
@@ -321,7 +316,6 @@
       <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
       <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
     </div>
-
   </div>
 </main>
 
@@ -337,12 +331,9 @@
   <i class="fa-solid fa-chevron-up"></i>
 </button>
 
-<!-- ══════════════════════════════════════
-     MODAL — DETALLE COMPLETO
-══════════════════════════════════════ -->
+<!-- ══ MODAL DETALLE ══ -->
 <div class="modal-overlay" id="modalDetalle">
   <div class="modal">
-
     <div class="det-header">
       <div class="det-avatar" id="detAvatar"></div>
       <div class="det-info">
@@ -350,6 +341,24 @@
         <div class="det-sub"  id="detRfc">—</div>
       </div>
       <span class="det-badge status-badge" id="detBadge">—</span>
+    </div>
+
+    <!-- Identificación -->
+    <div class="det-section">
+      <div class="det-section-title">
+        <i class="fa-solid fa-id-badge" style="color:var(--gold);font-size:10px"></i>
+        Identificación
+      </div>
+      <div class="det-grid">
+        <div class="det-field">
+          <div class="det-lbl">CURP</div>
+          <div class="det-val" id="detCurp">—</div>
+        </div>
+        <div class="det-field">
+          <div class="det-lbl">RFC</div>
+          <div class="det-val" id="detRfcVal">—</div>
+        </div>
+      </div>
     </div>
 
     <!-- Contacto -->
@@ -378,7 +387,7 @@
       </div>
       <div class="det-grid">
         <div class="det-field">
-          <div class="det-lbl">Ubicación</div>
+          <div class="det-lbl">Estado de operación</div>
           <div class="det-val" id="detUbicacion">—</div>
         </div>
         <div class="det-field">
@@ -397,25 +406,15 @@
     </div>
 
     <div class="det-footer">
-      <button class="det-btn close-btn" onclick="cerrarDetalle()">
-        <i class="fa-solid fa-xmark"></i> Cerrar
-      </button>
-      <button class="det-btn elim-btn" id="detBtnEliminar">
-        <i class="fa-solid fa-trash"></i> Eliminar
-      </button>
-      <button class="det-btn susp-btn" id="detBtnSusp">
-        <i class="fa-solid fa-ban"></i> Suspender
-      </button>
-      <button class="det-btn edit-btn" id="detBtnEditar">
-        <i class="fa-solid fa-pen"></i> Editar
-      </button>
+      <button class="det-btn close-btn" onclick="cerrarDetalle()"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+      <button class="det-btn elim-btn" id="detBtnEliminar"><i class="fa-solid fa-trash"></i> Eliminar</button>
+      <button class="det-btn susp-btn" id="detBtnSusp"><i class="fa-solid fa-ban"></i> Suspender</button>
+      <button class="det-btn edit-btn" id="detBtnEditar"><i class="fa-solid fa-pen"></i> Editar</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MODAL — CONFIRMAR SUSPENSIÓN
-══════════════════════════════════════ -->
+<!-- ══ MODAL SUSPENDER ══ -->
 <div class="modal-overlay" id="modalSuspender">
   <div class="modal">
     <div class="modal-icon"><i class="fa-solid fa-ban"></i></div>
@@ -433,9 +432,7 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MODAL — ELIMINAR CON CÓDIGO
-══════════════════════════════════════ -->
+<!-- ══ MODAL ELIMINAR ══ -->
 <div class="modal-overlay" id="modalEliminar">
   <div class="modal">
     <div class="modal-icon"><i class="fa-solid fa-user-tie"></i></div>
@@ -475,10 +472,21 @@
   const AV_COLORS   = ['av-green','av-blue','av-amber','av-purple','av-coral','av-teal'];
   const ESTADO_CLS  = { ACTIVO:'s-activo', INACTIVO:'s-inactivo', SUSPENDIDO:'s-suspendido' };
   const ESTADO_LBL  = { ACTIVO:'Activo',   INACTIVO:'Inactivo',   SUSPENDIDO:'Suspendido' };
-  const UBIC_LBL    = { CDMX:'CDMX', HIDALGO:'Hidalgo', PUEBLA:'Puebla' };
+  /* Mapa idEstadoOperacion -> label */
+  const UBIC_LBL    = { 1:'CDMX', 2:'Hidalgo', 3:'Puebla' };
   const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
 
   const $ = id => document.getElementById(id);
+
+  /* ── Perfil en navbar ── */
+  (function() {
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) return;
+    const ini = emp.nombreEmpleado.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    $('navAvatar').textContent = ini;
+    $('navNombre').textContent = emp.nombreEmpleado;
+    $('navRol').textContent    = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
 
   function iniciales(nombre, rfc) {
     if (nombre) { const p = nombre.trim().split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
@@ -489,6 +497,11 @@
     const f=n||0;
     return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">★</span>`).join('')
       + `<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`;
+  }
+  function ubicLabel(c) {
+    if (c.estadoOperacion?.nombreEst) return c.estadoOperacion.nombreEst;
+    if (c.idEstadoOperacion) return UBIC_LBL[c.idEstadoOperacion] || `Estado ${c.idEstadoOperacion}`;
+    return '—';
   }
 
   let todos = [];
@@ -524,7 +537,7 @@
     const f = todos.filter(c =>
       (!q    || (c.nombreContratista||'').toLowerCase().includes(q) || (c.rfcContratista||'').toLowerCase().includes(q)) &&
       (!est  || c.estadoContratista === est) &&
-      (!ubic || c.ubicacionContratista === ubic)
+      (!ubic || String(c.estadoOperacion?.idEstado ?? c.idEstadoOperacion) === ubic)
     );
     const grid = $('cardsGrid'), lbl = $('resultsLabel');
     if (!f.length) {
@@ -539,27 +552,30 @@
   /* ══ RENDER CARD ══ */
   function renderCard(c, idx) {
     const delay = 60 + idx * 55;
-    const pulso = c.estadoContratista === 'ACTIVO' ? ' is-pulsing' : '';
     const av  = AV_COLORS[idx % AV_COLORS.length];
     const cl  = ESTADO_CLS[c.estadoContratista]||'';
     const lb  = ESTADO_LBL[c.estadoContratista]||c.estadoContratista;
     const nom = c.nombreContratista || `RFC: ${c.rfcContratista}`;
-    const ub  = UBIC_LBL[c.ubicacionContratista]||c.ubicacionContratista||'—';
+    const ub  = ubicLabel(c);
     const desc = (c.descripcionContratista||'').length>70
       ? c.descripcionContratista.substring(0,70)+'…'
       : (c.descripcionContratista||'—');
     const safeName = nom.replace(/'/g,"\\'");
 
+    const avatarInner = c.fotoPerfilUrl
+      ? `<img src="${c.fotoPerfilUrl}" alt="${nom}" onerror="this.style.display='none';this.nextSibling.style.display='flex'" />`
+      : iniciales(c.nombreContratista, c.rfcContratista);
+
     return `
       <div class="worker-card" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${delay}ms" onclick="abrirDetalle(${c.idContratista})">
-        <div class="avatar ${av}">${iniciales(c.nombreContratista, c.rfcContratista)}</div>
+        <div class="avatar ${av}">${avatarInner}</div>
         <div>
           <div class="wname">${nom}</div>
           <div class="wmeta">
             <div class="wrow"><i class="fa-solid fa-file-invoice"></i>RFC: ${c.rfcContratista||'—'}</div>
+            <div class="wrow"><i class="fa-solid fa-id-badge"></i>CURP: ${c.curp||'—'}</div>
             <div class="wrow"><i class="fa-solid fa-location-dot"></i>${ub}</div>
             <div class="wrow"><i class="fa-solid fa-phone"></i>${c.telefonoContratista||'—'}</div>
-            <div class="wrow"><i class="fa-solid fa-envelope"></i>${c.correoContratista||'—'}</div>
             <div class="wrow"><i class="fa-solid fa-align-left"></i><span class="wdesc">${desc}</span></div>
           </div>
           <div class="wfooter">
@@ -577,13 +593,11 @@
             <div class="stars-mini">${miniStars(c.calificacionContratista)}</div>
           </div>
         </div>
-        <div class="status-badge ${cl}${pulso}">${lb}</div>
+        <div class="status-badge ${cl}">${lb}</div>
       </div>`;
   }
 
-  /* ══════════════════════════════════════
-     MODAL DETALLE
-  ══════════════════════════════════════ */
+  /* ══ MODAL DETALLE ══ */
   function abrirDetalle(id) {
     const c = todos.find(x => x.idContratista === id);
     if (!c) return;
@@ -592,10 +606,14 @@
     const avCls = AV_COLORS[avIdx % AV_COLORS.length];
     const nom   = c.nombreContratista || `RFC: ${c.rfcContratista}`;
 
-    // Header
     const av = $('detAvatar');
-    av.textContent = iniciales(c.nombreContratista, c.rfcContratista);
-    av.className   = `det-avatar ${avCls}`;
+    if (c.fotoPerfilUrl) {
+      av.innerHTML = `<img src="${c.fotoPerfilUrl}" alt="${nom}" style="width:100%;height:100%;object-fit:cover" />`;
+      av.className = 'det-avatar';
+    } else {
+      av.textContent = iniciales(c.nombreContratista, c.rfcContratista);
+      av.className   = `det-avatar ${avCls}`;
+    }
     $('detNombre').textContent = nom;
     $('detRfc').textContent    = c.rfcContratista ? `RFC: ${c.rfcContratista}` : '—';
 
@@ -603,17 +621,15 @@
     badge.textContent = ESTADO_LBL[c.estadoContratista]||c.estadoContratista||'—';
     badge.className   = `det-badge status-badge ${ESTADO_CLS[c.estadoContratista]||''}`;
 
-    // Contacto
-    $('detTelefono').textContent = c.telefonoContratista||'—';
-    $('detCorreo').textContent   = c.correoContratista||'—';
-
-    // Empresarial
-    $('detUbicacion').textContent   = UBIC_LBL[c.ubicacionContratista]||c.ubicacionContratista||'—';
+    $('detCurp').textContent       = c.curp||'—';
+    $('detRfcVal').textContent      = c.rfcContratista||'—';
+    $('detTelefono').textContent    = c.telefonoContratista||'—';
+    $('detCorreo').textContent      = c.correoContratista||'—';
+    $('detUbicacion').textContent   = ubicLabel(c);
     $('detStars').innerHTML         = detStars(c.calificacionContratista);
     $('detExperiencia').textContent = c.experiencia||'Sin registrar';
     $('detDescripcion').textContent = c.descripcionContratista||'Sin registrar';
 
-    // Botones del footer del detalle
     $('detBtnEditar').onclick   = () => { cerrarDetalle(); irAEditar(id); };
     $('detBtnSusp').onclick     = () => { cerrarDetalle(); abrirModalSusp(id, nom); };
     $('detBtnEliminar').onclick = () => { cerrarDetalle(); abrirModalElim(id, nom); };
@@ -644,13 +660,36 @@
     const btn=$('btnConfirmSusp');
     btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Procesando…';
     try {
-      const res=await fetch(`${API_BASE}/contratistas/${pendingSuspId}/estado?estado=SUSPENDIDO`,{method:'PATCH'});
-      if(!res.ok) throw new Error();
-      const idx=todos.findIndex(c=>c.idContratista===pendingSuspId);
-      if(idx!==-1) todos[idx].estadoContratista='SUSPENDIDO';
+      const c = todos.find(x => x.idContratista === pendingSuspId);
+      if (!c) throw new Error('Contratista no encontrado');
+
+      // Construir payload PUT con el estado cambiado a SUSPENDIDO
+      const payload = {
+        nombreContratista:      c.nombreContratista,
+        curp:                   c.curp,
+        rfcContratista:         c.rfcContratista,
+        telefonoContratista:    c.telefonoContratista,
+        correoContratista:      c.correoContratista,
+        descripcionContratista: c.descripcionContratista,
+        experiencia:            c.experiencia || null,
+        calificacionContratista:c.calificacionContratista || null,
+        idEstadoOperacion:      c.estadoOperacion?.idEstado ?? c.idEstadoOperacion,
+        fotoPerfilUrl:          c.fotoPerfilUrl || null,
+        estadoContratista:      'SUSPENDIDO'
+      };
+
+      const res = await fetch(`${API_BASE}/contratistas/${pendingSuspId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error();
+      const updated = await res.json();
+      const idx = todos.findIndex(x => x.idContratista === pendingSuspId);
+      if (idx !== -1) todos[idx] = updated;
       cerrarModalSusp(); filtrar();
-      showToast(`${pendingSuspNombre} suspendido correctamente`,true);
-    } catch { showToast('Error al suspender el contratista',false); }
+      showToast(`${pendingSuspNombre} suspendido correctamente`, true);
+    } catch { showToast('Error al suspender el contratista', false); }
     finally {
       btn.disabled=false;
       btn.innerHTML='<i class="fa-solid fa-ban"></i> Confirmar suspensión';
@@ -697,7 +736,7 @@
     }
   }
 
-  /* ══ HELPERS ══ */
+  /* ── Helpers ── */
   function showToast(msg,ok) {
     const t=$('toast');
     $('toastMsg').textContent=msg;
@@ -707,9 +746,8 @@
     ic.className=ok?'fa-solid fa-circle-check':'fa-solid fa-circle-exclamation';
     t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
   }
-  function cerrarSesion() { window.location.href='../../index.html'; }
+  function cerrarSesion() { sessionStorage.removeItem('empleado'); window.location.href='../../index.html'; }
 
-  /* Smart navbar */
   let lastScroll=0;
   const scrollBtn=$('scrollTop');
   window.addEventListener('scroll',()=>{
@@ -719,7 +757,6 @@
     scrollBtn.classList.toggle('visible',c>200);
   });
 
-  /* Cerrar modales con click fuera o ESC */
   ['modalDetalle','modalSuspender','modalEliminar'].forEach(id=>{
     $(id).addEventListener('click',e=>{ if(e.target===e.currentTarget) $(id).classList.remove('open'); });
   });
@@ -730,6 +767,5 @@
 
   cargarContratistas();
 </script>
-
 </body>
 </html>

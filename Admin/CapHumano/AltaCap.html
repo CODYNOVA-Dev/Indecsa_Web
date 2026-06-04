@@ -6,7 +6,6 @@
   <title>INDECSA – Registrar Empleado</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/animations.css" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
@@ -15,30 +14,120 @@
       --success:#5DCAA5; --danger:#F09595; --warning:#FAC775;
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
     }
-    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
 
-    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity:0; transform:scale(.97); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    body {
+      font-family:'DM Sans',sans-serif;
+      background:var(--navy);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      color:var(--white);
+      padding-top:120px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background:var(--navy-mid);
+      border-bottom:1px solid var(--border);
+      padding:0 2rem;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:fixed;
+      top:0; left:0; right:0;
+      z-index:100;
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
+    }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
-    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
-    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
+
+    /* ── NAV ── */
+    nav {
+      background:var(--navy-dark);
+      border-bottom:1px solid rgba(200,169,110,0.12);
+      display:flex;
+      align-items:center;
+      padding:0 2rem;
+      height:48px;
+      gap:4px;
+      position:fixed;
+      top:72px; left:0; right:0;
+      z-index:99;
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-link {
+      display:flex; align-items:center; gap:7px;
+      padding:6px 16px; border-radius:6px;
+      font-size:13px; color:var(--muted);
+      text-decoration:none;
+      transition:background .2s,color .2s;
+    }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
-    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout {
+      display:flex; align-items:center; gap:7px;
+      padding:6px 16px; border-radius:6px;
+      font-size:13px; color:var(--danger);
+      cursor:pointer;
+      border:1px solid rgba(226,75,74,0.25);
+      background:none;
+      font-family:'DM Sans',sans-serif;
+      transition:background .2s;
+    }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
+
+    /* hide nav on scroll down */
     .nav-hidden header { transform:translateY(-72px); }
     .nav-hidden nav    { transform:translateY(-72px); }
 
-    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    /* ── SCROLL TOP ── */
+    .scroll-top {
+      position:fixed; bottom:28px; right:28px;
+      width:46px; height:46px; border-radius:50%;
+      background:linear-gradient(135deg,var(--gold),#a8844a);
+      border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 20px rgba(200,169,110,0.35);
+      transition:transform .2s,opacity .3s;
+      opacity:0; pointer-events:none; z-index:997;
+    }
     .scroll-top.visible { opacity:1; pointer-events:auto; }
     .scroll-top:hover { transform:translateY(-3px); }
     .scroll-top i { font-size:16px; color:var(--navy); }
 
-    main { flex:1; padding:3rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+    /* ── MAIN ── */
+    main {
+      flex:1;
+      padding:3rem 2rem;
+      background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%);
+    }
 
-    .page-header { max-width:860px; margin:0 auto 2.5rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; animation:fadeUp var(--dur-normal) var(--ease-out) both; }
+    /* ── PAGE HEADER ── */
+    .page-header {
+      max-width:860px; margin:0 auto 2.5rem;
+      display:flex; align-items:flex-end;
+      justify-content:space-between; gap:1rem;
+      animation:fadeUp .4s ease both;
+    }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
-    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .page-icon {
+      width:54px; height:54px; border-radius:14px;
+      background:rgba(175,169,236,0.1);
+      border:1px solid rgba(175,169,236,0.25);
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0;
+    }
     .page-icon i { font-size:22px; color:var(--purple); }
     .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
     .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
@@ -46,70 +135,203 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
-    .form-card { max-width:860px; margin:0 auto; background:var(--navy-card); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); animation:scaleIn var(--dur-slow) var(--ease-spring) both; animation-delay:80ms; }
-    .form-card-header { padding:1.5rem 2rem; background:linear-gradient(90deg,rgba(175,169,236,0.05) 0%,transparent 100%); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-    .form-card-header h3 { font-size:14px; font-weight:500; color:var(--purple); letter-spacing:.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+    /* ── FORM CARD ── */
+    .form-card {
+      max-width:860px; margin:0 auto;
+      background:var(--navy-card);
+      border:1px solid var(--border);
+      border-radius:18px; overflow:hidden;
+      box-shadow:0 24px 64px rgba(0,0,0,0.35);
+      animation:scaleIn .45s cubic-bezier(.34,1.56,.64,1) both;
+      animation-delay:80ms;
+    }
+    .form-card-header {
+      padding:1.5rem 2rem;
+      background:linear-gradient(90deg,rgba(175,169,236,0.05) 0%,transparent 100%);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .form-card-header h3 {
+      font-size:14px; font-weight:500; color:var(--purple);
+      letter-spacing:.5px; text-transform:uppercase;
+      display:flex; align-items:center; gap:8px;
+    }
     .required-note { font-size:11px; color:var(--muted); }
     .required-note span { color:var(--danger); }
 
+    /* ── FORM BODY ── */
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
     .form-section { display:flex; flex-direction:column; gap:1.25rem; }
-    .form-section:nth-child(1) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:240ms; }
-    .form-section:nth-child(2) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:320ms; }
-    .form-section:nth-child(3) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:400ms; }
-    .form-section:nth-child(4) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:480ms; }
-    .form-section:nth-child(5) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:560ms; }
-    .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
+    .form-section:nth-child(1) { animation:fadeUp .4s ease both; animation-delay:240ms; }
+    .form-section:nth-child(2) { animation:fadeUp .4s ease both; animation-delay:320ms; }
+    .form-section:nth-child(3) { animation:fadeUp .4s ease both; animation-delay:400ms; }
+    .form-section:nth-child(4) { animation:fadeUp .4s ease both; animation-delay:480ms; }
+
+    .section-label {
+      font-size:11px; color:var(--muted);
+      text-transform:uppercase; letter-spacing:1.5px;
+      display:flex; align-items:center; gap:8px;
+    }
     .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .section-label i { color:var(--gold); font-size:11px; }
+
     .form-row { display:grid; gap:1rem; }
     .col-2 { grid-template-columns:1fr 1fr; }
     .form-divider { height:1px; background:var(--border); }
 
+    /* ── FIELD ── */
     .field { display:flex; flex-direction:column; gap:7px; }
     .field label { font-size:12px; font-weight:500; color:var(--muted); }
     .field label .req { color:var(--danger); margin-left:2px; }
     .field-error { font-size:11px; color:var(--danger); display:none; margin-top:2px; }
     .field.has-error .field-error { display:block; }
     .field.has-error input { border-color:var(--danger)!important; box-shadow:0 0 0 3px rgba(240,149,149,0.07)!important; }
+
     .input-wrap { position:relative; }
-    .input-wrap > i.ico { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
-    input,select { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px 11px 42px; transition:border-color .2s,background .2s,box-shadow .2s; outline:none; -webkit-appearance:none; appearance:none; }
+    .input-wrap > i.ico {
+      position:absolute; left:14px; top:50%; transform:translateY(-50%);
+      font-size:13px; color:var(--muted); pointer-events:none;
+    }
+
+    input, select {
+      width:100%;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px;
+      color:var(--white);
+      font-family:'DM Sans',sans-serif;
+      font-size:13.5px;
+      padding:11px 14px 11px 42px;
+      transition:border-color .2s,background .2s,box-shadow .2s;
+      outline:none;
+      -webkit-appearance:none;
+      appearance:none;
+    }
     input::placeholder { color:rgba(138,155,181,0.5); }
-    input:focus { border-color:var(--purple); background:rgba(175,169,236,0.04); box-shadow:0 0 0 3px rgba(175,169,236,0.07); }
-    select:disabled { opacity:.7; cursor:default; }
-    .pass-toggle { position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); cursor:pointer; background:none; border:none; padding:0; transition:color .2s; z-index:1; }
+    input:focus {
+      border-color:var(--purple);
+      background:rgba(175,169,236,0.04);
+      box-shadow:0 0 0 3px rgba(175,169,236,0.07);
+    }
+
+    /* CURP input: uppercase */
+    #curpEmpleado { text-transform:uppercase; letter-spacing:1px; }
+
+    /* CURP counter */
+    .curp-counter {
+      font-size:11px; color:var(--muted);
+      text-align:right; margin-top:2px;
+      transition:color .2s;
+    }
+    .curp-counter.complete { color:var(--success); }
+    .curp-counter.over    { color:var(--danger); }
+
+    .pass-toggle {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      font-size:13px; color:var(--muted);
+      cursor:pointer; background:none; border:none; padding:0;
+      transition:color .2s; z-index:1;
+    }
     .pass-toggle:hover { color:var(--purple); }
 
-    .rol-display { width:100%; background:rgba(175,169,236,0.06); border:1px solid rgba(175,169,236,0.2); border-radius:10px; color:var(--purple); font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px 11px 42px; font-weight:500; }
+    .rol-display {
+      width:100%;
+      background:rgba(175,169,236,0.06);
+      border:1px solid rgba(175,169,236,0.2);
+      border-radius:10px;
+      color:var(--purple);
+      font-family:'DM Sans',sans-serif;
+      font-size:13.5px;
+      padding:11px 14px 11px 42px;
+      font-weight:500;
+    }
 
-    .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    /* ── FOOTER ── */
+    .form-footer {
+      padding:1.5rem 2rem;
+      border-top:1px solid var(--border);
+      background:rgba(0,0,0,0.15);
+      display:flex; align-items:center;
+      justify-content:space-between; gap:12px;
+    }
     .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
     .form-footer-left i { color:var(--purple); }
     .form-footer-right { display:flex; gap:10px; }
-    .btn { display:flex; align-items:center; gap:8px; padding:10px 22px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer; border:none; transition:all .2s; }
+
+    .btn {
+      display:flex; align-items:center; gap:8px;
+      padding:10px 22px; border-radius:10px;
+      font-family:'DM Sans',sans-serif;
+      font-size:13.5px; font-weight:500;
+      cursor:pointer; border:none;
+      transition:all .2s;
+    }
     .btn:disabled { opacity:.5; cursor:not-allowed; transform:none!important; }
-    .btn-ghost { background:none; border:1px solid rgba(255,255,255,0.1); color:var(--muted); }
+    .btn-ghost {
+      background:none;
+      border:1px solid rgba(255,255,255,0.1);
+      color:var(--muted);
+    }
     .btn-ghost:hover:not(:disabled) { border-color:var(--muted); color:var(--white); }
-    .btn-purple { background:linear-gradient(135deg,var(--purple) 0%,#7a72c4 100%); color:#0B1F3A; font-weight:600; box-shadow:0 4px 20px rgba(175,169,236,0.2); }
+    .btn-purple {
+      background:linear-gradient(135deg,var(--purple) 0%,#7a72c4 100%);
+      color:#0B1F3A; font-weight:600;
+      box-shadow:0 4px 20px rgba(175,169,236,0.2);
+    }
     .btn-purple:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 8px 28px rgba(175,169,236,0.3); }
 
-    .spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(11,31,58,0.3); border-top-color:#0B1F3A; animation:spin .7s linear infinite; display:none; }
-    .btn.loading .spinner { display:inline-block; }
-    .btn.loading .btn-icon { display:none; }
-    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner {
+      width:14px; height:14px; border-radius:50%;
+      border:2px solid rgba(11,31,58,0.3);
+      border-top-color:#0B1F3A;
+      animation:spin .7s linear infinite;
+      display:none;
+    }
+    .btn.loading .spinner   { display:inline-block; }
+    .btn.loading .btn-icon  { display:none; }
 
-    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    /* ── TOAST ── */
+    .toast {
+      position:fixed; bottom:28px; left:50%;
+      transform:translateX(-50%) translateY(80px);
+      background:var(--navy-mid);
+      border:1px solid var(--success);
+      border-radius:12px; padding:14px 20px;
+      display:flex; align-items:center; gap:12px;
+      font-size:13px; color:var(--white);
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);
+      opacity:0;
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;
+      z-index:999; pointer-events:none; white-space:nowrap;
+    }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     .toast i { font-size:16px; }
 
-    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    /* ── PAGE FOOTER ── */
+    footer {
+      background:var(--navy-mid);
+      border-top:1px solid var(--border);
+      height:56px;
+      display:flex; align-items:center;
+      justify-content:space-between;
+      padding:0 2rem;
+    }
     .footer-left { font-size:12px; color:var(--muted); }
     .footer-contact { display:flex; gap:24px; }
-    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a {
+      font-size:12px; color:var(--muted);
+      text-decoration:none;
+      display:flex; align-items:center; gap:6px;
+      transition:color .2s;
+    }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @media(max-width:680px){.col-2{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}}
+    @media(max-width:680px) {
+      .col-2 { grid-template-columns:1fr; }
+      .page-header { flex-direction:column; align-items:flex-start; }
+      .form-footer { flex-direction:column; align-items:stretch; }
+    }
   </style>
 </head>
 <body>
@@ -120,14 +342,28 @@
 </header>
 
 <nav>
-  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
-  <a class="nav-link active" href="ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
-  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
-  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
-  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
-  <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
+  <a class="nav-link" href="../Paginaprincipal.html">
+    <i class="fa-solid fa-house"></i> Inicio
+  </a>
+  <a class="nav-link active" href="ListaCap.html">
+    <i class="fa-solid fa-users-gear"></i> Cap. Humano
+  </a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html">
+    <i class="fa-solid fa-user"></i> Trabajadores
+  </a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html">
+    <i class="fa-solid fa-people-group"></i> Contratistas
+  </a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
+    <i class="fa-solid fa-diagram-project"></i> Proyectos
+  </a>
+  <a class="nav-link" href="../Reportes/Reportes.html">
+    <i class="fa-solid fa-file-pdf"></i> Reportes
+  </a>
   <div class="nav-sep"></div>
-  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+  <button class="nav-logout" onclick="cerrarSesion()">
+    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+  </button>
 </nav>
 
 <main>
@@ -154,50 +390,81 @@
 
     <form class="form-body" id="formAlta" novalidate>
 
+      <!-- SECCIÓN 1: Información personal -->
       <div class="form-section">
         <div class="section-label">
-          <i class="fa-solid fa-circle-user ico" style="color:var(--gold);font-size:11px;position:static;transform:none"></i>
+          <i class="fa-solid fa-circle-user"></i>
           Información personal
         </div>
+
         <div class="form-row col-2">
           <div class="field" id="field-nombre">
             <label>Nombre completo <span class="req">*</span></label>
             <div class="input-wrap">
               <i class="fa-solid fa-user ico"></i>
-              <input type="text" id="nombreEmpleado" placeholder="Ej. María López Pérez" maxlength="100" />
+              <input type="text" id="nombreEmpleado"
+                     placeholder="Ej. María López Pérez"
+                     maxlength="100" autocomplete="name" />
             </div>
             <span class="field-error">El nombre es obligatorio (máx. 100 caracteres)</span>
           </div>
+
           <div class="field" id="field-correo">
             <label>Correo electrónico <span class="req">*</span></label>
             <div class="input-wrap">
               <i class="fa-solid fa-envelope ico"></i>
-              <input type="email" id="correoEmpleado" placeholder="correo@ejemplo.com" maxlength="100" />
+              <input type="email" id="correoEmpleado"
+                     placeholder="correo@ejemplo.com"
+                     maxlength="100" autocomplete="email" />
             </div>
-            <span class="field-error">Ingresa un correo válido</span>
+            <span class="field-error">Ingresa un correo electrónico válido</span>
+          </div>
+        </div>
+
+        <!-- CURP en su propia fila para darle espacio -->
+        <div class="form-row">
+          <div class="field" id="field-curp">
+            <label>CURP <span class="req">*</span></label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-id-card ico"></i>
+              <input type="text" id="curpEmpleado"
+                     placeholder="AAAA######XXXXXX##"
+                     maxlength="18" autocomplete="off"
+                     oninput="actualizarCurpCounter()" />
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="field-error" style="display:none;">El CURP debe tener exactamente 18 caracteres</span>
+              <span class="curp-counter" id="curpCounter">0 / 18</span>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="form-divider"></div>
 
+      <!-- SECCIÓN 2: Acceso al sistema -->
       <div class="form-section">
         <div class="section-label">
-          <i class="fa-solid fa-lock" style="color:var(--gold);font-size:11px;position:static;transform:none"></i>
+          <i class="fa-solid fa-lock"></i>
           Acceso al sistema
         </div>
+
         <div class="form-row col-2">
           <div class="field" id="field-pass">
             <label>Contraseña <span class="req">*</span></label>
             <div class="input-wrap">
               <i class="fa-solid fa-key ico"></i>
-              <input type="password" id="contrasena" placeholder="Mínimo 8 caracteres" maxlength="255" style="padding-right:44px" />
+              <input type="password" id="contrasena"
+                     placeholder="Mínimo 8 caracteres"
+                     maxlength="255" style="padding-right:44px"
+                     autocomplete="new-password" />
               <button type="button" class="pass-toggle" onclick="togglePass()">
                 <i id="iconPass" class="fa-solid fa-eye"></i>
               </button>
             </div>
             <span class="field-error">La contraseña es obligatoria (mín. 8 caracteres)</span>
           </div>
+
           <div class="field">
             <label>Rol asignado</label>
             <div class="input-wrap">
@@ -214,7 +481,9 @@
     <div class="form-footer">
       <div class="form-footer-left">
         <i class="fa-solid fa-circle-info"></i>
-        <span>La contraseña se almacenará de forma <strong style="color:var(--purple)">cifrada (BCrypt)</strong></span>
+        <span>La contraseña se almacenará de forma
+          <strong style="color:var(--purple)">cifrada (BCrypt)</strong>
+        </span>
       </div>
       <div class="form-footer-right">
         <button class="btn btn-ghost" type="button" onclick="limpiarFormulario()">
@@ -233,8 +502,12 @@
 <footer>
   <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
   <div class="footer-contact">
-    <a href="mailto:contacto@indecsa.com"><i class="fa-solid fa-envelope"></i>contacto@indecsa.com</a>
-    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+    <a href="mailto:contacto@indecsa.com">
+      <i class="fa-solid fa-envelope"></i>contacto@indecsa.com
+    </a>
+    <a href="tel:+521234567890">
+      <i class="fa-solid fa-phone"></i>+52 123 456 7890
+    </a>
   </div>
 </footer>
 
@@ -242,25 +515,27 @@
   <i class="fa-solid fa-circle-check" id="toastIcon"></i>
   <span id="toastMsg">Empleado registrado correctamente</span>
 </div>
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+<button class="scroll-top" id="scrollTop"
+        onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <i class="fa-solid fa-chevron-up"></i>
 </button>
 
 <script>
   var API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
+
   function gid(id) { return document.getElementById(id); }
 
-  /* Carga roles, filtra Cap Humano y lo fija */
+  /* ── Carga roles y fija el de Capital Humano ── */
   async function cargarRol() {
     try {
       var res = await fetch(API_BASE + '/roles');
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       var roles = await res.json();
       var cap = null;
       for (var i = 0; i < roles.length; i++) {
         if ((roles[i].nombreRol + '').toUpperCase().indexOf('CAP') !== -1) {
-          cap = roles[i];
-          break;
+          cap = roles[i]; break;
         }
       }
       if (cap) {
@@ -269,101 +544,178 @@
       } else {
         gid('rolDisplay').textContent = 'Rol no encontrado';
       }
-    } catch {
+    } catch (e) {
       gid('rolDisplay').textContent = 'Error al cargar rol';
+      console.error('cargarRol:', e);
     }
   }
 
+  /* ── Toggle visibilidad contraseña ── */
   function togglePass() {
     var inp = gid('contrasena'), ico = gid('iconPass');
     inp.type = inp.type === 'password' ? 'text' : 'password';
-    ico.className = inp.type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+    ico.className = inp.type === 'password'
+      ? 'fa-solid fa-eye'
+      : 'fa-solid fa-eye-slash';
   }
 
+  /* ── Contador CURP ── */
+  function actualizarCurpCounter() {
+    var val = gid('curpEmpleado').value.toUpperCase();
+    gid('curpEmpleado').value = val;          // fuerza mayúsculas
+    var len = val.length;
+    var ctr = gid('curpCounter');
+    ctr.textContent = len + ' / 18';
+    ctr.className = 'curp-counter ' + (len === 18 ? 'complete' : len > 18 ? 'over' : '');
+  }
+
+  /* ── Validación ── */
   function validar() {
     var ok = true;
     var reglas = [
-      { id:'nombreEmpleado', fid:'field-nombre', check: function(v){ return v.trim().length > 0 && v.length <= 100; } },
-      { id:'correoEmpleado', fid:'field-correo', check: function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); } },
-      { id:'contrasena',     fid:'field-pass',   check: function(v){ return v.length >= 8; } }
+      {
+        id: 'nombreEmpleado', fid: 'field-nombre',
+        check: function(v) { return v.trim().length > 0 && v.trim().length <= 100; }
+      },
+      {
+        id: 'correoEmpleado', fid: 'field-correo',
+        check: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+      },
+      {
+        id: 'curpEmpleado', fid: 'field-curp',
+        check: function(v) { return v.trim().length === 18; }
+      },
+      {
+        id: 'contrasena', fid: 'field-pass',
+        check: function(v) { return v.length >= 8; }
+      }
     ];
+
     for (var i = 0; i < reglas.length; i++) {
       var r = reglas[i];
       var el = gid(r.id), fe = gid(r.fid);
       if (!fe) continue;
-      if (!r.check(el ? el.value : '')) { fe.classList.add('has-error'); ok = false; }
-      else fe.classList.remove('has-error');
+      var valid = r.check(el ? el.value : '');
+      fe.classList.toggle('has-error', !valid);
+      /* mostrar/ocultar el span de error dentro del field */
+      var errSpan = fe.querySelector('.field-error');
+      if (errSpan) errSpan.style.display = valid ? 'none' : 'block';
+      if (!valid) ok = false;
     }
     return ok;
   }
 
-  var inputs = document.querySelectorAll('#formAlta input');
-  for (var i = 0; i < inputs.length; i++) {
-    inputs[i].addEventListener('input', function() {
+  /* Limpiar error al escribir */
+  document.querySelectorAll('#formAlta input').forEach(function(inp) {
+    inp.addEventListener('input', function() {
       var f = this.closest('.field');
-      if (f) f.classList.remove('has-error');
+      if (f) {
+        f.classList.remove('has-error');
+        var e = f.querySelector('.field-error');
+        if (e) e.style.display = 'none';
+      }
     });
-  }
+  });
 
+  /* ── Registrar empleado → POST /api/empleados ── */
   async function registrarEmpleado() {
-    if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
+    if (!validar()) {
+      showToast('Revisa los campos obligatorios', false);
+      return;
+    }
+
     var idRolVal = parseInt(gid('idRol').value);
-    if (!idRolVal) { showToast('Rol de Cap. Humano no disponible', false); return; }
+    if (!idRolVal) {
+      showToast('Rol de Cap. Humano no disponible. Recarga la página.', false);
+      return;
+    }
+
     var btn = gid('btnGuardar');
     setLoading(btn, true);
+
+    /* Payload exacto que espera EmpleadoRequestDTO */
     var payload = {
       nombreEmpleado: gid('nombreEmpleado').value.trim(),
+      curp:           gid('curpEmpleado').value.trim().toUpperCase(),
       correoEmpleado: gid('correoEmpleado').value.trim(),
       contrasena:     gid('contrasena').value,
       idRol:          idRolVal
     };
+
     try {
       var res = await fetch(API_BASE + '/empleados', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+
       if (res.status === 201) {
         var data = await res.json();
-        showToast('Empleado #' + data.idEmpleado + ' registrado correctamente', true);
+        showToast(
+          'Empleado #' + (data.idEmpleado || data.id || '—') + ' registrado correctamente',
+          true
+        );
         limpiarFormulario();
       } else {
-        var err = await res.json().catch(function(){ return {}; });
-        showToast(err.message || err.error || 'Error ' + res.status, false);
+        var err = {};
+        try { err = await res.json(); } catch (_) {}
+        var msg = err.message || err.error || ('Error ' + res.status);
+        /* Si el backend devuelve errores de validación como objeto */
+        if (err.errors && typeof err.errors === 'object') {
+          msg = Object.values(err.errors).join(' · ');
+        }
+        showToast(msg, false);
       }
-    } catch(e) { showToast('No se pudo conectar con el servidor', false); }
-    finally { setLoading(btn, false); }
+    } catch (e) {
+      showToast('No se pudo conectar con el servidor', false);
+      console.error('registrarEmpleado:', e);
+    } finally {
+      setLoading(btn, false);
+    }
   }
 
+  /* ── Limpiar formulario ── */
   function limpiarFormulario() {
     gid('nombreEmpleado').value = '';
     gid('correoEmpleado').value = '';
-    gid('contrasena').value = '';
-    var fields = document.querySelectorAll('.field');
-    for (var i = 0; i < fields.length; i++) fields[i].classList.remove('has-error');
+    gid('curpEmpleado').value   = '';
+    gid('contrasena').value     = '';
+    gid('curpCounter').textContent = '0 / 18';
+    gid('curpCounter').className   = 'curp-counter';
+    document.querySelectorAll('.field').forEach(function(f) {
+      f.classList.remove('has-error');
+      var e = f.querySelector('.field-error');
+      if (e) e.style.display = 'none';
+    });
   }
 
+  /* ── Loading state ── */
   function setLoading(btn, on) {
     btn.disabled = on;
     btn.classList.toggle('loading', on);
     btn.querySelector('.btn-label').textContent = on ? 'Registrando…' : 'Registrar empleado';
   }
 
+  /* ── Toast ── */
   function showToast(msg, ok) {
-    var t = gid('toast');
+    var t   = gid('toast');
+    var ic  = gid('toastIcon');
     gid('toastMsg').textContent = msg;
     t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
-    var ic = gid('toastIcon');
-    ic.style.color = ok ? 'var(--success)' : 'var(--danger)';
-    ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    ic.style.color      = ok ? 'var(--success)' : 'var(--danger)';
+    ic.className        = ok
+      ? 'fa-solid fa-circle-check'
+      : 'fa-solid fa-circle-exclamation';
     t.classList.add('show');
-    setTimeout(function(){ t.classList.remove('show'); }, 3500);
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
+  /* ── Logout ── */
   function cerrarSesion() { window.location.href = '../../index.html'; }
 
+  /* ── Scroll behaviour ── */
   var lastScroll = 0;
-  var scrollBtn = gid('scrollTop');
+  var scrollBtn  = gid('scrollTop');
   window.addEventListener('scroll', function() {
     var c = window.scrollY;
     document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
@@ -371,6 +723,7 @@
     scrollBtn.classList.toggle('visible', c > 200);
   });
 
+  /* ── Init ── */
   cargarRol();
 </script>
 </body>

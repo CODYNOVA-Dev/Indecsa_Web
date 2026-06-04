@@ -24,6 +24,12 @@
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -66,11 +72,10 @@
 
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
     .form-section { display:flex; flex-direction:column; gap:1.25rem; }
-    .form-section:nth-child(1) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:240ms; }
-    .form-section:nth-child(2) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:320ms; }
-    .form-section:nth-child(3) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:400ms; }
-    .form-section:nth-child(4) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:480ms; }
-    .form-section:nth-child(5) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:560ms; }
+    .form-section:nth-child(1){animation:fadeUp var(--dur-normal) var(--ease-out) both;animation-delay:240ms}
+    .form-section:nth-child(2){animation:fadeUp var(--dur-normal) var(--ease-out) both;animation-delay:320ms}
+    .form-section:nth-child(3){animation:fadeUp var(--dur-normal) var(--ease-out) both;animation-delay:400ms}
+    .form-section:nth-child(4){animation:fadeUp var(--dur-normal) var(--ease-out) both;animation-delay:480ms}
     .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
     .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
     .form-row { display:grid; gap:1rem; }
@@ -100,6 +105,13 @@
     .star-btn.active { color:var(--gold); }
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
+
+    /* foto preview */
+    .foto-wrap { display:flex; align-items:center; gap:12px; }
+    .foto-preview { width:48px; height:48px; border-radius:50%; border:1px solid var(--border); background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .foto-preview img { width:100%; height:100%; object-fit:cover; display:none; }
+    .foto-preview i { font-size:18px; color:var(--muted); }
+    .foto-wrap .input-wrap { flex:1; }
 
     .status-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
     .status-pill input[type="radio"] { display:none; }
@@ -139,7 +151,7 @@
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @media(max-width:680px) { .col-2{grid-template-columns:1fr} .status-grid{grid-template-columns:1fr 1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
+    @media(max-width:680px){ .col-2{grid-template-columns:1fr} .status-grid{grid-template-columns:1fr 1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} .profile-info{display:none} }
   </style>
 </head>
 <body>
@@ -155,16 +167,20 @@
   <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
   <a class="nav-link active" href="ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
-  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
-  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
-  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
 <main>
-
   <div class="page-header">
     <div class="page-header-left">
       <div class="page-icon"><i class="fa-solid fa-pen-to-square"></i></div>
@@ -202,6 +218,7 @@
 
     <form class="form-body" id="formEditar" novalidate>
 
+      <!-- ── SECCIÓN 1: Identificación ── -->
       <div class="form-section">
         <div class="section-label">
           <i class="fa-solid fa-building" style="color:var(--gold);font-size:11px"></i>
@@ -210,56 +227,107 @@
         <div class="form-row col-2">
           <div class="field" id="field-nombre">
             <label>Nombre / Razón social <span class="req">*</span></label>
-            <div class="input-wrap">
-              <i class="fa-solid fa-user-tie"></i>
+            <div class="input-wrap"><i class="fa-solid fa-user-tie"></i>
               <input type="text" id="nombreContratista" placeholder="Ej. Constructora García S.A." maxlength="100" />
             </div>
             <span class="field-error">El nombre es obligatorio (máx. 100 caracteres)</span>
           </div>
+          <div class="field" id="field-curp">
+            <label>CURP <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i>
+              <input type="text" id="curp" placeholder="Ej. XAXX010101HXXXXX00" maxlength="18" style="text-transform:uppercase" />
+            </div>
+            <span class="field-error">El CURP debe tener exactamente 18 caracteres</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
           <div class="field" id="field-rfc">
             <label>RFC <span class="req">*</span></label>
-            <div class="input-wrap">
-              <i class="fa-solid fa-file-invoice"></i>
+            <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i>
               <input type="text" id="rfcContratista" placeholder="Ej. XAXX010101000" maxlength="15" style="text-transform:uppercase" />
             </div>
             <span class="field-error">El RFC es obligatorio (máx. 15 caracteres)</span>
           </div>
+          <div class="field" id="field-ubicacion">
+            <label>Estado de operación <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="idEstadoOperacion">
+                <option value="" disabled>Selecciona un estado…</option>
+                <option value="1">Ciudad de México (CDMX)</option>
+                <option value="2">Hidalgo</option>
+                <option value="3">Puebla</option>
+              </select>
+            </div>
+            <span class="field-error">El estado de operación es obligatorio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── SECCIÓN 2: Contacto ── -->
+      <div class="form-section">
+        <div class="section-label">
+          <i class="fa-solid fa-address-card" style="color:var(--gold);font-size:11px"></i>
+          Contacto
         </div>
         <div class="form-row col-2">
           <div class="field" id="field-telefono">
             <label>Teléfono <span class="req">*</span></label>
-            <div class="input-wrap">
-              <i class="fa-solid fa-phone"></i>
+            <div class="input-wrap"><i class="fa-solid fa-phone"></i>
               <input type="tel" id="telefonoContratista" placeholder="+52 000 000 0000" maxlength="15" />
             </div>
             <span class="field-error">El teléfono es obligatorio (máx. 15 caracteres)</span>
           </div>
           <div class="field" id="field-correo">
             <label>Correo electrónico <span class="req">*</span></label>
-            <div class="input-wrap">
-              <i class="fa-solid fa-envelope"></i>
+            <div class="input-wrap"><i class="fa-solid fa-envelope"></i>
               <input type="email" id="correoContratista" placeholder="correo@empresa.com" maxlength="100" />
             </div>
             <span class="field-error">Ingresa un correo válido</span>
           </div>
         </div>
-        <div class="form-row col-2">
-          <div class="field" id="field-ubicacion">
-            <label>Ubicación <span class="req">*</span></label>
-            <div class="input-wrap">
-              <i class="fa-solid fa-location-dot"></i>
-              <!--
-                Values EXACTOS del enum Ubicacion en Java:
-                CDMX | Hidalgo | Puebla
-              -->
-              <select id="ubicacionContratista">
-                <option value="" disabled>Selecciona una ubicación…</option>
-                <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="Hidalgo">Hidalgo</option>
-                <option value="Puebla">Puebla</option>
-              </select>
+        <div class="form-row col-1">
+          <div class="field" id="field-foto">
+            <label>Foto de perfil (URL)</label>
+            <div class="foto-wrap">
+              <div class="foto-preview" id="fotoPreview">
+                <img id="fotoImg" src="" alt="preview" />
+                <i class="fa-solid fa-user" id="fotoIcon"></i>
+              </div>
+              <div class="input-wrap">
+                <i class="fa-solid fa-image"></i>
+                <input type="url" id="fotoPerfilUrl" placeholder="https://ejemplo.com/foto.jpg" maxlength="255" oninput="previewFoto()" />
+              </div>
             </div>
-            <span class="field-error">La ubicación es obligatoria</span>
+            <span class="field-error">La URL no puede exceder 255 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── SECCIÓN 3: Perfil profesional ── -->
+      <div class="form-section">
+        <div class="section-label">
+          <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i>
+          Perfil profesional
+        </div>
+        <div class="form-row col-1">
+          <div class="field" id="field-desc">
+            <label>Descripción <span class="req">*</span></label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
+              <textarea id="descripcionContratista" placeholder="Describe los servicios que ofrece…" maxlength="255"></textarea>
+            </div>
+            <span class="field-error">La descripción es obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Experiencia</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
+              <textarea id="experiencia" placeholder="Años de experiencia, proyectos relevantes…" maxlength="200"></textarea>
+            </div>
           </div>
           <div class="field">
             <label>Calificación</label>
@@ -280,34 +348,7 @@
 
       <div class="form-divider"></div>
 
-      <div class="form-section">
-        <div class="section-label">
-          <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i>
-          Perfil profesional
-        </div>
-        <div class="form-row col-1">
-          <div class="field" id="field-desc">
-            <label>Descripción <span class="req">*</span></label>
-            <div class="input-wrap top-icon">
-              <i class="fa-solid fa-align-left"></i>
-              <textarea id="descripcionContratista" placeholder="Describe los servicios que ofrece…" maxlength="255"></textarea>
-            </div>
-            <span class="field-error">La descripción es obligatoria</span>
-          </div>
-        </div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Experiencia</label>
-            <div class="input-wrap top-icon">
-              <i class="fa-solid fa-star-half-stroke"></i>
-              <textarea id="experiencia" placeholder="Años de experiencia, proyectos relevantes…" maxlength="200"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-divider"></div>
-
+      <!-- ── SECCIÓN 4: Estado ── -->
       <div class="form-section">
         <div class="section-label">
           <i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i>
@@ -342,12 +383,8 @@
         <span id="changesLabel">Sin cambios pendientes</span>
       </div>
       <div class="form-footer-right">
-        <a class="btn btn-ghost" href="ListaContratistas.html">
-          <i class="fa-solid fa-arrow-left"></i> Cancelar
-        </a>
-        <button class="btn btn-ghost" type="button" onclick="descartar()">
-          <i class="fa-solid fa-rotate-left"></i> Descartar
-        </button>
+        <a class="btn btn-ghost" href="ListaContratistas.html"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
+        <button class="btn btn-ghost" type="button" onclick="descartar()"><i class="fa-solid fa-rotate-left"></i> Descartar</button>
         <button class="btn btn-warning" type="button" id="btnGuardar" onclick="guardar()">
           <span class="spinner"></span>
           <i class="fa-solid fa-floppy-disk btn-icon"></i>
@@ -356,7 +393,6 @@
       </div>
     </div>
   </div>
-
 </main>
 
 <footer>
@@ -385,28 +421,26 @@
   let originales        = {};
   let currentStar       = 0;
 
-  /*
-    Normaliza el valor de ubicación para que coincida EXACTAMENTE
-    con el enum Java:  CDMX | Hidalgo | Puebla
-    Cubre casos donde la API devuelva HIDALGO/PUEBLA en mayúsculas.
-  */
-  function normalizarUbicacion(val) {
-    const mapa = {
-      'CDMX'    : 'CDMX',
-      'cdmx'    : 'CDMX',
-      'HIDALGO' : 'Hidalgo',
-      'hidalgo' : 'Hidalgo',
-      'Hidalgo' : 'Hidalgo',
-      'PUEBLA'  : 'Puebla',
-      'puebla'  : 'Puebla',
-      'Puebla'  : 'Puebla'
-    };
-    return mapa[val] !== undefined ? mapa[val] : val;
+  /* ── Perfil en navbar ── */
+  (function() {
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) return;
+    const ini = emp.nombreEmpleado.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    $('navAvatar').textContent = ini;
+    $('navNombre').textContent = emp.nombreEmpleado;
+    $('navRol').textContent    = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
+
+  /* ── Foto preview ── */
+  function previewFoto() {
+    const url = $('fotoPerfilUrl').value.trim();
+    const img  = $('fotoImg');
+    const icon = $('fotoIcon');
+    if (url) { img.src = url; img.style.display='block'; icon.style.display='none'; }
+    else     { img.style.display='none'; icon.style.display=''; }
   }
 
-  /* ══════════════════════════════════════
-     INIT
-  ══════════════════════════════════════ */
+  /* ══ INIT ══ */
   function init() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) { mostrarNoBanner(); return; }
@@ -420,36 +454,41 @@
     $('noBanner').style.display = 'block';
   }
 
-  /* ══════════════════════════════════════
-     CARGAR DATOS
-  ══════════════════════════════════════ */
+  /* ══ CARGAR DATOS ══ */
   function cargarDatos(c) {
     $('badgeName').textContent = c.nombreContratista || c.rfcContratista || '—';
     $('badgeId').textContent   = c.idContratista || '—';
 
     setVal('nombreContratista',      c.nombreContratista);
+    setVal('curp',                   c.curp);
     setVal('rfcContratista',         c.rfcContratista);
     setVal('telefonoContratista',    c.telefonoContratista);
     setVal('correoContratista',      c.correoContratista);
     setVal('descripcionContratista', c.descripcionContratista);
     setVal('experiencia',            c.experiencia);
+    setVal('fotoPerfilUrl',          c.fotoPerfilUrl);
 
-    /* Normalizar ubicación al cargar: la API puede devolver HIDALGO/PUEBLA */
-    const ubic = normalizarUbicacion((c.ubicacionContratista || '').toString());
-    if (ubic) $('ubicacionContratista').value = ubic;
+    /* Foto preview */
+    if (c.fotoPerfilUrl) {
+      $('fotoImg').src = c.fotoPerfilUrl;
+      $('fotoImg').style.display = 'block';
+      $('fotoIcon').style.display = 'none';
+    }
 
-    /* estado */
+    /* Estado operación: idEstadoOperacion (Integer) */
+    const idEst = c.estadoOperacion?.idEstado ?? c.idEstadoOperacion;
+    if (idEst) $('idEstadoOperacion').value = String(idEst);
+    /* Estado contratista */
     const radio = document.querySelector(`input[name="estadoContratista"][value="${c.estadoContratista}"]`);
     if (radio) radio.checked = true;
 
-    /* calificación */
+    /* Calificación */
     currentStar = c.calificacionContratista || 0;
     $('calificacionContratista').value = currentStar || '';
     paintStars(currentStar);
     $('starLabel').textContent = currentStar > 0 ? STAR_LABELS[currentStar] : 'Sin calificar';
 
     guardarSnapshot();
-
     document.querySelectorAll('#formEditar input,#formEditar select,#formEditar textarea')
       .forEach(el => { el.addEventListener('input', detectar); el.addEventListener('change', detectar); });
   }
@@ -459,23 +498,26 @@
     if (el && val != null) el.value = val;
   }
 
-  /* ══════════════════════════════════════
-     LEER FORMULARIO
-     PUT solo acepta los campos del ContratistaRequestDTO (sin estado).
-  ══════════════════════════════════════ */
+  /* ══ LEER FORMULARIO ══ */
   function leerForm() {
-    return {
-      nombreContratista:       $('nombreContratista').value.trim(),
-      rfcContratista:          $('rfcContratista').value.trim().toUpperCase(),
-      telefonoContratista:     $('telefonoContratista').value.trim(),
-      correoContratista:       $('correoContratista').value.trim(),
-      descripcionContratista:  $('descripcionContratista').value.trim(),
-      experiencia:             $('experiencia').value.trim() || null,
-      calificacionContratista: currentStar > 0 ? currentStar : null,
-      /* Normalizado para coincidir con enum Java: CDMX | Hidalgo | Puebla */
-      ubicacionContratista:    normalizarUbicacion($('ubicacionContratista').value || '')
-    };
-  }
+  const fotoUrl = $('fotoPerfilUrl').value.trim();
+  const idEst = $('idEstadoOperacion').value ? parseInt($('idEstadoOperacion').value, 10) : null;
+  return {
+    nombreContratista:       $('nombreContratista').value.trim(),
+    curp:                    $('curp').value.trim().toUpperCase(),
+    rfcContratista:          $('rfcContratista').value.trim().toUpperCase(),
+    telefonoContratista:     $('telefonoContratista').value.trim(),
+    correoContratista:       $('correoContratista').value.trim(),
+    descripcionContratista:  $('descripcionContratista').value.trim(),
+    experiencia:             $('experiencia').value.trim() || null,
+    calificacionContratista: currentStar > 0 ? currentStar : null,
+    fotoPerfilUrl:           fotoUrl || null,
+    idEstadoOperacion:   idEst,
+    id_estado_operacion: idEst,
+    idEstado:            idEst,
+    estadoOperacion:     idEst != null ? { idEstado: idEst } : null
+  };
+}
 
   function leerEstado() {
     const radio = document.querySelector('input[name="estadoContratista"]:checked');
@@ -496,18 +538,18 @@
     lbl.style.color = mod > 0 ? 'var(--warning)' : '';
   }
 
-  /* ══════════════════════════════════════
-     VALIDAR
-  ══════════════════════════════════════ */
+  /* ══ VALIDAR ══ */
   function validar() {
     let ok = true;
     [
       { id:'nombreContratista',      fid:'field-nombre',    check: v => v.trim().length > 0 && v.length <= 100 },
+      { id:'curp',                   fid:'field-curp',      check: v => v.trim().length === 18 },
       { id:'rfcContratista',         fid:'field-rfc',       check: v => v.trim().length > 0 && v.length <= 15 },
       { id:'telefonoContratista',    fid:'field-telefono',  check: v => v.trim().length > 0 && v.length <= 15 },
       { id:'correoContratista',      fid:'field-correo',    check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
-      { id:'ubicacionContratista',   fid:'field-ubicacion', check: v => v !== '' },
+      { id:'idEstadoOperacion',      fid:'field-ubicacion', check: v => v !== '' },
       { id:'descripcionContratista', fid:'field-desc',      check: v => v.trim().length > 0 },
+      { id:'fotoPerfilUrl',          fid:'field-foto',      check: v => v.length <= 255 },
     ].forEach(({ id, fid, check }) => {
       const el=$(id), fe=$(fid); if (!fe) return;
       if (!check(el?.value || '')) { fe.classList.add('has-error'); ok = false; }
@@ -516,71 +558,46 @@
     return ok;
   }
 
-  /* ══════════════════════════════════════
-     GUARDAR
-     1. PUT /contratistas/{id}  → datos sin estado
-     2. PATCH /contratistas/{id}/estado  → solo si cambió
-  ══════════════════════════════════════ */
+  /* ══ GUARDAR ══ */
   async function guardar() {
-    if (!contratistaActual) return;
-    if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
+  if (!contratistaActual) return;
+  if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
 
-    const btn = $('btnGuardar');
-    setLoading(btn, true);
+  const btn = $('btnGuardar');
+  setLoading(btn, true);
 
-    const dto    = leerForm();
-    const estado = leerEstado();
+  const dto = leerForm();
+  dto.estadoContratista = leerEstado() || contratistaActual.estadoContratista;
 
-    try {
-      /* 1. PUT datos */
-      const resPut = await fetch(`${API_BASE}/contratistas/${contratistaActual.idContratista}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dto)
-      });
-
-      if (!resPut.ok) {
-        const errBody = await resPut.json().catch(() => ({}));
-        throw new Error(errBody.message || errBody.error || `Error ${resPut.status} al guardar datos`);
-      }
-
-      const updated = await resPut.json();
-
-      /* 2. PATCH estado solo si cambió */
-      if (estado && estado !== contratistaActual.estadoContratista) {
-        const resPatch = await fetch(
-          `${API_BASE}/contratistas/${contratistaActual.idContratista}/estado?estado=${estado}`,
-          { method: 'PATCH' }
-        );
-        if (!resPatch.ok) {
-          const errBody = await resPatch.json().catch(() => ({}));
-          throw new Error(errBody.message || errBody.error || `Error ${resPatch.status} al cambiar estado`);
-        }
-      }
-
-      /* 3. Actualizar estado local */
-      contratistaActual = { ...updated, estadoContratista: estado || updated.estadoContratista };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(contratistaActual));
-      $('badgeName').textContent = contratistaActual.nombreContratista || contratistaActual.rfcContratista;
-      guardarSnapshot();
-      detectar();
-      showToast('Cambios guardados correctamente', true);
-
-    } catch (e) {
-      showToast(e.message || 'Error al guardar', false);
-    } finally {
-      setLoading(btn, false);
+  try {
+    const resPut = await fetch(`${API_BASE}/contratistas/${contratistaActual.idContratista}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto)
+    });
+    if (!resPut.ok) {
+      const errBody = await resPut.json().catch(() => ({}));
+      throw new Error(errBody.message || errBody.error || `Error ${resPut.status} al guardar datos`);
     }
+    const updated = await resPut.json();
+
+    contratistaActual = { ...updated, estadoContratista: dto.estadoContratista };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(contratistaActual));
+    $('badgeName').textContent = contratistaActual.nombreContratista || contratistaActual.rfcContratista;
+    guardarSnapshot(); detectar();
+    showToast('Cambios guardados correctamente', true);
+  } catch (e) {
+    showToast(e.message || 'Error al guardar', false);
+  } finally {
+    setLoading(btn, false);
   }
+}
 
   function descartar() {
-    if (contratistaActual) {
-      cargarDatos(contratistaActual);
-      showToast('Cambios descartados', false);
-    }
+    if (contratistaActual) { cargarDatos(contratistaActual); showToast('Cambios descartados', false); }
   }
 
-  /* ══ ESTRELLAS ══ */
+  /* ── Estrellas ── */
   const stars = document.querySelectorAll('.star-btn');
   stars.forEach(s => {
     s.addEventListener('click', () => {
@@ -593,11 +610,9 @@
     s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
     s.addEventListener('mouseleave', () => paintStars(currentStar));
   });
-  function paintStars(n) {
-    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n));
-  }
+  function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
 
-  /* ══ HELPERS ══ */
+  /* ── Helpers ── */
   function setLoading(btn, on) {
     btn.disabled = on; btn.classList.toggle('loading', on);
     btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios';
@@ -610,7 +625,7 @@
     ic.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
     t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
   }
-  function cerrarSesion() { window.location.href = '../../index.html'; }
+  function cerrarSesion() { sessionStorage.removeItem('empleado'); window.location.href = '../../index.html'; }
 
   let lastScroll = 0;
   const scrollBtn = $('scrollTop');

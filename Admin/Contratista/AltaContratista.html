@@ -17,13 +17,25 @@
     }
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
 
+    /* ── HEADER ── */
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+
+    /* ── NAVBAR ── */
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .nav-link { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; }
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+
+    /* Perfil pill */
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
+
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -54,11 +66,7 @@
 
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
     .form-section { display:flex; flex-direction:column; gap:1.25rem; animation:fadeUp var(--dur-normal) var(--ease-out) both; }
-    .form-section:nth-child(1) { animation-delay:240ms; }
-    .form-section:nth-child(2) { animation-delay:320ms; }
-    .form-section:nth-child(3) { animation-delay:400ms; }
-    .form-section:nth-child(4) { animation-delay:480ms; }
-    .form-section:nth-child(5) { animation-delay:560ms; }
+    .form-section:nth-child(1){animation-delay:240ms} .form-section:nth-child(2){animation-delay:320ms} .form-section:nth-child(3){animation-delay:400ms} .form-section:nth-child(4){animation-delay:480ms} .form-section:nth-child(5){animation-delay:560ms}
     .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
     .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
     .form-row { display:grid; gap:1rem; }
@@ -89,6 +97,13 @@
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
 
+    /* foto preview */
+    .foto-wrap { display:flex; align-items:center; gap:12px; }
+    .foto-preview { width:48px; height:48px; border-radius:50%; border:1px solid var(--border); background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .foto-preview img { width:100%; height:100%; object-fit:cover; display:none; }
+    .foto-preview i { font-size:18px; color:var(--muted); }
+    .foto-wrap .input-wrap { flex:1; }
+
     .form-divider { height:1px; background:var(--border); }
 
     .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
@@ -118,7 +133,7 @@
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @media(max-width:680px) { .col-2{grid-template-columns:1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} }
+    @media(max-width:680px) { .col-2{grid-template-columns:1fr} .page-header{flex-direction:column;align-items:flex-start} .form-footer{flex-direction:column;align-items:stretch} .profile-info{display:none} }
   </style>
 </head>
 <body>
@@ -134,11 +149,16 @@
   <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
   <a class="nav-link active" href="ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
-  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
-  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
-  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
@@ -168,6 +188,7 @@
 
     <form class="form-body" id="formContratista" novalidate>
 
+      <!-- ── SECCIÓN 1: Identificación ── -->
       <div class="form-section">
         <div class="section-label">
           <i class="fa-solid fa-building" style="color:var(--gold);font-size:11px"></i>
@@ -181,6 +202,15 @@
             </div>
             <span class="field-error">El nombre es obligatorio (máx. 100 caracteres)</span>
           </div>
+          <div class="field" id="field-curp">
+            <label>CURP <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i>
+              <input type="text" id="curp" placeholder="Ej. XAXX010101HXXXXX00" maxlength="18" style="text-transform:uppercase" />
+            </div>
+            <span class="field-error">El CURP debe tener exactamente 18 caracteres</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
           <div class="field" id="field-rfc">
             <label>RFC <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i>
@@ -188,6 +218,28 @@
             </div>
             <span class="field-error">El RFC es obligatorio (máx. 15 caracteres)</span>
           </div>
+          <div class="field" id="field-ubicacion">
+            <label>Estado de operación <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="idEstadoOperacion">
+                <option value="" disabled selected>Selecciona un estado…</option>
+                <option value="1">Ciudad de México (CDMX)</option>
+                <option value="2">Hidalgo</option>
+                <option value="3">Puebla</option>
+              </select>
+            </div>
+            <span class="field-error">El estado de operación es obligatorio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── SECCIÓN 2: Contacto ── -->
+      <div class="form-section">
+        <div class="section-label">
+          <i class="fa-solid fa-address-card" style="color:var(--gold);font-size:11px"></i>
+          Contacto
         </div>
         <div class="form-row col-2">
           <div class="field" id="field-telefono">
@@ -205,42 +257,27 @@
             <span class="field-error">Ingresa un correo válido</span>
           </div>
         </div>
-        <div class="form-row col-2">
-          <div class="field" id="field-ubicacion">
-            <label>Ubicación <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
-              <!--
-                Values EXACTOS del enum Ubicacion en Java:
-                CDMX | Hidalgo | Puebla
-              -->
-              <select id="ubicacionContratista">
-                <option value="" disabled selected>Selecciona una ubicación…</option>
-                <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="Hidalgo">Hidalgo</option>
-                <option value="Puebla">Puebla</option>
-              </select>
-            </div>
-            <span class="field-error">La ubicación es obligatoria</span>
-          </div>
-          <div class="field">
-            <label>Calificación inicial</label>
-            <div class="stars-container">
-              <div class="stars-wrap">
-                <button type="button" class="star-btn" data-val="1">&#9733;</button>
-                <button type="button" class="star-btn" data-val="2">&#9733;</button>
-                <button type="button" class="star-btn" data-val="3">&#9733;</button>
-                <button type="button" class="star-btn" data-val="4">&#9733;</button>
-                <button type="button" class="star-btn" data-val="5">&#9733;</button>
-                <span class="star-value-label" id="starLabel">Sin calificar</span>
+        <div class="form-row col-1">
+          <div class="field" id="field-foto">
+            <label>Foto de perfil (URL)</label>
+            <div class="foto-wrap">
+              <div class="foto-preview" id="fotoPreview">
+                <img id="fotoImg" src="" alt="preview" />
+                <i class="fa-solid fa-user" id="fotoIcon"></i>
+              </div>
+              <div class="input-wrap">
+                <i class="fa-solid fa-image"></i>
+                <input type="url" id="fotoPerfilUrl" placeholder="https://ejemplo.com/foto.jpg" maxlength="255" oninput="previewFoto()" />
               </div>
             </div>
-            <input type="hidden" id="calificacionContratista" />
+            <span class="field-error">La URL no puede exceder 255 caracteres</span>
           </div>
         </div>
       </div>
 
       <div class="form-divider"></div>
 
+      <!-- ── SECCIÓN 3: Perfil profesional ── -->
       <div class="form-section">
         <div class="section-label">
           <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i>
@@ -255,12 +292,26 @@
             <span class="field-error">La descripción es obligatoria (máx. 255 caracteres)</span>
           </div>
         </div>
-        <div class="form-row col-1">
+        <div class="form-row col-2">
           <div class="field">
             <label>Experiencia</label>
             <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
               <textarea id="experiencia" placeholder="Años de experiencia, proyectos relevantes…" maxlength="200"></textarea>
             </div>
+          </div>
+          <div class="field">
+            <label>Calificación inicial</label>
+            <div class="stars-container">
+              <div class="stars-wrap">
+                <button type="button" class="star-btn" data-val="1">&#9733;</button>
+                <button type="button" class="star-btn" data-val="2">&#9733;</button>
+                <button type="button" class="star-btn" data-val="3">&#9733;</button>
+                <button type="button" class="star-btn" data-val="4">&#9733;</button>
+                <button type="button" class="star-btn" data-val="5">&#9733;</button>
+                <span class="star-value-label" id="starLabel">Sin calificar</span>
+              </div>
+            </div>
+            <input type="hidden" id="calificacionContratista" />
           </div>
         </div>
       </div>
@@ -305,23 +356,23 @@
 <script>
   const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
 
-  /*
-    Normaliza el valor de ubicación para que coincida EXACTAMENTE
-    con el enum Java:  CDMX | Hidalgo | Puebla
-    Cubre casos donde la API devuelva HIDALGO/PUEBLA en mayúsculas.
-  */
-  function normalizarUbicacion(val) {
-    const mapa = {
-      'CDMX'    : 'CDMX',
-      'cdmx'    : 'CDMX',
-      'HIDALGO' : 'Hidalgo',
-      'hidalgo' : 'Hidalgo',
-      'Hidalgo' : 'Hidalgo',
-      'PUEBLA'  : 'Puebla',
-      'puebla'  : 'Puebla',
-      'Puebla'  : 'Puebla'
-    };
-    return mapa[val] !== undefined ? mapa[val] : val;
+  /* ── Perfil en navbar ── */
+  (function() {
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) return;
+    const ini = emp.nombreEmpleado.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    document.getElementById('navAvatar').textContent  = ini;
+    document.getElementById('navNombre').textContent  = emp.nombreEmpleado;
+    document.getElementById('navRol').textContent     = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
+
+  /* ── Foto preview ── */
+  function previewFoto() {
+    const url = document.getElementById('fotoPerfilUrl').value.trim();
+    const img  = document.getElementById('fotoImg');
+    const icon = document.getElementById('fotoIcon');
+    if (url) { img.src = url; img.style.display='block'; icon.style.display='none'; }
+    else     { img.style.display='none'; icon.style.display=''; }
   }
 
   /* ── Estrellas ── */
@@ -345,11 +396,13 @@
     let ok = true;
     [
       { id:'nombreContratista',      fid:'field-nombre',    check: v => v.trim().length > 0 && v.length <= 100 },
+      { id:'curp',                   fid:'field-curp',      check: v => v.trim().length === 18 },
       { id:'rfcContratista',         fid:'field-rfc',       check: v => v.trim().length > 0 && v.length <= 15 },
       { id:'telefonoContratista',    fid:'field-telefono',  check: v => v.trim().length > 0 && v.length <= 15 },
       { id:'correoContratista',      fid:'field-correo',    check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
-      { id:'ubicacionContratista',   fid:'field-ubicacion', check: v => v.trim().length > 0 },
+      { id:'idEstadoOperacion',      fid:'field-ubicacion', check: v => v.trim().length > 0 },
       { id:'descripcionContratista', fid:'field-desc',      check: v => v.trim().length > 0 },
+      { id:'fotoPerfilUrl',          fid:'field-foto',      check: v => v.length <= 255 },
     ].forEach(({ id, fid, check }) => {
       const el = document.getElementById(id);
       const fe = document.getElementById(fid);
@@ -370,17 +423,26 @@
     const btn = document.getElementById('btnGuardar');
     setLoading(btn, true);
 
-    const payload = {
-      nombreContratista:       document.getElementById('nombreContratista').value.trim(),
-      rfcContratista:          document.getElementById('rfcContratista').value.trim().toUpperCase(),
-      telefonoContratista:     document.getElementById('telefonoContratista').value.trim(),
-      correoContratista:       document.getElementById('correoContratista').value.trim(),
-      descripcionContratista:  document.getElementById('descripcionContratista').value.trim(),
-      experiencia:             document.getElementById('experiencia').value.trim() || null,
-      calificacionContratista: currentStar > 0 ? currentStar : null,
-      /* Normalizado para coincidir con enum Java: CDMX | Hidalgo | Puebla */
-      ubicacionContratista:    normalizarUbicacion(document.getElementById('ubicacionContratista').value)
-    };
+    const fotoUrl = document.getElementById('fotoPerfilUrl').value.trim();
+const idEstado = parseInt(document.getElementById('idEstadoOperacion').value, 10);
+const idEstadoVal = Number.isNaN(idEstado) ? null : idEstado;
+
+const payload = {
+  nombreContratista:       document.getElementById('nombreContratista').value.trim(),
+  curp:                    document.getElementById('curp').value.trim().toUpperCase(),
+  rfcContratista:          document.getElementById('rfcContratista').value.trim().toUpperCase(),
+  telefonoContratista:     document.getElementById('telefonoContratista').value.trim(),
+  correoContratista:       document.getElementById('correoContratista').value.trim(),
+  descripcionContratista:  document.getElementById('descripcionContratista').value.trim(),
+  experiencia:             document.getElementById('experiencia').value.trim() || null,
+  calificacionContratista: currentStar > 0 ? currentStar : null,
+  fotoPerfilUrl:           fotoUrl || null,
+  // ── Variantes del estado de operación (una de estas la acepta el backend) ──
+  idEstadoOperacion:   idEstadoVal,
+  id_estado_operacion: idEstadoVal,
+  idEstado:            idEstadoVal,
+  estadoOperacion:     idEstadoVal != null ? { idEstado: idEstadoVal } : null
+};
 
     try {
       const res = await fetch(`${API_BASE}/contratistas`, {
@@ -408,6 +470,8 @@
     currentStar = 0; paintStars(0);
     document.getElementById('calificacionContratista').value = '';
     document.getElementById('starLabel').textContent = 'Sin calificar';
+    document.getElementById('fotoImg').style.display = 'none';
+    document.getElementById('fotoIcon').style.display = '';
     document.querySelectorAll('.field').forEach(f => f.classList.remove('has-error'));
   }
 
@@ -424,7 +488,7 @@
     icon.className   = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
     t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
   }
-  function cerrarSesion() { window.location.href = '../../index.html'; }
+  function cerrarSesion() { sessionStorage.removeItem('empleado'); window.location.href = '../../index.html'; }
 
   let lastScroll = 0;
   const scrollBtn = document.getElementById('scrollTop');

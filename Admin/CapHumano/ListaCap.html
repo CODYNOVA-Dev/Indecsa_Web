@@ -6,7 +6,6 @@
   <title>INDECSA – Cap. Humano</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/animations.css" />
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
@@ -15,8 +14,19 @@
       --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
       --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
     }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+    @keyframes popIn { from{opacity:0;transform:scale(.5) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+
     body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
 
+    /* ── HEADER ── */
     header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
     .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
     nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
@@ -37,6 +47,7 @@
     main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
     .page-wrap { max-width:960px; margin:0 auto; }
 
+    /* ── PAGE HEADER ── */
     .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
     .page-header-left { display:flex; align-items:center; gap:1rem; }
     .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; }
@@ -47,10 +58,11 @@
     .breadcrumb a { color:var(--gold); text-decoration:none; }
     .breadcrumb i { font-size:10px; }
 
-    .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; }
+    /* ── TOOLBAR ── */
+    .toolbar { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; flex-wrap:wrap; }
     .btn-add { display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; background:linear-gradient(135deg,var(--purple),#7a72c4); color:#0B1F3A; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:700; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(175,169,236,0.25); transition:transform .2s,box-shadow .2s; text-decoration:none; white-space:nowrap; }
     .btn-add:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(175,169,236,0.35); }
-    .toolbar-right { margin-left:auto; display:flex; align-items:flex-end; gap:10px; }
+    .toolbar-right { margin-left:auto; }
     .search-wrap { position:relative; min-width:260px; }
     .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .search-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px 9px 36px; outline:none; transition:border-color .2s; }
@@ -60,29 +72,29 @@
     .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
     .results-info strong { color:var(--white); }
 
+    /* ── SKELETONS ── */
     .skeleton-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.08); border-radius:13px; padding:14px 16px; display:grid; grid-template-columns:42px 1fr; gap:12px; }
     .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
     .sk-circle { width:38px; height:38px; border-radius:50%; }
     .sk-line { height:10px; margin-bottom:8px; }
     .sk-w80{width:80%} .sk-w60{width:60%} .sk-w40{width:40%}
-    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-    .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; animation:fadeUp .4s ease both; }
-
-    .emp-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:14px 16px; display:grid; grid-template-columns:46px 1fr; gap:12px; align-items:start; position:relative; cursor:pointer; opacity:0; transition:border-color var(--dur-normal) var(--ease-smooth),background var(--dur-normal) var(--ease-smooth),transform var(--dur-normal) var(--ease-smooth),box-shadow var(--dur-normal) var(--ease-smooth); }
+    /* ── CARDS ── */
+    .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .emp-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:13px; padding:14px 16px; display:grid; grid-template-columns:46px 1fr; gap:12px; align-items:start; position:relative; cursor:pointer; opacity:0; animation:fadeUp .45s cubic-bezier(.34,1.56,.64,1) both; transition:border-color .2s,background .2s,transform .2s,box-shadow .2s; }
     .emp-card:hover { border-color:rgba(175,169,236,0.45); background:#1a3560; transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
 
     .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; margin-top:2px; }
     .av-purple { background:rgba(175,169,236,0.15); color:var(--purple); border:1px solid rgba(175,169,236,0.3); }
-    .av-blue   { background:rgba(133,183,235,0.15); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
-    .av-green  { background:rgba(93,202,165,0.15);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
-    .av-amber  { background:rgba(250,199,117,0.15); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
-    .av-coral  { background:rgba(240,149,149,0.12); color:#F09595; border:1px solid rgba(240,149,149,0.3); }
-    .av-teal   { background:rgba(93,202,165,0.1);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.25); }
+    .av-blue   { background:rgba(133,183,235,0.15); color:#85B7EB;       border:1px solid rgba(133,183,235,0.3); }
+    .av-green  { background:rgba(93,202,165,0.15);  color:#5DCAA5;       border:1px solid rgba(93,202,165,0.3); }
+    .av-amber  { background:rgba(250,199,117,0.15); color:#FAC775;       border:1px solid rgba(250,199,117,0.3); }
+    .av-coral  { background:rgba(240,149,149,0.12); color:#F09595;       border:1px solid rgba(240,149,149,0.3); }
+    .av-teal   { background:rgba(93,202,165,0.1);   color:#5DCAA5;       border:1px solid rgba(93,202,165,0.25); }
 
     .ename { font-size:13px; font-weight:500; color:var(--white); margin-bottom:6px; padding-right:80px; }
     .emeta { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
-    .erow { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .erow  { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
     .erow i { font-size:10px; color:var(--gold); width:12px; flex-shrink:0; }
 
     .efooter { display:flex; align-items:center; justify-content:flex-end; padding-top:9px; border-top:1px solid rgba(255,255,255,0.06); }
@@ -95,10 +107,9 @@
     .eact.del:hover  { background:rgba(240,149,149,0.12); }
 
     .rol-badge { position:absolute; top:13px; right:14px; font-size:9px; font-weight:600; padding:3px 9px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; }
-    .rb-admin      { background:rgba(175,169,236,0.15); color:var(--purple); border:1px solid rgba(175,169,236,0.35); }
-    .rb-supervisor { background:rgba(133,183,235,0.12); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
-    .rb-operador   { background:rgba(93,202,165,0.12);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
-    .rb-default    { background:rgba(200,169,110,0.12); color:var(--gold); border:1px solid rgba(200,169,110,0.3); }
+    .rb-cap     { background:rgba(175,169,236,0.15); color:var(--purple); border:1px solid rgba(175,169,236,0.35); }
+    .rb-admin   { background:rgba(200,169,110,0.15); color:var(--gold);   border:1px solid rgba(200,169,110,0.35); }
+    .rb-default { background:rgba(133,183,235,0.12); color:#85B7EB;       border:1px solid rgba(133,183,235,0.3); }
 
     .empty-state { grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--muted); }
     .empty-state i { font-size:36px; color:rgba(200,169,110,0.2); margin-bottom:1rem; display:block; }
@@ -106,12 +117,14 @@
     .retry-btn { display:inline-flex; align-items:center; gap:7px; margin-top:1rem; padding:9px 20px; border-radius:9px; background:rgba(200,169,110,0.1); border:1px solid rgba(200,169,110,0.2); color:var(--gold); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:background .2s; }
     .retry-btn:hover { background:rgba(200,169,110,0.18); }
 
-    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; }
+    /* ── MODAL BASE ── */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; padding:1rem; }
     .modal-overlay.open { opacity:1; pointer-events:auto; }
-    .modal { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:2rem; width:90%; transform:translateY(20px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); max-height:90vh; overflow-y:auto; }
+    .modal { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:2rem; width:100%; transform:translateY(20px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); max-height:90vh; overflow-y:auto; }
     .modal-overlay.open .modal { transform:translateY(0); }
 
-    #modalDetalle .modal { max-width:520px; }
+    /* ── MODAL DETALLE ── */
+    #modalDetalle .modal { max-width:540px; }
     .det-header { display:flex; align-items:center; gap:16px; padding-bottom:1.25rem; margin-bottom:1.25rem; border-bottom:1px solid var(--border); }
     .det-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; }
     .det-info { flex:1; min-width:0; }
@@ -120,12 +133,14 @@
     .det-role-badge { font-size:9px; font-weight:600; padding:4px 12px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; white-space:nowrap; flex-shrink:0; }
     .det-section { margin-bottom:1.25rem; }
     .det-section-title { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:.75rem; display:flex; align-items:center; gap:8px; }
+    .det-section-title i { color:var(--gold); font-size:10px; }
     .det-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
     .det-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     .det-field { display:flex; flex-direction:column; gap:4px; }
     .det-field.full { grid-column:1/-1; }
     .det-lbl { font-size:11px; color:var(--muted); }
-    .det-val { font-size:13px; color:var(--white); background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:9px 12px; word-break:break-word; }
+    .det-val { font-size:13px; color:var(--white); background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:9px 12px; word-break:break-all; font-family:'DM Sans',sans-serif; }
+    .det-val.mono { letter-spacing:2px; font-size:13px; color:var(--gold); }
     .det-footer { display:flex; gap:10px; justify-content:flex-end; padding-top:1.25rem; border-top:1px solid var(--border); margin-top:.5rem; flex-wrap:wrap; }
     .det-btn { display:flex; align-items:center; gap:8px; padding:9px 20px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; border:1px solid transparent; transition:all .2s; }
     .det-btn.close-btn { background:rgba(255,255,255,0.05); color:var(--muted); border-color:rgba(255,255,255,0.08); }
@@ -135,10 +150,11 @@
     .det-btn.del-btn   { background:rgba(240,149,149,0.08); color:var(--danger); border-color:rgba(240,149,149,0.25); }
     .det-btn.del-btn:hover   { background:rgba(240,149,149,0.16); }
 
+    /* ── MODAL ELIMINAR ── */
     #modalEliminar .modal { max-width:420px; border-color:rgba(200,169,110,0.25); }
-    .modal-icon { font-size:28px; color:var(--muted); margin-bottom:1rem; }
+    .modal-icon  { font-size:28px; color:var(--muted); margin-bottom:1rem; }
     .modal-title { font-family:'Playfair Display',serif; font-size:18px; margin-bottom:.5rem; }
-    .modal-body { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:1.5rem; }
+    .modal-body  { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:1.5rem; }
     .modal-body strong { color:var(--white); }
     .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
     .modal-btn { padding:9px 20px; border-radius:9px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; display:flex; align-items:center; gap:7px; transition:all .2s; }
@@ -147,18 +163,17 @@
     .code-display { display:flex; align-items:center; justify-content:center; gap:10px; margin:1.2rem 0 1rem; }
     .code-digit { width:52px; height:64px; background:rgba(200,169,110,0.07); border:1.5px solid rgba(200,169,110,0.3); border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:30px; font-weight:700; color:var(--gold); animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both; }
     .code-digit:nth-child(2){animation-delay:.07s} .code-digit:nth-child(3){animation-delay:.14s}
-    @keyframes popIn{from{opacity:0;transform:scale(.5) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
     .code-input-wrap { display:flex; align-items:center; gap:10px; margin-bottom:.4rem; }
     .code-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:18px; font-weight:600; letter-spacing:6px; text-align:center; padding:10px 14px; outline:none; transition:border-color .2s,box-shadow .2s; }
     .code-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,169,110,0.08); }
     .code-input.wrong { border-color:var(--danger)!important; animation:shake .35s ease; }
     .code-input.right { border-color:var(--success)!important; }
-    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
     .code-hint { font-size:11px; color:var(--muted); text-align:center; margin-bottom:1.2rem; }
     .modal-btn.elim { background:rgba(200,169,110,0.12); border:1px solid rgba(200,169,110,0.3); color:var(--gold); font-weight:600; }
     .modal-btn.elim:hover:not(:disabled) { background:rgba(200,169,110,0.2); }
     .modal-btn.elim:disabled { opacity:.3; cursor:not-allowed; }
 
+    /* ── TOAST ── */
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     .toast i { font-size:16px; }
@@ -170,7 +185,14 @@
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
 
-    @media(max-width:700px){.cards-grid{grid-template-columns:1fr}.toolbar{flex-direction:column;align-items:stretch}.toolbar-right{margin-left:0}.page-header{flex-direction:column;align-items:flex-start}.det-grid{grid-template-columns:1fr}.det-footer{flex-direction:column}}
+    @media(max-width:700px) {
+      .cards-grid { grid-template-columns:1fr; }
+      .toolbar { flex-direction:column; align-items:stretch; }
+      .toolbar-right { margin-left:0; }
+      .page-header { flex-direction:column; align-items:flex-start; }
+      .det-grid { grid-template-columns:1fr; }
+      .det-footer { flex-direction:column; }
+    }
   </style>
 </head>
 <body>
@@ -183,9 +205,9 @@
 <nav>
   <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
   <a class="nav-link active" href="ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
-  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
-  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
-  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
@@ -216,7 +238,8 @@
       <div class="toolbar-right">
         <div class="search-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input class="search-input" type="text" id="busqueda" placeholder="Buscar por nombre…" oninput="filtrar()" />
+          <input class="search-input" type="text" id="busqueda"
+                 placeholder="Buscar por nombre o CURP…" oninput="filtrar()" />
         </div>
       </div>
     </div>
@@ -227,12 +250,12 @@
     </div>
 
     <div class="cards-grid" id="cardsGrid">
+      <!-- skeletons -->
       <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
       <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
       <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
       <div class="skeleton-card"><div class="sk sk-circle"></div><div><div class="sk sk-line sk-w80"></div><div class="sk sk-line sk-w60"></div><div class="sk sk-line sk-w40"></div></div></div>
     </div>
-
   </div>
 </main>
 
@@ -255,27 +278,28 @@
       <div class="det-avatar" id="detAvatar"></div>
       <div class="det-info">
         <div class="det-name" id="detNombre">—</div>
-        <div class="det-sub"  id="detCorreo">—</div>
+        <div class="det-sub"  id="detCorreoSub">—</div>
       </div>
       <span class="det-role-badge rol-badge" id="detRolBadge">—</span>
     </div>
     <div class="det-section">
-      <div class="det-section-title">
-        <i class="fa-solid fa-id-card" style="color:var(--gold);font-size:10px"></i>
-        Información del empleado
-      </div>
+      <div class="det-section-title"><i class="fa-solid fa-id-card"></i> Información del empleado</div>
       <div class="det-grid">
         <div class="det-field">
           <div class="det-lbl">ID de empleado</div>
           <div class="det-val" id="detId">—</div>
         </div>
         <div class="det-field">
-          <div class="det-lbl">Correo electrónico</div>
-          <div class="det-val" id="detCorreoFull">—</div>
-        </div>
-        <div class="det-field full">
           <div class="det-lbl">Rol asignado</div>
           <div class="det-val" id="detRolNombre">—</div>
+        </div>
+        <div class="det-field full">
+          <div class="det-lbl">Correo electrónico</div>
+          <div class="det-val" id="detCorreo">—</div>
+        </div>
+        <div class="det-field full">
+          <div class="det-lbl">CURP</div>
+          <div class="det-val mono" id="detCurp">—</div>
         </div>
         <div class="det-field full">
           <div class="det-lbl">Descripción del rol</div>
@@ -297,13 +321,14 @@
   </div>
 </div>
 
-<!-- MODAL ELIMINAR CON CÓDIGO -->
+<!-- MODAL ELIMINAR -->
 <div class="modal-overlay" id="modalEliminar">
   <div class="modal">
     <div class="modal-icon"><i class="fa-solid fa-user-shield"></i></div>
     <div class="modal-title">Eliminar empleado</div>
     <div class="modal-body">
-      Se eliminará permanentemente el registro de <strong id="elimNombre">—</strong> del sistema. Ingresa el código para confirmar.
+      Se eliminará permanentemente el registro de <strong id="elimNombre">—</strong>.
+      Ingresa el código para confirmar.
     </div>
     <div class="code-display">
       <div class="code-digit" id="cd0">?</div>
@@ -330,174 +355,206 @@
 </div>
 
 <script>
-  const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
-  const $ = id => document.getElementById(id);
+  var API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
+  function gid(id) { return document.getElementById(id); }
 
-  const AV_COLORS = ['av-purple','av-blue','av-green','av-amber','av-coral','av-teal'];
+  var AV_COLORS = ['av-purple','av-blue','av-green','av-amber','av-coral','av-teal'];
+
+  function iniciales(nombre) {
+    var p = (nombre || '').trim().split(' ');
+    return ((p[0] ? p[0][0] : '') + (p[1] ? p[1][0] : '')).toUpperCase();
+  }
 
   function rolBadgeClass(nombreRol) {
-    const r = (nombreRol||'').toUpperCase();
-    if (r.includes('ADMIN'))      return 'rb-admin';
-    if (r.includes('SUPERVISOR')) return 'rb-supervisor';
-    if (r.includes('OPERADOR'))   return 'rb-operador';
+    var r = (nombreRol || '').toUpperCase();
+    if (r.indexOf('CAP') !== -1) return 'rb-cap';
+    if (r.indexOf('ADMIN') !== -1) return 'rb-admin';
     return 'rb-default';
   }
 
-  function iniciales(nombre) {
-    const p = (nombre||'').trim().split(' ');
-    return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
-  }
+  var todos = [];
+  var pendingElimId = null;
+  var pendingElimNombre = '';
+  var codigoElim = '';
 
-  let todos = [];
-  let pendingElimId = '', pendingElimNombre = '', codigoElim = '';
-
-  /* ══ CARGAR — solo empleados con rol CAPITAL_HUMANO (idRol = 2) ══ */
+  /* ══ CARGAR: GET /api/empleados → filtrar los que tienen rol CAP en cliente ══ */
   async function cargarEmpleados() {
     try {
-      const res = await fetch(`${API_BASE}/empleados/rol/2`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      todos = await res.json();
+      var res = await fetch(API_BASE + '/empleados');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var data = await res.json();
+
+      /* Solo los que tienen rol que contenga "CAP" en el nombre */
+      todos = data.filter(function(e) {
+        var rolNombre = (e.rol && e.rol.nombreRol) ? e.rol.nombreRol : '';
+        return rolNombre.toUpperCase().indexOf('CAP') !== -1;
+      });
+
       filtrar();
     } catch(e) {
       console.error(e);
-      $('cardsGrid').innerHTML = `
-        <div class="empty-state">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <p>No se pudo conectar con el servidor.</p>
-          <button class="retry-btn" onclick="cargarEmpleados()">
-            <i class="fa-solid fa-rotate-right"></i> Reintentar
-          </button>
-        </div>`;
-      $('resultsLabel').textContent = 'Error al cargar datos';
+      gid('cardsGrid').innerHTML =
+        '<div class="empty-state">' +
+        '<i class="fa-solid fa-triangle-exclamation"></i>' +
+        '<p>No se pudo conectar con el servidor.</p>' +
+        '<button class="retry-btn" onclick="cargarEmpleados()">' +
+        '<i class="fa-solid fa-rotate-right"></i> Reintentar</button>' +
+        '</div>';
+      gid('resultsLabel').textContent = 'Error al cargar datos';
     }
   }
 
-  /* ══ FILTRAR — solo por nombre ══ */
+  /* ══ FILTRAR por nombre o CURP ══ */
   function filtrar() {
-    const q = $('busqueda').value.toLowerCase().trim();
-    const f = todos.filter(e =>
-      !q || (e.nombreEmpleado||'').toLowerCase().includes(q)
-    );
-    const grid = $('cardsGrid'), lbl = $('resultsLabel');
+    var q = gid('busqueda').value.toLowerCase().trim();
+    var f = todos.filter(function(e) {
+      if (!q) return true;
+      var nombre = (e.nombreEmpleado || '').toLowerCase();
+      var curp   = (e.curp || '').toLowerCase();
+      return nombre.indexOf(q) !== -1 || curp.indexOf(q) !== -1;
+    });
+
+    var grid = gid('cardsGrid'), lbl = gid('resultsLabel');
+
     if (!f.length) {
-      grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-users-gear"></i><p>No se encontraron empleados con ese nombre.</p></div>`;
+      grid.innerHTML =
+        '<div class="empty-state"><i class="fa-solid fa-users-gear"></i>' +
+        '<p>No se encontraron empleados con ese criterio.</p></div>';
       lbl.innerHTML = 'Sin resultados';
     } else {
-      grid.innerHTML = f.map((e,i) => renderCard(e,i)).join('');
-      lbl.innerHTML  = `<strong>${f.length}</strong> empleado${f.length!==1?'s':''} encontrado${f.length!==1?'s':''}`;
+      grid.innerHTML = f.map(function(e, i) { return renderCard(e, i); }).join('');
+      lbl.innerHTML  = '<strong>' + f.length + '</strong> empleado' +
+                       (f.length !== 1 ? 's' : '') + ' encontrado' + (f.length !== 1 ? 's' : '');
     }
   }
 
   /* ══ RENDER CARD ══ */
   function renderCard(e, idx) {
-    const delay = 60 + idx * 55;
-    const av  = AV_COLORS[idx % AV_COLORS.length];
-    const rol = e.rol?.nombreRol || '—';
-    const rbc = rolBadgeClass(rol);
-    const safeName = (e.nombreEmpleado||'').replace(/'/g,"\\'");
-    return `
-      <div class="emp-card" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${delay}ms" onclick="abrirDetalle(${e.idEmpleado})">
-        <div class="avatar ${av}">${iniciales(e.nombreEmpleado)}</div>
-        <div>
-          <div class="ename">${e.nombreEmpleado}</div>
-          <div class="emeta">
-            <div class="erow"><i class="fa-solid fa-envelope"></i>${e.correoEmpleado||'—'}</div>
-            <div class="erow"><i class="fa-solid fa-id-badge"></i>ID: ${e.idEmpleado}</div>
-            <div class="erow"><i class="fa-solid fa-user-tag"></i>${e.rol?.descripcionRol||rol}</div>
-          </div>
-          <div class="efooter">
-            <div class="eactions">
-              <button class="eact edit" onclick="event.stopPropagation();irAEditar(${e.idEmpleado})">
-                <i class="fa-solid fa-pen"></i> Editar
-              </button>
-              <button class="eact del" onclick="event.stopPropagation();abrirModalElim(${e.idEmpleado},'${safeName}')">
-                <i class="fa-solid fa-trash"></i> Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="rol-badge ${rbc}">${rol}</div>
-      </div>`;
+    var delay  = 60 + idx * 55;
+    var av     = AV_COLORS[idx % AV_COLORS.length];
+    var rol    = (e.rol && e.rol.nombreRol) ? e.rol.nombreRol : '—';
+    var rbc    = rolBadgeClass(rol);
+    var curp   = e.curp ? e.curp : '—';
+    var safeName = (e.nombreEmpleado || '').replace(/'/g, "\\'");
+
+    return (
+      '<div class="emp-card" style="animation-delay:' + delay + 'ms" onclick="abrirDetalle(' + e.idEmpleado + ')">' +
+        '<div class="avatar ' + av + '">' + iniciales(e.nombreEmpleado) + '</div>' +
+        '<div>' +
+          '<div class="ename">' + (e.nombreEmpleado || '—') + '</div>' +
+          '<div class="emeta">' +
+            '<div class="erow"><i class="fa-solid fa-envelope"></i>' + (e.correoEmpleado || '—') + '</div>' +
+            '<div class="erow"><i class="fa-solid fa-id-card"></i>' + curp + '</div>' +
+            '<div class="erow"><i class="fa-solid fa-id-badge"></i>ID: ' + e.idEmpleado + '</div>' +
+          '</div>' +
+          '<div class="efooter">' +
+            '<div class="eactions">' +
+              '<button class="eact edit" onclick="event.stopPropagation();irAEditar(' + e.idEmpleado + ')">' +
+                '<i class="fa-solid fa-pen"></i> Editar</button>' +
+              '<button class="eact del" onclick="event.stopPropagation();abrirModalElim(' + e.idEmpleado + ',\'' + safeName + '\')">' +
+                '<i class="fa-solid fa-trash"></i> Eliminar</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="rol-badge ' + rbc + '">' + rol + '</div>' +
+      '</div>'
+    );
   }
 
   /* ══ MODAL DETALLE ══ */
   function abrirDetalle(id) {
-    const e = todos.find(x => x.idEmpleado === id);
+    var e = todos.find(function(x) { return x.idEmpleado === id; });
     if (!e) return;
 
-    const avIdx = todos.indexOf(e);
-    const avCls = AV_COLORS[avIdx % AV_COLORS.length];
-    const rol   = e.rol?.nombreRol || '—';
+    var idx = todos.indexOf(e);
+    var avCls = AV_COLORS[idx % AV_COLORS.length];
+    var rol = (e.rol && e.rol.nombreRol) ? e.rol.nombreRol : '—';
 
-    const av = $('detAvatar');
+    var av = gid('detAvatar');
     av.textContent = iniciales(e.nombreEmpleado);
-    av.className   = `det-avatar ${avCls}`;
+    av.className   = 'det-avatar ' + avCls;
 
-    $('detNombre').textContent     = e.nombreEmpleado||'—';
-    $('detCorreo').textContent     = e.correoEmpleado||'—';
-    $('detId').textContent         = `#${e.idEmpleado}`;
-    $('detCorreoFull').textContent = e.correoEmpleado||'—';
-    $('detRolNombre').textContent  = rol;
-    $('detDescRol').textContent    = e.rol?.descripcionRol||'Sin descripción';
+    gid('detNombre').textContent    = e.nombreEmpleado || '—';
+    gid('detCorreoSub').textContent = e.correoEmpleado || '—';
+    gid('detId').textContent        = '#' + e.idEmpleado;
+    gid('detCorreo').textContent    = e.correoEmpleado || '—';
+    gid('detCurp').textContent      = e.curp || '—';
+    gid('detRolNombre').textContent = rol;
+    gid('detDescRol').textContent   = (e.rol && e.rol.descripcionRol) ? e.rol.descripcionRol : 'Sin descripción';
 
-    const badge = $('detRolBadge');
+    var badge = gid('detRolBadge');
     badge.textContent = rol;
-    badge.className   = `det-role-badge rol-badge ${rolBadgeClass(rol)}`;
+    badge.className   = 'det-role-badge rol-badge ' + rolBadgeClass(rol);
 
-    $('detBtnEditar').onclick   = () => { cerrarDetalle(); irAEditar(id); };
-    $('detBtnEliminar').onclick = () => { cerrarDetalle(); abrirModalElim(id, e.nombreEmpleado||''); };
+    gid('detBtnEditar').onclick   = function() { cerrarDetalle(); irAEditar(id); };
+    gid('detBtnEliminar').onclick = function() { cerrarDetalle(); abrirModalElim(id, e.nombreEmpleado || ''); };
 
-    $('modalDetalle').classList.add('open');
+    gid('modalDetalle').classList.add('open');
   }
 
-  function cerrarDetalle() { $('modalDetalle').classList.remove('open'); }
+  function cerrarDetalle() { gid('modalDetalle').classList.remove('open'); }
 
-  /* ══ EDITAR ══ */
+  /* ══ EDITAR: guarda el objeto completo en localStorage ══ */
   function irAEditar(id) {
-    const e = todos.find(x => x.idEmpleado === id);
+    var e = todos.find(function(x) { return x.idEmpleado === id; });
     if (!e) return;
     localStorage.setItem('indecsa_empleado_editar', JSON.stringify(e));
     window.location.href = 'EditCap.html';
   }
 
-  /* ══ ELIMINAR ══ */
+  /* ══ MODAL ELIMINAR ══ */
   function abrirModalElim(id, nombre) {
-    pendingElimId = id; pendingElimNombre = nombre;
-    codigoElim = String(Math.floor(Math.random()*900)+100);
-    $('elimNombre').textContent = nombre;
-    $('cd0').textContent = codigoElim[0];
-    $('cd1').textContent = codigoElim[1];
-    $('cd2').textContent = codigoElim[2];
-    const inp = $('elimCodeInput');
-    inp.value = ''; inp.classList.remove('wrong','right');
-    $('btnConfirmElim').disabled = true;
-    $('modalEliminar').classList.add('open');
-    setTimeout(() => inp.focus(), 300);
+    pendingElimId      = id;
+    pendingElimNombre  = nombre;
+    codigoElim = String(Math.floor(Math.random() * 900) + 100);
+
+    gid('elimNombre').textContent = nombre;
+    gid('cd0').textContent = codigoElim[0];
+    gid('cd1').textContent = codigoElim[1];
+    gid('cd2').textContent = codigoElim[2];
+
+    var inp = gid('elimCodeInput');
+    inp.value = '';
+    inp.classList.remove('wrong', 'right');
+    gid('btnConfirmElim').disabled = true;
+    gid('modalEliminar').classList.add('open');
+    setTimeout(function() { inp.focus(); }, 300);
   }
-  function cerrarModalElim() { $('modalEliminar').classList.remove('open'); pendingElimId = ''; }
+
+  function cerrarModalElim() {
+    gid('modalEliminar').classList.remove('open');
+    pendingElimId = null;
+  }
 
   function validarCodigo() {
-    const inp = $('elimCodeInput'), val = inp.value.replace(/\D/g,'');
-    inp.value = val; inp.classList.remove('wrong','right');
-    const btn = $('btnConfirmElim');
+    var inp = gid('elimCodeInput');
+    var val = inp.value.replace(/\D/g, '');
+    inp.value = val;
+    inp.classList.remove('wrong', 'right');
+    var btn = gid('btnConfirmElim');
     if (val.length === 3) {
       if (val === codigoElim) { inp.classList.add('right'); btn.disabled = false; }
       else                    { inp.classList.add('wrong'); btn.disabled = true;  }
-    } else btn.disabled = true;
+    } else {
+      btn.disabled = true;
+    }
   }
 
   async function confirmarEliminar() {
     if (!pendingElimId) return;
-    const btn = $('btnConfirmElim');
-    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
+    var btn = gid('btnConfirmElim');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Eliminando…';
     try {
-      const res = await fetch(`${API_BASE}/empleados/${pendingElimId}`, { method:'DELETE' });
+      var res = await fetch(API_BASE + '/empleados/' + pendingElimId, { method: 'DELETE' });
       if (!res.ok && res.status !== 204) throw new Error();
-      todos = todos.filter(e => e.idEmpleado !== pendingElimId);
-      cerrarModalElim(); filtrar();
-      showToast(`${pendingElimNombre} eliminado correctamente`, true);
-    } catch { showToast('Error al eliminar el empleado', false); }
-    finally {
+      todos = todos.filter(function(e) { return e.idEmpleado !== pendingElimId; });
+      cerrarModalElim();
+      filtrar();
+      showToast(pendingElimNombre + ' eliminado correctamente', true);
+    } catch(e) {
+      showToast('Error al eliminar el empleado', false);
+    } finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-trash"></i> Confirmar eliminación';
     }
@@ -505,27 +562,37 @@
 
   /* ══ HELPERS ══ */
   function showToast(msg, ok) {
-    const t = $('toast'); $('toastMsg').textContent = msg;
+    var t  = gid('toast'), ic = gid('toastIcon');
+    gid('toastMsg').textContent = msg;
     t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
-    const ic = $('toastIcon'); ic.style.color = ok ? 'var(--success)' : 'var(--danger)';
-    ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
-    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
+    ic.style.color      = ok ? 'var(--success)' : 'var(--danger)';
+    ic.className        = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
+
   function cerrarSesion() { window.location.href = '../../index.html'; }
 
-  let lastScroll = 0; const scrollBtn = $('scrollTop');
-  window.addEventListener('scroll', () => {
-    const c = window.scrollY;
+  var lastScroll = 0;
+  var scrollBtn  = gid('scrollTop');
+  window.addEventListener('scroll', function() {
+    var c = window.scrollY;
     document.body.classList.toggle('nav-hidden', c > lastScroll && c > 80);
     lastScroll = c <= 0 ? 0 : c;
     scrollBtn.classList.toggle('visible', c > 200);
   });
 
-  ['modalDetalle','modalEliminar'].forEach(id => {
-    $(id).addEventListener('click', e => { if (e.target === e.currentTarget) $(id).classList.remove('open'); });
+  ['modalDetalle', 'modalEliminar'].forEach(function(id) {
+    gid(id).addEventListener('click', function(e) {
+      if (e.target === e.currentTarget) gid(id).classList.remove('open');
+    });
   });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') ['modalDetalle','modalEliminar'].forEach(id => $(id).classList.remove('open'));
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      gid('modalDetalle').classList.remove('open');
+      gid('modalEliminar').classList.remove('open');
+    }
   });
 
   cargarEmpleados();
