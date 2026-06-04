@@ -34,6 +34,12 @@
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -210,6 +216,14 @@
   <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
   <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
@@ -355,6 +369,14 @@
 </div>
 
 <script>
+  (function(){
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) { window.location.href = '../../index.html'; return; }
+    const ini = (emp.nombreEmpleado || '').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    const a = document.getElementById('navAvatar'); if (a) a.textContent = ini || '--';
+    const n = document.getElementById('navNombre'); if (n) n.textContent = emp.nombreEmpleado || 'Usuario';
+    const r = document.getElementById('navRol');    if (r) r.textContent = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
   var API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
   function gid(id) { return document.getElementById(id); }
 
