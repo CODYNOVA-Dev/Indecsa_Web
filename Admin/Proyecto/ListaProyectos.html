@@ -281,12 +281,12 @@
           </select>
         </div>
         <div class="filter-group">
-          <div class="filter-label">Ubicación</div>
+          <div class="filter-label">Estado</div>
           <select class="filter-select" id="filtroUbic" onchange="filtrar()">
-            <option value="">Todas</option>
-            <option value="CDMX">CDMX</option>
-            <option value="Hidalgo">Hidalgo</option>
-            <option value="Puebla">Puebla</option>
+            <option value="">Todos</option>
+            <option value="1">CDMX</option>
+            <option value="2">Hidalgo</option>
+            <option value="3">Puebla</option>
           </select>
         </div>
       </div>
@@ -330,11 +330,24 @@
     </div>
 
     <div class="det-section">
-      <div class="det-section-title"><i class="fa-solid fa-map-location-dot" style="color:var(--gold);font-size:10px"></i> Ubicación</div>
+      <div class="det-section-title"><i class="fa-solid fa-folder-open" style="color:var(--gold);font-size:10px"></i> Identificación</div>
       <div class="det-grid">
+        <div class="det-field"><div class="det-lbl">ID</div><div class="det-val" id="detId">—</div></div>
+        <div class="det-field"><div class="det-lbl">Cliente</div><div class="det-val" id="detCliente">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Oferta de trabajo</div><div class="det-val" id="detOferta">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Imagen del proyecto</div><div class="det-val" id="detImagenWrap">—</div></div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-house" style="color:var(--gold);font-size:10px"></i> Domicilio</div>
+      <div class="det-grid">
+        <div class="det-field"><div class="det-lbl">Calle</div><div class="det-val" id="detCalle">—</div></div>
+        <div class="det-field"><div class="det-lbl">Núm. exterior</div><div class="det-val" id="detNumExt">—</div></div>
+        <div class="det-field"><div class="det-lbl">Colonia</div><div class="det-val" id="detColonia">—</div></div>
+        <div class="det-field"><div class="det-lbl">Código postal</div><div class="det-val" id="detCodPost">—</div></div>
+        <div class="det-field"><div class="det-lbl">Municipio/Alcaldía</div><div class="det-val" id="detMunAlc">—</div></div>
         <div class="det-field"><div class="det-lbl">Estado</div><div class="det-val" id="detEstado">—</div></div>
-        <div class="det-field"><div class="det-lbl">Municipio</div><div class="det-val" id="detMunicipio">—</div></div>
-        <div class="det-field full"><div class="det-lbl">Lugar / Dirección</div><div class="det-val" id="detLugar">—</div></div>
       </div>
     </div>
 
@@ -458,7 +471,7 @@
     const f=todos.filter(p=>
       (!q||(p.nombreProyecto||'').toLowerCase().includes(q))&&
       (!est||p.estatusProyecto===est)&&
-      (!ubic||p.estadoProyectoGeo===ubic)
+      (!ubic||(p.domicilio && p.domicilio.estado && String(p.domicilio.estado.idEstado)===ubic))
     );
     const grid=$('cardsGrid'), lbl=$('resultsLabel');
     if(!f.length){
@@ -478,7 +491,8 @@
     const ico=iconSet[idx%iconSet.length];
     const ec=ESTATUS_CLS[p.estatusProyecto]||'';
     const el=ESTATUS_LBL[p.estatusProyecto]||p.estatusProyecto;
-    const ub=UBIC_LBL[p.estadoProyectoGeo]||p.estadoProyectoGeo||'—';
+    const dom = p.domicilio || {};
+    const estNom = (dom.estado && (dom.estado.nombreEst || dom.estado.idEstado)) || '—';
     const safeName=(p.nombreProyecto||'').replace(/'/g,"\\'");
     return `
       <div class="proj-card" style="animation:fadeUp var(--dur-slow) var(--ease-spring) both;animation-delay:${delay}ms" onclick="abrirDetalle(${p.idProyecto})">
@@ -487,8 +501,8 @@
           <div><div class="pcard-name">${p.nombreProyecto}</div><div class="pcard-type">${p.tipoProyecto||'Sin tipo'}</div></div>
         </div>
         <div class="pmeta">
-          <div class="prow"><i class="fa-solid fa-location-dot"></i>${ub}${p.municipioProyecto?' · '+p.municipioProyecto:''}</div>
-          <div class="prow"><i class="fa-solid fa-map-pin"></i>${p.lugarProyecto||'—'}</div>
+          <div class="prow"><i class="fa-solid fa-user-tie"></i>${p.cliente||'—'}</div>
+          <div class="prow"><i class="fa-solid fa-location-dot"></i>${estNom}${dom.munAlc?' · '+dom.munAlc:''}</div>
           <div class="prow"><i class="fa-solid fa-calendar-day"></i>Inicio: ${fmtFecha(p.fechaEstimadaInicio)}</div>
           <div class="prow"><i class="fa-solid fa-calendar-check"></i>Fin: ${fmtFecha(p.fechaEstimadaFin)}</div>
         </div>
@@ -524,9 +538,20 @@
     badge.className=`estatus-badge ${ESTATUS_CLS[p.estatusProyecto]||''}`;
     badge.style.position='static'; badge.style.display='inline-block';
 
-    $('detEstado').textContent=UBIC_LBL[p.estadoProyectoGeo]||p.estadoProyectoGeo||'—';
-    $('detMunicipio').textContent=p.municipioProyecto||'—';
-    $('detLugar').textContent=p.lugarProyecto||'—';
+    $('detId').textContent      = '#' + (p.idProyecto||'—');
+    $('detCliente').textContent = p.cliente||'—';
+    $('detOferta').textContent  = p.ofertaTrabajo||'—';
+    const img = p.imagenProyectoUrl;
+    $('detImagenWrap').innerHTML = img
+      ? `<img src="${img}" alt="Imagen" style="max-width:160px;border-radius:8px;border:1px solid rgba(255,255,255,0.08)"/>`
+      : 'Sin imagen';
+    const dom = p.domicilio || {};
+    $('detCalle').textContent   = dom.calle||'—';
+    $('detNumExt').textContent  = dom.numExt||'—';
+    $('detColonia').textContent = dom.colonia||'—';
+    $('detCodPost').textContent = dom.codPost||'—';
+    $('detMunAlc').textContent  = dom.munAlc||'—';
+    $('detEstado').textContent  = (dom.estado && (dom.estado.nombreEst || dom.estado.idEstado))||'—';
     $('detFechaIni').textContent=fmtFecha(p.fechaEstimadaInicio);
     $('detFechaFin').textContent=fmtFecha(p.fechaEstimadaFin);
     $('detStars').innerHTML=detStars(p.calificacionProyecto);
