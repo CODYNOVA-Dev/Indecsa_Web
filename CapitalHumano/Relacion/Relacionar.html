@@ -442,7 +442,7 @@
     const f = proyectos.filter(p =>
       (!q    || (p.nombreProyecto||'').toLowerCase().includes(q)) &&
       (!est  || p.estatusProyecto === est) &&
-      (!ubic || p.estadoProyectoGeo === ubic)
+      (!ubic || (p.domicilio?.estado?.nombreEst||'') === ubic)
     );
     const grid = $('cardsGrid'), lbl = $('resultsLabel');
     if (!f.length) {
@@ -467,7 +467,7 @@
           <div class="pcard-icon ${ic}"><i class="fa-solid ${ico}" style="color:inherit;font-size:16px"></i></div>
           <div>
             <div class="pcard-name">${p.nombreProyecto}</div>
-            <div class="pcard-type">${p.tipoProyecto||'Sin tipo'} · ${p.estadoProyectoGeo||'—'}${p.municipioProyecto?' · '+p.municipioProyecto:''}</div>
+            <div class="pcard-type">${p.tipoProyecto||'Sin tipo'} · ${p.domicilio?.estado?.nombreEst||'—'}${p.domicilio?.munAlc?' · '+p.domicilio.munAlc:''}</div>
           </div>
         </div>
         <div class="pmeta">
@@ -495,7 +495,7 @@
     icon.className = `det-proj-icon ${ic}`;
     icon.innerHTML = `<i class="fa-solid ${ico}" style="color:inherit;font-size:20px"></i>`;
     $('modalNombre').textContent = p.nombreProyecto;
-    $('modalSub').textContent    = (p.tipoProyecto||'Sin tipo') + ' · ' + (p.estadoProyectoGeo||'—') + (p.municipioProyecto?' · '+p.municipioProyecto:'');
+    $('modalSub').textContent    = (p.tipoProyecto||'Sin tipo') + ' · ' + (p.domicilio?.estado?.nombreEst||'—') + (p.domicilio?.munAlc?' · '+p.domicilio.munAlc:'');
     const badge = $('modalBadge');
     badge.textContent = ESTATUS_LBL[p.estatusProyecto]||p.estatusProyecto||'—';
     badge.className   = `estatus-badge ${ESTATUS_CLS[p.estatusProyecto]||''}`;
@@ -535,7 +535,7 @@
     const data = res.ok ? await res.json() : [];
     todosContratistas = data.filter(c =>
       c.estadoContratista === 'ACTIVO' &&
-      (c.ubicacionContratista||'').toUpperCase() === (p.estadoProyectoGeo||'').toUpperCase()
+      (c.estadoOperacion?.nombreEst||'') === (p.domicilio?.estado?.nombreEst||'')
     );
   }
 
@@ -545,7 +545,7 @@
     todosTrabajadores = data
       .filter(t =>
         t.estadoTrabajador === 'ACTIVO' &&
-        (t.ubicacionTrabajador||'').toUpperCase() === (p.estadoProyectoGeo||'').toUpperCase()
+        (t.domicilio?.estado?.nombreEst||'') === (p.domicilio?.estado?.nombreEst||'')
       )
       .sort((a,b) => (a.especialidadTrabajador||'').localeCompare(b.especialidadTrabajador||''));
   }
@@ -560,7 +560,7 @@
     $('contratistaSelect').innerHTML = todosContratistas.length === 0
       ? '<option>No hay contratistas disponibles</option>'
       : todosContratistas.map(c =>
-        `<option value="${c.idContratista}">${c.nombreContratista} — ${c.ubicacionContratista}</option>`
+        `<option value="${c.idContratista}">${c.nombreContratista} — ${c.estadoOperacion?.nombreEst||'—'}</option>`
       ).join('');
   }
 

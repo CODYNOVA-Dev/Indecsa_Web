@@ -319,8 +319,8 @@
   const $ = id => document.getElementById(id);
 
   function iniciales(n='') { const p=n.trim().split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
-  function miniStars(n) { return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">★</div>`).join(''); }
-  function detStars(n) { const f=n||0; return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">★</span>`).join('')+`<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`; }
+  function miniStars(n) { return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">&#9733;</div>`).join(''); }
+  function detStars(n) { const f=n||0; return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">&#9733;</span>`).join('')+`<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`; }
   function fmt(f) { if(!f) return '—'; const [y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
 
   let todos = [];
@@ -346,7 +346,7 @@
     const f = todos.filter(t =>
       (!q    || (t.nombreTrabajador||'').toLowerCase().includes(q)) &&
       (!est  || t.estadoTrabajador === est) &&
-      (!ubic || t.ubicacionTrabajador === ubic) &&
+      (!ubic || (t.domicilio?.estado?.nombreEst||'') === ubic) &&
       (!esp  || t.especialidadTrabajador === esp)
     );
     const grid = $('cardsGrid'), lbl = $('resultsLabel');
@@ -376,7 +376,7 @@
             <div class="wrow"><i class="fa-solid fa-id-badge"></i>NSS: ${t.nssTrabajador||'—'}</div>
           </div>
           <div class="wfooter">
-            <div class="stars-mini">${miniStars(t.calificacionTrabajador)}</div>
+            <div class="stars-mini">${miniStars(t.evaluacionTrabajador)}</div>
           </div>
         </div>
         <div class="status-badge ${cl}">${lb}</div>
@@ -400,10 +400,10 @@
     $('detCorreo').textContent      = t.correoTrabajador||'—';
     $('detNss').textContent         = t.nssTrabajador||'—';
     $('detFecha').textContent       = fmt(t.fechaIngreso);
-    $('detUbicacion').textContent   = t.ubicacionTrabajador||'—';
-    $('detStars').innerHTML         = detStars(t.calificacionTrabajador);
+    $('detUbicacion').textContent   = t.domicilio?.estado?.nombreEst||'—';
+    $('detStars').innerHTML         = detStars(t.evaluacionTrabajador);
     $('detExperiencia').textContent = t.experiencia||'Sin registrar';
-    $('detDescripcion').textContent = t.descripcionTrabajador||'Sin registrar';
+    $('detDescripcion').textContent = 'Sin registrar';
     $('modalDetalle').classList.add('open');
   }
   function cerrarDetalle() { $('modalDetalle').classList.remove('open'); }
