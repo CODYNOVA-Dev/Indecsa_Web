@@ -1,1 +1,475 @@
-PLACEHOLDER_F2
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INDECSA – Proyectos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --navy:#0B1F3A; --navy-mid:#152D50; --navy-dark:#0a1828; --navy-card:#112244;
+      --gold:#C8A96E; --white:#F8F9FC; --muted:#8A9BB5;
+      --success:#5DCAA5; --danger:#F09595; --warning:#FAC775; --blue:#85B7EB;
+      --purple:#AFA9EC; --border:rgba(200,169,110,0.18);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--navy); min-height:100vh; display:flex; flex-direction:column; color:var(--white); padding-top:120px; }
+
+    header { background:var(--navy-mid); border-bottom:1px solid var(--border); padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; position:fixed; top:0; left:0; right:0; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .header-tag { font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    nav { background:var(--navy-dark); border-bottom:1px solid rgba(200,169,110,0.12); display:flex; align-items:center; padding:0 2rem; height:48px; gap:4px; position:fixed; top:72px; left:0; right:0; z-index:99; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+    .nav-link { display:flex; align-items:center; gap:7px; padding:6px 12px; border-radius:6px; font-size:12.5px; color:var(--muted); text-decoration:none; transition:background .2s,color .2s; white-space:nowrap; }
+    .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
+    .nav-link i { font-size:12px; }
+    .nav-sep { flex:1; }
+    .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
+    .nav-logout:hover { background:rgba(226,75,74,0.1); }
+    .nav-hidden header { transform:translateY(-72px); }
+    .nav-hidden nav    { transform:translateY(-72px); }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:6px 14px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .avatar { width:32px; height:32px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--gold); font-weight:500; }
+    .profile-info { display:flex; flex-direction:column; }
+    .profile-name { font-size:13px; color:var(--white); font-weight:500; line-height:1.2; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:0.5px; line-height:1.4; }
+    .nav-div { width:1px; height:24px; background:rgba(200,169,110,0.2); }
+
+    .scroll-top { position:fixed; bottom:28px; right:28px; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#a8844a); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(200,169,110,0.35); transition:transform .2s,opacity .3s; opacity:0; pointer-events:none; z-index:997; }
+    .scroll-top.visible { opacity:1; pointer-events:auto; }
+    .scroll-top:hover { transform:translateY(-3px); }
+    .scroll-top i { font-size:16px; color:var(--navy); }
+
+    main { flex:1; padding:2.5rem 2rem; background:radial-gradient(ellipse at 70% 30%,#1a2e4a 0%,var(--navy) 70%); }
+    .page-wrap { max-width:1060px; margin:0 auto; }
+
+    .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem; animation:fadeUp .3s ease both; }
+    .page-header-left { display:flex; align-items:center; gap:1rem; }
+    .page-icon { width:54px; height:54px; border-radius:14px; background:rgba(175,169,236,0.1); border:1px solid rgba(175,169,236,0.25); display:flex; align-items:center; justify-content:center; }
+    .page-icon i { font-size:22px; color:var(--purple); }
+    .page-title { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); }
+    .page-sub { font-size:13px; color:var(--muted); margin-top:3px; }
+    .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb i { font-size:10px; }
+
+    .toolbar { display:flex; align-items:flex-end; gap:12px; margin-bottom:1.25rem; animation:fadeUp .35s ease both; flex-wrap:wrap; }
+    .toolbar-right { margin-left:auto; display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; }
+    .filter-group { display:flex; flex-direction:column; gap:5px; }
+    .filter-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+    .filter-select { background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 34px 9px 13px; appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:calc(100% - 12px) center; min-width:140px; transition:border-color .2s; }
+    .filter-select:focus { outline:none; border-color:var(--gold); }
+    .filter-select option { background:#152D50; }
+    .search-wrap { position:relative; min-width:200px; }
+    .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+    .search-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(200,169,110,0.2); border-radius:9px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px 9px 36px; outline:none; transition:border-color .2s; }
+    .search-input::placeholder { color:rgba(138,155,181,0.5); }
+    .search-input:focus { border-color:var(--gold); }
+
+    .results-info { font-size:12px; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:6px; }
+    .results-info strong { color:var(--white); }
+
+    .skeleton-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.08); border-radius:13px; padding:16px 18px; }
+    .sk { background:rgba(255,255,255,0.05); border-radius:6px; animation:pulse 1.5s ease infinite; }
+    .sk-line { height:10px; margin-bottom:10px; }
+    .sk-w90{width:90%} .sk-w70{width:70%} .sk-w50{width:50%} .sk-w30{width:30%}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+    .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:fadeUp .4s ease both; }
+
+    .proj-card { background:var(--navy-mid); border:1px solid rgba(200,169,110,0.15); border-radius:14px; padding:16px 18px; position:relative; cursor:pointer; transition:border-color .2s,background .2s,transform .15s,box-shadow .2s; animation:fadeUp .4s ease both; }
+    .proj-card:hover { border-color:rgba(175,169,236,0.4); background:#1a3560; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+    .pcard-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; padding-right:90px; }
+    .pcard-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pi-purple { background:rgba(175,169,236,0.12); border:1px solid rgba(175,169,236,0.25); }
+    .pi-blue   { background:rgba(133,183,235,0.12); border:1px solid rgba(133,183,235,0.25); }
+    .pi-amber  { background:rgba(250,199,117,0.12); border:1px solid rgba(250,199,117,0.25); }
+    .pi-green  { background:rgba(93,202,165,0.12);  border:1px solid rgba(93,202,165,0.25); }
+    .pi-coral  { background:rgba(240,149,149,0.1);  border:1px solid rgba(240,149,149,0.25); }
+    .pcard-name { font-size:13.5px; font-weight:600; color:var(--white); line-height:1.35; margin-bottom:3px; }
+    .pcard-type { font-size:11px; color:var(--muted); }
+    .pmeta { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-bottom:12px; }
+    .prow { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .prow i { font-size:10px; color:var(--gold); width:12px; flex-shrink:0; }
+    .pdesc { font-size:11.5px; color:var(--muted); line-height:1.5; margin-bottom:12px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+    .pcard-foot { display:flex; align-items:center; justify-content:flex-end; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06); }
+    .stars-mini { display:flex; gap:1px; }
+    .st { font-size:11px; color:rgba(200,169,110,0.2); }
+    .st.on { color:var(--gold); }
+    .estatus-badge { position:absolute; top:13px; right:14px; font-size:9px; font-weight:600; padding:3px 10px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; }
+    .e-planeacion { background:rgba(133,183,235,0.12); color:#85B7EB; border:1px solid rgba(133,183,235,0.3); }
+    .e-en-curso   { background:rgba(93,202,165,0.12);  color:#5DCAA5; border:1px solid rgba(93,202,165,0.3); }
+    .e-pausado    { background:rgba(250,199,117,0.12); color:#FAC775; border:1px solid rgba(250,199,117,0.3); }
+    .e-finalizado { background:rgba(175,169,236,0.12); color:#AFA9EC; border:1px solid rgba(175,169,236,0.3); }
+    .e-cancelado  { background:rgba(240,149,149,0.1);  color:#F09595; border:1px solid rgba(240,149,149,0.3); }
+
+    .empty-state { grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--muted); }
+    .empty-state i { font-size:36px; color:rgba(200,169,110,0.2); margin-bottom:1rem; display:block; }
+    .empty-state p { font-size:14px; }
+    .retry-btn { display:inline-flex; align-items:center; gap:7px; margin-top:1rem; padding:9px 20px; border-radius:9px; background:rgba(200,169,110,0.1); border:1px solid rgba(200,169,110,0.2); color:var(--gold); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:background .2s; }
+    .retry-btn:hover { background:rgba(200,169,110,0.18); }
+
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; }
+    .modal-overlay.open { opacity:1; pointer-events:auto; }
+    .modal { background:var(--navy-card); border:1px solid var(--border); border-radius:18px; padding:2rem; width:90%; transform:translateY(20px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); max-height:90vh; overflow-y:auto; }
+    .modal-overlay.open .modal { transform:translateY(0); }
+
+    #modalDetalle .modal { max-width:600px; }
+    .det-header { display:flex; align-items:center; gap:16px; padding-bottom:1.25rem; margin-bottom:1.25rem; border-bottom:1px solid var(--border); }
+    .det-proj-icon { width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .det-info { flex:1; min-width:0; }
+    .det-name { font-family:'Playfair Display',serif; font-size:20px; color:var(--white); }
+    .det-sub  { font-size:13px; color:var(--muted); margin-top:3px; }
+
+    .det-section { margin-bottom:1.25rem; }
+    .det-section-title { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:.75rem; display:flex; align-items:center; gap:8px; }
+    .det-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+    .det-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .det-field { display:flex; flex-direction:column; gap:4px; }
+    .det-field.full { grid-column:1/-1; }
+    .det-lbl { font-size:11px; color:var(--muted); }
+    .det-val { font-size:13px; color:var(--white); background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:9px 12px; word-break:break-word; line-height:1.5; }
+    .det-val.muted-val { color:var(--muted); font-size:12.5px; }
+    .det-stars-wrap { display:flex; align-items:center; gap:3px; padding:6px 0; }
+    .det-star  { font-size:20px; color:rgba(200,169,110,0.2); }
+    .det-star.on { color:var(--gold); }
+    .det-star-lbl { font-size:12px; color:var(--muted); margin-left:6px; }
+
+    .det-worker-list { display:flex; flex-direction:column; gap:7px; margin-top:6px; }
+    .det-worker-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:9px 12px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px; }
+    .det-worker-item strong { color:var(--white); }
+    .det-worker-item span { color:var(--muted); font-size:11px; }
+    .det-empty { font-size:12px; color:var(--muted); font-style:italic; padding:6px 0; }
+    .det-counter { font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+    .det-counter strong { color:var(--white); }
+
+    .det-footer { display:flex; gap:10px; justify-content:flex-end; padding-top:1.25rem; border-top:1px solid var(--border); margin-top:.5rem; }
+    .det-btn { display:flex; align-items:center; gap:8px; padding:9px 20px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; border:1px solid transparent; transition:all .2s; }
+    .det-btn.close-btn { background:rgba(255,255,255,0.05); color:var(--muted); border-color:rgba(255,255,255,0.08); }
+    .det-btn.close-btn:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--navy-mid); border:1px solid var(--success); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s; z-index:999; pointer-events:none; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { font-size:16px; }
+
+    footer { background:var(--navy-mid); border-top:1px solid var(--border); height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; }
+    .footer-left { font-size:12px; color:var(--muted); }
+    .footer-contact { display:flex; gap:24px; }
+    .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .footer-contact a:hover { color:var(--gold); }
+    .footer-contact a i { font-size:13px; color:var(--gold); }
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:750px){.cards-grid{grid-template-columns:1fr}.toolbar{flex-direction:column;align-items:stretch}.toolbar-right{margin-left:0;flex-wrap:wrap}.page-header{flex-direction:column;align-items:flex-start}.pmeta{grid-template-columns:1fr}.det-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="../../img/logo.png" height="52" alt="INDECSA" />
+  <div class="header-tag">Capital Humano</div>
+</header>
+
+<nav>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../Trabajador/VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link active" href="ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Relacion/Relacionar.html"><i class="fa-solid fa-link"></i> Relacionar</a>
+  <a class="nav-link" href="../Cuadrilla/Cuadrillas.html"><i class="fa-solid fa-layer-group"></i> Cuadrillas</a>
+  <a class="nav-link" href="../RegistroHoras/RegistroHoras.html"><i class="fa-solid fa-clock"></i> Reg. Horas</a>
+  <a class="nav-link" href="../PersonalObra/PersonalObra.html"><i class="fa-solid fa-hard-hat"></i> Personal Obra</a>
+  <a class="nav-link" href="../AvanceObra/AvanceObra.html"><i class="fa-solid fa-chart-line"></i> Avance Obra</a>
+  <div class="nav-sep"></div>
+  <div class="profile-pill" id="navProfilePill" style="display:none">
+    <div class="avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">—</span>
+      <span class="profile-role">Capital Humano</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+</nav>
+
+<main>
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="page-icon"><i class="fa-solid fa-diagram-project"></i></div>
+        <div>
+          <div class="page-title">Proyectos registrados</div>
+          <div class="page-sub">Haz clic en una tarjeta para ver el detalle completo</div>
+        </div>
+      </div>
+      <div class="breadcrumb">
+        <a href="../Paginaprincipal.html">Dashboard</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Proyectos</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-right" style="margin-left:0;width:100%;">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input class="search-input" type="text" id="filtroNombre" placeholder="Buscar por nombre…" oninput="filtrar()" />
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Estatus</div>
+          <select class="filter-select" id="filtroEstatus" onchange="filtrar()">
+            <option value="">Todos</option>
+            <option value="PLANEACION">Planeación</option>
+            <option value="EN_CURSO">En curso</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="FINALIZADO">Finalizado</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Estado</div>
+          <select class="filter-select" id="filtroEstado" onchange="filtrar()">
+            <option value="">Todos</option>
+            <option value="CDMX">CDMX</option>
+            <option value="Hidalgo">Hidalgo</option>
+            <option value="Puebla">Puebla</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-info">
+      <i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:11px"></i>
+      <span id="resultsLabel">Cargando proyectos…</span>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+      <div class="skeleton-card"><div class="sk sk-line sk-w90"></div><div class="sk sk-line sk-w70"></div><div class="sk sk-line sk-w50"></div><div class="sk sk-line sk-w30"></div></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-left">© 2025 INDECSA — Todos los derechos reservados</div>
+  <div class="footer-contact">
+    <a href="mailto:contacto@cydesa.com"><i class="fa-solid fa-envelope"></i>contacto@cydesa.com</a>
+    <a href="tel:+521234567890"><i class="fa-solid fa-phone"></i>+52 123 456 7890</a>
+  </div>
+</footer>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
+<div class="modal-overlay" id="modalDetalle">
+  <div class="modal">
+
+    <div class="det-header">
+      <div class="det-proj-icon" id="detIcon"></div>
+      <div class="det-info">
+        <div class="det-name" id="detNombre">—</div>
+        <div class="det-sub"  id="detTipo">—</div>
+      </div>
+      <span class="estatus-badge" id="detBadge" style="position:static;display:inline-block">—</span>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-map-location-dot" style="color:var(--gold);font-size:10px"></i> Ubicación</div>
+      <div class="det-grid">
+        <div class="det-field"><div class="det-lbl">Estado</div><div class="det-val" id="detEstado">—</div></div>
+        <div class="det-field"><div class="det-lbl">Municipio</div><div class="det-val" id="detMunicipio">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Lugar / Dirección</div><div class="det-val" id="detLugar">—</div></div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-calendar-days" style="color:var(--gold);font-size:10px"></i> Plazos y valoración</div>
+      <div class="det-grid">
+        <div class="det-field"><div class="det-lbl">Fecha estimada inicio</div><div class="det-val" id="detFechaIni">—</div></div>
+        <div class="det-field"><div class="det-lbl">Fecha estimada fin</div><div class="det-val" id="detFechaFin">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Calificación</div><div class="det-stars-wrap" id="detStars"></div></div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-align-left" style="color:var(--gold);font-size:10px"></i> Descripción</div>
+      <div class="det-field"><div class="det-val muted-val" id="detDesc">—</div></div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-users" style="color:var(--gold);font-size:10px"></i> Trabajadores asignados</div>
+      <div class="det-counter" id="detCounter"></div>
+      <div id="detTrabajadores"><div class="det-empty">Cargando…</div></div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-people-group" style="color:var(--gold);font-size:10px"></i> Contratista</div>
+      <div class="det-val" id="detContratista">—</div>
+    </div>
+
+    <div class="det-footer">
+      <button class="det-btn close-btn" onclick="cerrarDetalle()"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i id="toastIcon" class="fa-solid fa-circle-check"></i><span id="toastMsg">OK</span></div>
+
+<script>
+  (function(){const _e=JSON.parse(sessionStorage.getItem('empleado'));if(_e){const _i=_e.nombreEmpleado.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();document.getElementById('navAvatar').textContent=_i;document.getElementById('navNombre').textContent=_e.nombreEmpleado;document.getElementById('navProfilePill').style.display='flex';}})();
+
+  const API_BASE  = 'https://springbootindecsa-production.up.railway.app/api';
+  const API_ASIG  = `${API_BASE}/asignaciones-trabajador-proyecto`;
+  const API_PC    = `${API_BASE}/asignaciones-proyecto-contratista`;
+  const $ = id => document.getElementById(id);
+
+  const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
+  const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
+  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en-curso', PENDIENTE:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
+  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PENDIENTE:'Pendiente', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
+  const UBIC_LBL    = { CDMX:'CDMX', HIDALGO:'Hidalgo', PUEBLA:'Puebla' };
+  const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
+
+  function fmtFecha(f){ if(!f) return '—'; const [y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
+  function miniStars(n){ return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">&#9733;</div>`).join(''); }
+  function detStars(n){ const f=n||0; return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">&#9733;</span>`).join('')+`<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`; }
+
+  let todos = [];
+
+  async function cargar() {
+    try {
+      const res = await fetch(`${API_BASE}/proyectos`);
+      if (!res.ok) throw new Error();
+      todos = await res.json();
+      filtrar();
+    } catch {
+      $('cardsGrid').innerHTML = `<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>No se pudo conectar con el servidor.</p><button class="retry-btn" onclick="cargar()"><i class="fa-solid fa-rotate-right"></i> Reintentar</button></div>`;
+      $('resultsLabel').textContent = 'Error al cargar datos';
+    }
+  }
+
+  function filtrar() {
+    const q    = $('filtroNombre').value.toLowerCase();
+    const est  = $('filtroEstatus').value;
+    const ubic = $('filtroEstado').value;
+    const f = todos.filter(p =>
+      (!q    || (p.nombreProyecto||'').toLowerCase().includes(q)) &&
+      (!est  || p.estatusProyecto === est) &&
+      (!ubic || (p.domicilio?.estado?.nombreEst||'') === ubic)
+    );
+    const grid = $('cardsGrid'), lbl = $('resultsLabel');
+    if (!f.length) {
+      grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-diagram-project"></i><p>No se encontraron proyectos con los filtros seleccionados.</p></div>`;
+      lbl.innerHTML = 'Sin resultados';
+    } else {
+      grid.innerHTML = f.map((p,i) => renderCard(p,i)).join('');
+      lbl.innerHTML = `<strong>${f.length}</strong> proyecto${f.length!==1?'s':''} encontrado${f.length!==1?'s':''}`;
+    }
+  }
+
+  function renderCard(p, idx) {
+    const ic  = iconColors[idx % iconColors.length];
+    const ico = iconSet[idx % iconSet.length];
+    const ec  = ESTATUS_CLS[p.estatusProyecto]||'';
+    const el  = ESTATUS_LBL[p.estatusProyecto]||p.estatusProyecto;
+    const ub = p.domicilio?.estado?.nombreEst||'—';
+    return `
+      <div class="proj-card" onclick="abrirDetalle(${p.idProyecto})">
+        <div class="pcard-head">
+          <div class="pcard-icon ${ic}"><i class="fa-solid ${ico}" style="color:inherit;font-size:16px"></i></div>
+          <div><div class="pcard-name">${p.nombreProyecto}</div><div class="pcard-type">${p.tipoProyecto||'Sin tipo'}</div></div>
+        </div>
+        <div class="pmeta">
+          <div class="prow"><i class="fa-solid fa-location-dot"></i>${ub}${p.domicilio?.munAlc?' · '+p.domicilio.munAlc:''}</div>
+          <div class="prow"><i class="fa-solid fa-map-pin"></i>${[p.domicilio?.calle,p.domicilio?.colonia].filter(Boolean).join(', ')||'—'}</div>
+          <div class="prow"><i class="fa-solid fa-calendar-day"></i>Inicio: ${fmtFecha(p.fechaEstimadaInicio)}</div>
+          <div class="prow"><i class="fa-solid fa-calendar-check"></i>Fin: ${fmtFecha(p.fechaEstimadaFin)}</div>
+        </div>
+        ${p.descripcionProyecto?`<div class="pdesc">${p.descripcionProyecto.length>80?p.descripcionProyecto.substring(0,80)+'…':p.descripcionProyecto}</div>`:''}
+        <div class="pcard-foot">
+          <div class="stars-mini">${miniStars(p.calificacionProyecto)}</div>
+        </div>
+        <div class="estatus-badge ${ec}">${el}</div>
+      </div>`;
+  }
+
+  async function abrirDetalle(id) {
+    const p = todos.find(x => x.idProyecto === id);
+    if (!p) return;
+    const idx = todos.indexOf(p);
+    const ic  = iconColors[idx % iconColors.length];
+    const ico = iconSet[idx % iconSet.length];
+
+    const icon = $('detIcon');
+    icon.className = `det-proj-icon ${ic}`;
+    icon.innerHTML = `<i class="fa-solid ${ico}" style="color:inherit;font-size:20px"></i>`;
+
+    $('detNombre').textContent = p.nombreProyecto||'—';
+    $('detTipo').textContent   = p.tipoProyecto||'Sin tipo';
+
+    const badge = $('detBadge');
+    badge.textContent = ESTATUS_LBL[p.estatusProyecto]||p.estatusProyecto||'—';
+    badge.className   = `estatus-badge ${ESTATUS_CLS[p.estatusProyecto]||''}`;
+    badge.style.position='static'; badge.style.display='inline-block';
+
+    $('detEstado').textContent    = p.domicilio?.estado?.nombreEst||'—';
+    $('detMunicipio').textContent = p.domicilio?.munAlc||'—';
+    $('detLugar').textContent     = [p.domicilio?.calle,p.domicilio?.numExt?'#'+p.domicilio.numExt:null,p.domicilio?.colonia,p.domicilio?.munAlc].filter(Boolean).join(', ')||'—';
+    $('detFechaIni').textContent  = fmtFecha(p.fechaEstimadaInicio);
+    $('detFechaFin').textContent  = fmtFecha(p.fechaEstimadaFin);
+    $('detStars').innerHTML       = detStars(p.calificacionProyecto);
+    $('detDesc').textContent      = p.descripcionProyecto||'Sin descripción';
+
+    $('detTrabajadores').innerHTML = '<div class="det-empty">Cargando…</div>';
+    $('detContratista').textContent = 'Cargando…';
+    $('detCounter').innerHTML = '';
+    $('modalDetalle').classList.add('open');
+
+    try {
+      const resTrab = await fetch(`${API_ASIG}?idProyecto=${id}`);
+      const asignados = resTrab.ok ? await resTrab.json() : [];
+      asignados.sort((a,b) => (a.trabajador?.especialidadTrabajador||'').localeCompare(b.trabajador?.especialidadTrabajador||''));
+      $('detCounter').innerHTML = `<strong>${asignados.length}</strong> / 8 trabajadores asignados`;
+      if (!asignados.length) {
+        $('detTrabajadores').innerHTML = '<div class="det-empty">No hay trabajadores asignados</div>';
+      } else {
+        $('detTrabajadores').innerHTML = `<div class="det-worker-list">${
+          asignados.map(a => `
+            <div class="det-worker-item">
+              <strong>${a.trabajador?.nombreTrabajador || '—'}</strong>
+              <span>${a.trabajador?.especialidadTrabajador || '—'}</span>
+            </div>`).join('')
+        }</div>`;
+      }
+    } catch {
+      $('detTrabajadores').innerHTML = '<div class="det-empty">Error cargando trabajadores</div>';
+    }
+
+    try {
+      const resCont = await fetch(`${API_PC}?idProyecto=${id}`);
+      const contratos = resCont.ok ? await resCont.json() : [];
+      const activo = contratos.find(c => c.estatusContrato === 'ACTIVO');
+      $('detContratista').textContent = activo ? activo.contratista.nombreContratista : 'No asignado';
+    } catch {
+      $('detContratista').textContent = 'Error al cargar';
+    }
+  }
+
+  function cerrarDetalle() { $('modalDetalle').classList.remove('open'); }
+  function cerrarSesion() { window.location.href='../../index.html'; }
+
+  let lastScroll=0; const scrollBtn=$('scrollTop');
+  window.addEventListener('scroll',()=>{
+    const c=window.scrollY;
+    document.body.classList.toggle('nav-hidden',c>lastScroll&&c>80);
+    lastScroll=c<=0?0:c;
+    scrollBtn.classList.toggle('visible',c>200);
+  });
+
+  $('modalDetalle').addEventListener('click', e=>{ if(e.target===e.currentTarget) cerrarDetalle(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') cerrarDetalle(); });
+
+  cargar();
+</script>
+</body>
+</html>
