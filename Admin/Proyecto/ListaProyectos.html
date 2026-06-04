@@ -275,7 +275,7 @@
             <option value="">Todos</option>
             <option value="PLANEACION">Planeación</option>
             <option value="EN_CURSO">En curso</option>
-            <option value="PAUSADO">Pausado</option>
+            <option value="PENDIENTE">Pendiente</option>
             <option value="FINALIZADO">Completado</option>
             <option value="CANCELADO">Cancelado</option>
           </select>
@@ -385,7 +385,7 @@
     <div class="estatus-pills">
       <div class="epill ep-plan"><input type="radio" name="nuevoEstatus" id="ep1" value="PLANEACION"/><label for="ep1"><i class="fa-solid fa-pen-ruler"></i> Planeación</label></div>
       <div class="epill ep-curso"><input type="radio" name="nuevoEstatus" id="ep2" value="EN_CURSO"/><label for="ep2"><i class="fa-solid fa-play"></i> En curso</label></div>
-      <div class="epill ep-paus"><input type="radio" name="nuevoEstatus" id="ep3" value="PAUSADO"/><label for="ep3"><i class="fa-solid fa-pause"></i> Pausado</label></div>
+      <div class="epill ep-paus"><input type="radio" name="nuevoEstatus" id="ep3" value="PENDIENTE"/><label for="ep3"><i class="fa-solid fa-pause"></i> Pendiente</label></div>
       <div class="epill ep-comp"><input type="radio" name="nuevoEstatus" id="ep4" value="FINALIZADO"/><label for="ep4"><i class="fa-solid fa-circle-check"></i> Completado</label></div>
       <div class="epill ep-canc"><input type="radio" name="nuevoEstatus" id="ep5" value="CANCELADO"/><label for="ep5"><i class="fa-solid fa-ban"></i> Cancelado</label></div>
     </div>
@@ -439,8 +439,8 @@
 
   const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
   const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
-  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en-curso', PAUSADO:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
-  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado', FINALIZADO:'FINALIZADO', CANCELADO:'Cancelado' };
+  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en-curso', PENDIENTE:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
+  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PENDIENTE:'Pendiente', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
   const UBIC_LBL    = { CDMX:'CDMX', HIDALGO:'Hidalgo', PUEBLA:'Puebla' };
   const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
 
