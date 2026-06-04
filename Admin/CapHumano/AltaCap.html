@@ -488,6 +488,15 @@
             </div>
           </div>
         </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Foto de perfil (URL)</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-image ico"></i>
+              <input type="url" id="fotoPerfilUrl" placeholder="https://…" maxlength="255" />
+            </div>
+          </div>
+        </div>
       </div>
 
     </form>
@@ -656,12 +665,14 @@
     setLoading(btn, true);
 
     /* Payload exacto que espera EmpleadoRequestDTO */
+    var fotoVal = gid('fotoPerfilUrl') ? gid('fotoPerfilUrl').value.trim() : '';
     var payload = {
       nombreEmpleado: gid('nombreEmpleado').value.trim(),
       curp:           gid('curpEmpleado').value.trim().toUpperCase(),
       correoEmpleado: gid('correoEmpleado').value.trim(),
       contrasena:     gid('contrasena').value,
-      idRol:          idRolVal
+      fotoPerfilUrl:  fotoVal || null,
+      rol:            { idRol: idRolVal }
     };
 
     try {

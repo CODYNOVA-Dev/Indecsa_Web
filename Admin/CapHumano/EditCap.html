@@ -273,6 +273,16 @@
       '</div>' +
       '<span class="field-error">El nombre es obligatorio (máx. 100 caracteres)</span>' +
       '</div>' +
+      '<div class="field" id="field-curp">' +
+      '<label>CURP <span class="req">*</span></label>' +
+      '<div class="input-wrap">' +
+      '<i class="fa-solid fa-id-card ico"></i>' +
+      '<input type="text" id="curpEmpleado" maxlength="18" style="text-transform:uppercase" value="' + (empleado.curp||'').replace(/"/g,'&quot;') + '" />' +
+      '</div>' +
+      '<span class="field-error">CURP de 18 caracteres</span>' +
+      '</div>' +
+      '</div>' +
+      '<div class="form-row col-2">' +
       '<div class="field" id="field-correo">' +
       '<label>Correo electrónico <span class="req">*</span></label>' +
       '<div class="input-wrap">' +
@@ -280,6 +290,13 @@
       '<input type="email" id="correoEmpleado" maxlength="100" value="' + correoEsc + '" />' +
       '</div>' +
       '<span class="field-error">Ingresa un correo válido</span>' +
+      '</div>' +
+      '<div class="field">' +
+      '<label>Foto de perfil (URL)</label>' +
+      '<div class="input-wrap">' +
+      '<i class="fa-solid fa-image ico"></i>' +
+      '<input type="url" id="fotoPerfilUrl" maxlength="255" value="' + (empleado.fotoPerfilUrl||'').replace(/"/g,'&quot;') + '" />' +
+      '</div>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -290,23 +307,22 @@
       '<div class="section-label">Acceso al sistema</div>' +
       '<div class="form-row col-2">' +
       '<div class="field" id="field-pass">' +
-      '<label>Nueva contraseña <span class="req">*</span></label>' +
+      '<label>Nueva contraseña</label>' +
       '<div class="input-wrap">' +
       '<i class="fa-solid fa-key ico"></i>' +
-      '<input type="password" id="contrasena" placeholder="Mínimo 8 caracteres" maxlength="255" style="padding-right:44px" />' +
+      '<input type="password" id="contrasena" placeholder="Dejar vacío para mantener" maxlength="255" style="padding-right:44px" />' +
       '<button type="button" class="pass-toggle" onclick="togglePass()">' +
       '<i id="iconPass" class="fa-solid fa-eye"></i>' +
       '</button>' +
       '</div>' +
-      '<div class="pass-hint"><i class="fa-solid fa-triangle-exclamation"></i>Debes ingresar la contraseña aunque no la cambies</div>' +
-      '<span class="field-error">La contraseña es obligatoria (mín. 8 caracteres)</span>' +
+      '<div class="pass-hint"><i class="fa-solid fa-triangle-exclamation"></i>Vacío = no se modifica</div>' +
+      '<span class="field-error">Si la cambias debe tener mín. 8 caracteres</span>' +
       '</div>' +
       '<div class="field">' +
-      '<label>Rol asignado</label>' +
+      '<label>Rol asignado <span class="req">*</span></label>' +
       '<div class="input-wrap">' +
       '<i class="fa-solid fa-user-tag ico"></i>' +
-      '<div class="rol-display" id="rolDisplay">Cargando…</div>' +
-      '<input type="hidden" id="idRol" value="" />' +
+      '<select id="idRol"><option value="">Cargando…</option></select>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -341,28 +357,26 @@
     cargarRol();
   }
 
-  /* Carga roles, filtra Cap Humano y lo fija */
+  /* Carga roles y los pone en el select; preselecciona el actual del empleado */
   async function cargarRol() {
     try {
       var res = await fetch(API_BASE + '/roles');
       if (!res.ok) throw new Error();
       var roles = await res.json();
-      var cap = null;
+      var sel = gid('idRol');
+      sel.innerHTML = '';
       for (var i = 0; i < roles.length; i++) {
-        if ((roles[i].nombreRol + '').toUpperCase().indexOf('CAP') !== -1) {
-          cap = roles[i]; break;
-        }
+        var o = document.createElement('option');
+        o.value = roles[i].idRol;
+        o.textContent = roles[i].nombreRol;
+        sel.appendChild(o);
       }
-      if (cap) {
-        capRolId = cap.idRol;
-        capRolNombre = cap.nombreRol;
-        gid('rolDisplay').textContent = cap.nombreRol;
-        gid('idRol').value = cap.idRol;
-      } else {
-        gid('rolDisplay').textContent = 'Rol no encontrado';
+      if (empleado && empleado.rol && empleado.rol.idRol != null) {
+        sel.value = String(empleado.rol.idRol);
       }
     } catch {
-      gid('rolDisplay').textContent = 'Error al cargar rol';
+      var s = gid('idRol');
+      if (s) s.innerHTML = '<option value="">Error al cargar roles</option>';
     }
   }
 
@@ -376,8 +390,9 @@
     var ok = true;
     var reglas = [
       { id:'nombreEmpleado', fid:'field-nombre', check: function(v){ return v.trim().length > 0 && v.length <= 100; } },
+      { id:'curpEmpleado',   fid:'field-curp',   check: function(v){ return v.trim().length === 18; } },
       { id:'correoEmpleado', fid:'field-correo', check: function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); } },
-      { id:'contrasena',     fid:'field-pass',   check: function(v){ return v.length >= 8; } }
+      { id:'contrasena',     fid:'field-pass',   check: function(v){ return v.length === 0 || v.length >= 8; } }
     ];
     for (var i = 0; i < reglas.length; i++) {
       var r = reglas[i];
@@ -392,15 +407,21 @@
   async function guardarCambios() {
     if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
     var idRolVal = parseInt(gid('idRol').value);
-    if (!idRolVal) { showToast('Rol de Cap. Humano no disponible', false); return; }
+    if (!idRolVal) { showToast('Selecciona un rol', false); return; }
     var btn = gid('btnGuardar');
     setLoading(btn, true);
+    var fotoEl = gid('fotoPerfilUrl');
+    var passVal = gid('contrasena').value;
     var payload = {
       nombreEmpleado: gid('nombreEmpleado').value.trim(),
+      curp:           gid('curpEmpleado').value.trim().toUpperCase(),
       correoEmpleado: gid('correoEmpleado').value.trim(),
-      contrasena:     gid('contrasena').value,
-      idRol:          idRolVal
+      fotoPerfilUrl:  fotoEl ? (fotoEl.value.trim() || null) : null,
+      rol:            { idRol: idRolVal }
     };
+    if (passVal && passVal.length >= 8) {
+      payload.contrasena = passVal;
+    }
     try {
       var res = await fetch(API_BASE + '/empleados/' + empleado.idEmpleado, {
         method: 'PUT',
