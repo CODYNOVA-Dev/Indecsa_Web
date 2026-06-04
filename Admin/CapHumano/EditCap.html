@@ -322,7 +322,8 @@
       '<label>Rol asignado <span class="req">*</span></label>' +
       '<div class="input-wrap">' +
       '<i class="fa-solid fa-user-tag ico"></i>' +
-      '<select id="idRol"><option value="">Cargando…</option></select>' +
+      '<div class="rol-display" id="rolDisplay">Cargando…</div>' +
+      '<input type="hidden" id="idRol" value="" />' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -357,26 +358,26 @@
     cargarRol();
   }
 
-  /* Carga roles y los pone en el select; preselecciona el actual del empleado */
+  /* Fija el rol de Capital Humano (no editable, igual que AltaCap) */
   async function cargarRol() {
     try {
       var res = await fetch(API_BASE + '/roles');
       if (!res.ok) throw new Error();
       var roles = await res.json();
-      var sel = gid('idRol');
-      sel.innerHTML = '';
+      var cap = null;
       for (var i = 0; i < roles.length; i++) {
-        var o = document.createElement('option');
-        o.value = roles[i].idRol;
-        o.textContent = roles[i].nombreRol;
-        sel.appendChild(o);
+        if ((roles[i].nombreRol + '').toUpperCase().indexOf('CAP') !== -1) {
+          cap = roles[i]; break;
+        }
       }
-      if (empleado && empleado.rol && empleado.rol.idRol != null) {
-        sel.value = String(empleado.rol.idRol);
+      if (cap) {
+        gid('rolDisplay').textContent = cap.nombreRol;
+        gid('idRol').value = cap.idRol;
+      } else {
+        gid('rolDisplay').textContent = 'Rol no encontrado';
       }
     } catch {
-      var s = gid('idRol');
-      if (s) s.innerHTML = '<option value="">Error al cargar roles</option>';
+      gid('rolDisplay').textContent = 'Error al cargar rol';
     }
   }
 
