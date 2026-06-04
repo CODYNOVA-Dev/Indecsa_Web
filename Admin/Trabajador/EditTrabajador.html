@@ -23,6 +23,12 @@
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -149,6 +155,14 @@
     <i class="fa-solid fa-file-pdf"></i> Reportes
   </a>
   <div class="nav-sep"></div>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()">
     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
   </button>
@@ -214,12 +228,64 @@
             <div class="input-wrap"><i class="fa-solid fa-envelope"></i><input type="email" id="correoTrabajador" placeholder="correo@ejemplo.com" maxlength="100" /></div>
           </div>
         </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Sexo <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-venus-mars"></i>
+              <select id="sexo">
+                <option value="" disabled>Selecciona…</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Estado (calidad de vida) <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="estadoCalidadVida">
+                <option value="" disabled>Selecciona…</option>
+                <option value="1">Ciudad de México (CDMX)</option>
+                <option value="2">Hidalgo</option>
+                <option value="3">Puebla</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="form-divider"></div>
 
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Información profesional</div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Puesto <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i><input type="text" id="puesto" placeholder="Ej. Albañil / Supervisor" maxlength="100" /></div>
+          </div>
+          <div class="field">
+            <label>Escolaridad <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-graduation-cap"></i><input type="text" id="escolaridad" placeholder="Ej. Preparatoria / Licenciatura" maxlength="100" /></div>
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Descripción del puesto <span class="req">*</span></label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
+              <textarea id="descPuesto" placeholder="Describe las funciones del puesto…" maxlength="500"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Contratación <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-file-signature"></i><input type="text" id="contratacion" placeholder="Ej. Por obra determinada / Indefinido" maxlength="200" /></div>
+          </div>
+          <div class="field">
+            <label>Jornada <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-clock"></i><input type="text" id="jornada" placeholder="Ej. 8h L-V" maxlength="200" /></div>
+          </div>
+        </div>
         <div class="form-row col-2">
           <div class="field">
             <label>Especialidad <span class="req">*</span></label>
@@ -336,6 +402,14 @@
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 
 <script>
+  (function(){
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) { window.location.href = '../../index.html'; return; }
+    const ini = (emp.nombreEmpleado || '').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    const a = document.getElementById('navAvatar'); if (a) a.textContent = ini || '--';
+    const n = document.getElementById('navNombre'); if (n) n.textContent = emp.nombreEmpleado || 'Usuario';
+    const r = document.getElementById('navRol');    if (r) r.textContent = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
   const API_BASE    = 'https://springbootindecsa-production.up.railway.app/api';
   const STORAGE_KEY = 'indecsa_trabajador_editar';
   const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
@@ -386,6 +460,17 @@
     setVal('fechaIngreso',        d.fechaIngreso);
     setVal('experiencia',         d.experiencia);
     setVal('descripcionTrabajador', d.descripcionTrabajador);
+    setVal('puesto',              d.puesto);
+    setVal('descPuesto',          d.descPuesto);
+    setVal('escolaridad',         d.escolaridad);
+    setVal('contratacion',        d.contratacion);
+    setVal('jornada',             d.jornada);
+    if (d.sexo) $('sexo').value = d.sexo;
+    if (d.estadoCalidadVida && d.estadoCalidadVida.idEstado != null) {
+      $('estadoCalidadVida').value = String(d.estadoCalidadVida.idEstado);
+    } else if (d.estadoCalidadVida != null && typeof d.estadoCalidadVida !== 'object') {
+      $('estadoCalidadVida').value = String(d.estadoCalidadVida);
+    }
 
     /* especialidad */
     if (d.especialidadTrabajador) {
@@ -424,6 +509,7 @@
   /* ── LEER FORMULARIO ── */
   function leerFormulario() {
     const r = document.querySelector('input[name="estadoTrabajador"]:checked');
+    const idEstadoCV = parseInt($('estadoCalidadVida').value, 10);
     return {
       nombreTrabajador:       $('nombreTrabajador').value.trim(),
       nssTrabajador:          $('nssTrabajador').value.trim() || null,
@@ -436,6 +522,13 @@
       calificacionTrabajador: currentStar > 0 ? currentStar : null,
       /* Normalizado: nunca se manda HIDALGO ni PUEBLA al backend */
       ubicacionTrabajador:    normalizarUbicacion($('ubicacionTrabajador').value || ''),
+      puesto:                 $('puesto').value.trim(),
+      descPuesto:             $('descPuesto').value.trim(),
+      escolaridad:            $('escolaridad').value.trim(),
+      contratacion:           $('contratacion').value.trim(),
+      jornada:                $('jornada').value.trim(),
+      sexo:                   $('sexo').value || null,
+      estadoCalidadVida:      Number.isNaN(idEstadoCV) ? null : { idEstado: idEstadoCV },
       estadoTrabajador:       r ? r.value : ''
     };
   }
