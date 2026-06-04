@@ -23,6 +23,12 @@
     .nav-link:hover,.nav-link.active { background:rgba(200,169,110,0.1); color:var(--gold); }
     .nav-link i { font-size:13px; }
     .nav-sep { flex:1; }
+    .profile-pill { display:flex; align-items:center; gap:10px; padding:5px 12px; border-radius:8px; border:1px solid rgba(200,169,110,0.2); background:rgba(200,169,110,0.05); }
+    .nav-avatar { width:28px; height:28px; border-radius:50%; background:rgba(200,169,110,0.15); border:1px solid rgba(200,169,110,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gold); font-weight:600; }
+    .profile-info { display:flex; flex-direction:column; line-height:1.2; }
+    .profile-name { font-size:12px; color:var(--white); font-weight:500; }
+    .profile-role { font-size:10px; color:var(--gold); letter-spacing:.5px; }
+    .nav-div { width:1px; height:22px; background:rgba(200,169,110,0.2); margin:0 4px; }
     .nav-logout { display:flex; align-items:center; gap:7px; padding:6px 16px; border-radius:6px; font-size:13px; color:var(--danger); cursor:pointer; border:1px solid rgba(226,75,74,0.25); background:none; font-family:'DM Sans',sans-serif; transition:background .2s; }
     .nav-logout:hover { background:rgba(226,75,74,0.1); }
     .nav-hidden header { transform:translateY(-72px); }
@@ -137,6 +143,14 @@
     <i class="fa-solid fa-file-pdf"></i> Reportes
   </a>
   <div class="nav-sep"></div>
+  <div class="profile-pill">
+    <div class="nav-avatar" id="navAvatar">--</div>
+    <div class="profile-info">
+      <span class="profile-name" id="navNombre">Cargando…</span>
+      <span class="profile-role" id="navRol">--</span>
+    </div>
+  </div>
+  <div class="nav-div"></div>
   <button class="nav-logout" onclick="cerrarSesion()">
     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
   </button>
@@ -178,10 +192,52 @@
             </div>
             <span class="field-error">El nombre es obligatorio (máx. 150 caracteres)</span>
           </div>
+          <div class="field" id="field-cliente">
+            <label>Cliente <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-user-tie"></i>
+              <input type="text" id="cliente" placeholder="Nombre del cliente" maxlength="200" />
+            </div>
+            <span class="field-error">El cliente es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
           <div class="field">
             <label>Tipo de proyecto</label>
             <div class="input-wrap"><i class="fa-solid fa-tag"></i>
-              <input type="text" id="tipoProyecto" placeholder="Ej. Obra civil, Eléctrico, Hidráulico…" maxlength="80" />
+              <select id="tipoProyecto">
+                <option value="" selected>Selecciona…</option>
+                <option value="Construccion">Construcción</option>
+                <option value="Remodelacion">Remodelación</option>
+                <option value="Venta_mobiliaria">Venta mobiliaria</option>
+                <option value="Instalacion_de_mobiliario">Instalación de mobiliario</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" id="field-estatus">
+            <label>Estatus <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-circle-info"></i>
+              <select id="estatusProyecto">
+                <option value="PLANEACION" selected>PLANEACION</option>
+                <option value="EN_CURSO">EN_CURSO</option>
+                <option value="PENDIENTE">PENDIENTE</option>
+                <option value="FINALIZADO">FINALIZADO</option>
+                <option value="CANCELADO">CANCELADO</option>
+              </select>
+            </div>
+            <span class="field-error">El estatus es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Oferta de trabajo</label>
+            <div class="input-wrap"><i class="fa-solid fa-briefcase"></i>
+              <input type="text" id="ofertaTrabajo" placeholder="Ej. Vacante asociada" maxlength="200" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Imagen del proyecto (URL)</label>
+            <div class="input-wrap"><i class="fa-solid fa-image"></i>
+              <input type="url" id="imagenProyectoUrl" placeholder="https://…" maxlength="255" />
             </div>
           </div>
         </div>
@@ -190,35 +246,58 @@
       <div class="form-divider"></div>
 
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-map-location-dot" style="color:var(--gold);font-size:11px"></i> Ubicación</div>
-        <div class="form-row col-3">
-          <div class="field" id="field-geo">
-            <label>Estado <span class="req">*</span></label>
+        <div class="section-label"><i class="fa-solid fa-house" style="color:var(--gold);font-size:11px"></i> Domicilio</div>
+        <div class="form-row col-2">
+          <div class="field" id="field-calle">
+            <label>Calle <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-road"></i>
+              <input type="text" id="calle" placeholder="Ej. Mar Mediterráneo" maxlength="100" />
+            </div>
+            <span class="field-error">La calle es obligatoria</span>
+          </div>
+          <div class="field" id="field-numExt">
+            <label>Número exterior <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-hashtag"></i>
+              <input type="text" id="numExt" placeholder="Ej. 227" maxlength="10" />
+            </div>
+            <span class="field-error">El número exterior es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-colonia">
+            <label>Colonia <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-map"></i>
-              <!--
-                Values EXACTOS del enum UbicacionGeo en Java:
-                CDMX | Hidalgo | Puebla
-              -->
-              <select id="estadoProyectoGeo">
-                <option value="" disabled selected>Selecciona…</option>
-                <option value="CDMX">Ciudad de México (CDMX)</option>
-                <option value="Hidalgo">Hidalgo</option>
-                <option value="Puebla">Puebla</option>
+              <input type="text" id="colonia" placeholder="Ej. Popotla" maxlength="100" />
+            </div>
+            <span class="field-error">La colonia es obligatoria</span>
+          </div>
+          <div class="field" id="field-codPost">
+            <label>Código postal <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-envelopes-bulk"></i>
+              <input type="text" id="codPost" placeholder="Ej. 11400" maxlength="5" inputmode="numeric" />
+            </div>
+            <span class="field-error">El código postal debe tener 4 o 5 dígitos</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-munAlc">
+            <label>Municipio / Alcaldía <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-building"></i>
+              <input type="text" id="munAlc" placeholder="Ej. Miguel Hidalgo" maxlength="100" />
+            </div>
+            <span class="field-error">El municipio o alcaldía es obligatorio</span>
+          </div>
+          <div class="field" id="field-estadoDom">
+            <label>Estado <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="estadoDomicilio">
+                <option value="" disabled selected>Selecciona un estado…</option>
+                <option value="1">Ciudad de México (CDMX)</option>
+                <option value="2">Hidalgo</option>
+                <option value="3">Puebla</option>
               </select>
             </div>
             <span class="field-error">El estado es obligatorio</span>
-          </div>
-          <div class="field">
-            <label>Municipio</label>
-            <div class="input-wrap"><i class="fa-solid fa-city"></i>
-              <input type="text" id="municipioProyecto" placeholder="Ej. Pachuca" maxlength="100" />
-            </div>
-          </div>
-          <div class="field">
-            <label>Lugar / Dirección</label>
-            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
-              <input type="text" id="lugarProyecto" placeholder="Ej. Av. Reforma 123" maxlength="200" />
-            </div>
           </div>
         </div>
       </div>
@@ -305,28 +384,18 @@
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 
 <script>
+  (function(){
+    const emp = JSON.parse(sessionStorage.getItem('empleado') || 'null');
+    if (!emp) { window.location.href = '../../index.html'; return; }
+    const ini = (emp.nombreEmpleado || '').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    const a = document.getElementById('navAvatar'); if (a) a.textContent = ini || '--';
+    const n = document.getElementById('navNombre'); if (n) n.textContent = emp.nombreEmpleado || 'Usuario';
+    const r = document.getElementById('navRol');    if (r) r.textContent = emp.nombreRol === 'ADMIN' ? 'Administrador' : 'Capital Humano';
+  })();
   const API_BASE = 'https://springbootindecsa-production.up.railway.app/api';
   const starLabels = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
   let currentStar = 0;
   let fechasValidas = true;
-
-  /*
-    Normaliza ubicación al valor EXACTO del enum Java UbicacionGeo:
-    CDMX | Hidalgo | Puebla
-  */
-  function normalizarUbicacion(val) {
-    const mapa = {
-      'CDMX'    : 'CDMX',
-      'cdmx'    : 'CDMX',
-      'HIDALGO' : 'Hidalgo',
-      'hidalgo' : 'Hidalgo',
-      'Hidalgo' : 'Hidalgo',
-      'PUEBLA'  : 'Puebla',
-      'puebla'  : 'Puebla',
-      'Puebla'  : 'Puebla'
-    };
-    return mapa[val] !== undefined ? mapa[val] : val;
-  }
 
   const stars = document.querySelectorAll('.star-btn');
   stars.forEach(s => {
@@ -346,11 +415,23 @@
 
   function validar() {
     let ok = true;
-    const nombre = document.getElementById('nombreProyecto').value.trim();
-    const geo    = document.getElementById('estadoProyectoGeo').value;
-    const fn = document.getElementById('field-nombre'), fg = document.getElementById('field-geo');
-    if (!nombre || nombre.length > 150) { fn.classList.add('has-error'); ok = false; } else fn.classList.remove('has-error');
-    if (!geo) { fg.classList.add('has-error'); ok = false; } else fg.classList.remove('has-error');
+    const checks = [
+      { id:'nombreProyecto',   fid:'field-nombre',   check: v => v.trim().length > 0 && v.length <= 150 },
+      { id:'cliente',          fid:'field-cliente',  check: v => v.trim().length > 0 && v.length <= 200 },
+      { id:'estatusProyecto',  fid:'field-estatus',  check: v => v.trim().length > 0 },
+      { id:'calle',            fid:'field-calle',    check: v => v.trim().length > 0 },
+      { id:'numExt',           fid:'field-numExt',   check: v => v.trim().length > 0 },
+      { id:'colonia',          fid:'field-colonia',  check: v => v.trim().length > 0 },
+      { id:'codPost',          fid:'field-codPost',  check: v => /^\d{4,5}$/.test(v.trim()) },
+      { id:'munAlc',           fid:'field-munAlc',   check: v => v.trim().length > 0 },
+      { id:'estadoDomicilio',  fid:'field-estadoDom',check: v => v.trim().length > 0 },
+    ];
+    checks.forEach(({ id, fid, check }) => {
+      const el = document.getElementById(id), fe = document.getElementById(fid);
+      if (!fe) return;
+      if (!check(el ? el.value : '')) { fe.classList.add('has-error'); ok = false; }
+      else fe.classList.remove('has-error');
+    });
     if (!fechasValidas) ok = false;
     return ok;
   }
@@ -364,19 +445,48 @@
     if (!validar()) { showToast('Revisa los campos obligatorios', false); return; }
     const btn = document.getElementById('btnGuardar');
     setLoading(btn, true);
-    const payload = {
-      nombreProyecto:       document.getElementById('nombreProyecto').value.trim(),
-      tipoProyecto:         document.getElementById('tipoProyecto').value.trim() || null,
-      /* Normalizado: CDMX | Hidalgo | Puebla — coincide con enum UbicacionGeo */
-      estadoProyectoGeo:    normalizarUbicacion(document.getElementById('estadoProyectoGeo').value),
-      municipioProyecto:    document.getElementById('municipioProyecto').value.trim() || null,
-      lugarProyecto:        document.getElementById('lugarProyecto').value.trim() || null,
-      fechaEstimadaInicio:  document.getElementById('fechaEstimadaInicio').value || null,
-      fechaEstimadaFin:     document.getElementById('fechaEstimadaFin').value || null,
-      calificacionProyecto: currentStar > 0 ? currentStar : null,
-      descripcionProyecto:  document.getElementById('descripcionProyecto').value.trim() || null,
+
+    const $ = id => document.getElementById(id);
+    const idEstado = parseInt($('estadoDomicilio').value, 10);
+    const cp = $('codPost').value.trim();
+    const domicilioPayload = {
+      calle:   $('calle').value.trim(),
+      numExt:  $('numExt').value.trim(),
+      colonia: $('colonia').value.trim(),
+      codPost: cp ? parseInt(cp, 10) : null,
+      munAlc:  $('munAlc').value.trim(),
+      estado:    Number.isNaN(idEstado) ? null : { idEstado },
+      idEstado:  Number.isNaN(idEstado) ? null : idEstado,
+      id_estado: Number.isNaN(idEstado) ? null : idEstado
     };
+
     try {
+      const resDom = await fetch(`${API_BASE}/domicilios`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(domicilioPayload)
+      });
+      if (!resDom.ok && resDom.status !== 201) {
+        const e = await resDom.json().catch(() => ({}));
+        throw new Error(e.message || e.error || `Error ${resDom.status} al crear el domicilio`);
+      }
+      const dom = await resDom.json();
+      const idDomicilio = dom.idDomicilio;
+
+      const payload = {
+        nombreProyecto:       $('nombreProyecto').value.trim(),
+        tipoProyecto:         $('tipoProyecto').value || null,
+        ofertaTrabajo:        $('ofertaTrabajo').value.trim() || null,
+        cliente:              $('cliente').value.trim(),
+        fechaEstimadaInicio:  $('fechaEstimadaInicio').value || null,
+        fechaEstimadaFin:     $('fechaEstimadaFin').value || null,
+        calificacionProyecto: currentStar > 0 ? currentStar : null,
+        estatusProyecto:      $('estatusProyecto').value,
+        descripcionProyecto:  $('descripcionProyecto').value.trim() || null,
+        imagenProyectoUrl:    $('imagenProyectoUrl').value.trim() || null,
+        domicilio:            { idDomicilio }
+      };
+
       const res = await fetch(`${API_BASE}/proyectos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -390,7 +500,7 @@
         const err = await res.json().catch(() => ({}));
         showToast(err.message || err.error || `Error ${res.status}`, false);
       }
-    } catch(e) { showToast('No se pudo conectar con el servidor', false); }
+    } catch(e) { showToast(e.message || 'No se pudo conectar con el servidor', false); }
     finally { setLoading(btn, false); }
   }
 
