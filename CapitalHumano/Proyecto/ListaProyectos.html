@@ -221,7 +221,7 @@
             <option value="">Todos</option>
             <option value="PLANEACION">Planeación</option>
             <option value="EN_CURSO">En curso</option>
-            <option value="PAUSADO">Pausado</option>
+            <option value="PENDIENTE">Pendiente</option>
             <option value="FINALIZADO">Finalizado</option>
             <option value="CANCELADO">Cancelado</option>
           </select>
@@ -325,14 +325,14 @@
 
   const iconColors = ['pi-purple','pi-blue','pi-amber','pi-green','pi-coral'];
   const iconSet    = ['fa-building','fa-hard-hat','fa-road','fa-bolt','fa-wrench','fa-water','fa-tree-city'];
-  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en-curso', PAUSADO:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
-  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PAUSADO:'Pausado', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
+  const ESTATUS_CLS = { PLANEACION:'e-planeacion', EN_CURSO:'e-en-curso', PENDIENTE:'e-pausado', FINALIZADO:'e-finalizado', CANCELADO:'e-cancelado' };
+  const ESTATUS_LBL = { PLANEACION:'Planeación', EN_CURSO:'En curso', PENDIENTE:'Pendiente', FINALIZADO:'Finalizado', CANCELADO:'Cancelado' };
   const UBIC_LBL    = { CDMX:'CDMX', HIDALGO:'Hidalgo', PUEBLA:'Puebla' };
   const STAR_LABELS = ['','Muy bajo','Regular','Bueno','Muy bueno','Excelente'];
 
   function fmtFecha(f){ if(!f) return '—'; const [y,m,d]=f.split('-'); return `${d}/${m}/${y}`; }
-  function miniStars(n){ return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">★</div>`).join(''); }
-  function detStars(n){ const f=n||0; return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">★</span>`).join('')+`<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`; }
+  function miniStars(n){ return [1,2,3,4,5].map(i=>`<div class="st${i<=(n||0)?' on':''}">&#9733;</div>`).join(''); }
+  function detStars(n){ const f=n||0; return [1,2,3,4,5].map(i=>`<span class="det-star${i<=f?' on':''}">&#9733;</span>`).join('')+`<span class="det-star-lbl">${f>0?STAR_LABELS[f]:'Sin calificar'}</span>`; }
 
   let todos = [];
 
@@ -355,7 +355,7 @@
     const f = todos.filter(p =>
       (!q    || (p.nombreProyecto||'').toLowerCase().includes(q)) &&
       (!est  || p.estatusProyecto === est) &&
-      (!ubic || p.estadoProyectoGeo === ubic)
+      (!ubic || (p.domicilio?.estado?.nombreEst||'') === ubic)
     );
     const grid = $('cardsGrid'), lbl = $('resultsLabel');
     if (!f.length) {
@@ -372,7 +372,7 @@
     const ico = iconSet[idx % iconSet.length];
     const ec  = ESTATUS_CLS[p.estatusProyecto]||'';
     const el  = ESTATUS_LBL[p.estatusProyecto]||p.estatusProyecto;
-    const ub  = UBIC_LBL[p.estadoProyectoGeo]||p.estadoProyectoGeo||'—';
+    const ub = p.domicilio?.estado?.nombreEst||'—';
     return `
       <div class="proj-card" onclick="abrirDetalle(${p.idProyecto})">
         <div class="pcard-head">
@@ -380,8 +380,8 @@
           <div><div class="pcard-name">${p.nombreProyecto}</div><div class="pcard-type">${p.tipoProyecto||'Sin tipo'}</div></div>
         </div>
         <div class="pmeta">
-          <div class="prow"><i class="fa-solid fa-location-dot"></i>${ub}${p.municipioProyecto?' · '+p.municipioProyecto:''}</div>
-          <div class="prow"><i class="fa-solid fa-map-pin"></i>${p.lugarProyecto||'—'}</div>
+          <div class="prow"><i class="fa-solid fa-location-dot"></i>${ub}${p.domicilio?.munAlc?' · '+p.domicilio.munAlc:''}</div>
+          <div class="prow"><i class="fa-solid fa-map-pin"></i>${[p.domicilio?.calle,p.domicilio?.colonia].filter(Boolean).join(', ')||'—'}</div>
           <div class="prow"><i class="fa-solid fa-calendar-day"></i>Inicio: ${fmtFecha(p.fechaEstimadaInicio)}</div>
           <div class="prow"><i class="fa-solid fa-calendar-check"></i>Fin: ${fmtFecha(p.fechaEstimadaFin)}</div>
         </div>
@@ -412,9 +412,9 @@
     badge.className   = `estatus-badge ${ESTATUS_CLS[p.estatusProyecto]||''}`;
     badge.style.position='static'; badge.style.display='inline-block';
 
-    $('detEstado').textContent    = UBIC_LBL[p.estadoProyectoGeo]||p.estadoProyectoGeo||'—';
-    $('detMunicipio').textContent = p.municipioProyecto||'—';
-    $('detLugar').textContent     = p.lugarProyecto||'—';
+    $('detEstado').textContent    = p.domicilio?.estado?.nombreEst||'—';
+    $('detMunicipio').textContent = p.domicilio?.munAlc||'—';
+    $('detLugar').textContent     = [p.domicilio?.calle,p.domicilio?.numExt?'#'+p.domicilio.numExt:null,p.domicilio?.colonia,p.domicilio?.munAlc].filter(Boolean).join(', ')||'—';
     $('detFechaIni').textContent  = fmtFecha(p.fechaEstimadaInicio);
     $('detFechaFin').textContent  = fmtFecha(p.fechaEstimadaFin);
     $('detStars').innerHTML       = detStars(p.calificacionProyecto);

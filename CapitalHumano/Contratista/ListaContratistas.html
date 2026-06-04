@@ -350,7 +350,7 @@
     const f = todos.filter(c =>
       (!q    || (c.nombreContratista||'').toLowerCase().includes(q) || (c.rfcContratista||'').toLowerCase().includes(q)) &&
       (!est  || c.estadoContratista === est) &&
-      (!ubic || c.ubicacionContratista === ubic)
+      (!ubic || (c.estadoOperacion?.nombreEst||'') === ubic)
     );
     const grid = $('cardsGrid'), lbl = $('resultsLabel');
     if (!f.length) {
@@ -367,7 +367,7 @@
     const cl  = ESTADO_CLS[c.estadoContratista]||'';
     const lb  = ESTADO_LBL[c.estadoContratista]||c.estadoContratista;
     const nom = c.nombreContratista || `RFC: ${c.rfcContratista}`;
-    const ub  = UBIC_LBL[c.ubicacionContratista]||c.ubicacionContratista||'—';
+    const ub = c.estadoOperacion?.nombreEst||'—';
     const desc = (c.descripcionContratista||'').length>70
       ? c.descripcionContratista.substring(0,70)+'…'
       : (c.descripcionContratista||'—');
@@ -410,7 +410,7 @@
 
     $('detTelefono').textContent   = c.telefonoContratista||'—';
     $('detCorreo').textContent     = c.correoContratista||'—';
-    $('detUbicacion').textContent  = UBIC_LBL[c.ubicacionContratista]||c.ubicacionContratista||'—';
+    $('detUbicacion').textContent  = c.estadoOperacion?.nombreEst||'—';
     $('detStars').innerHTML        = detStars(c.calificacionContratista);
     $('detExperiencia').textContent= c.experiencia||'Sin registrar';
     $('detDescripcion').textContent= c.descripcionContratista||'Sin registrar';
