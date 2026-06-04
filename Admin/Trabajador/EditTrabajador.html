@@ -64,11 +64,6 @@
     .required-note span { color:var(--danger); }
     .form-body { padding:2rem; display:flex; flex-direction:column; gap:2rem; }
     .form-section { display:flex; flex-direction:column; gap:1.25rem; }
-    .form-section:nth-child(1) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:240ms; }
-    .form-section:nth-child(2) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:320ms; }
-    .form-section:nth-child(3) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:400ms; }
-    .form-section:nth-child(4) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:480ms; }
-    .form-section:nth-child(5) { animation:fadeUp var(--dur-normal) var(--ease-out) both; animation-delay:560ms; }
     .section-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:flex; align-items:center; gap:8px; }
     .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
     .form-row { display:grid; gap:1rem; }
@@ -77,6 +72,9 @@
     .field { display:flex; flex-direction:column; gap:7px; }
     .field label { font-size:12px; font-weight:500; color:var(--muted); }
     .field label .req { color:var(--danger); margin-left:2px; }
+    .field-error { font-size:11px; color:var(--danger); display:none; margin-top:2px; }
+    .field.has-error .field-error { display:block; }
+    .field.has-error input,.field.has-error select,.field.has-error textarea { border-color:var(--danger)!important; box-shadow:0 0 0 3px rgba(240,149,149,0.07)!important; }
     .input-wrap { position:relative; }
     .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
     .input-wrap.top-icon i { top:16px; transform:none; }
@@ -92,15 +90,6 @@
     .star-btn.active { color:var(--gold); }
     .star-btn:hover { color:var(--gold); transform:scale(1.15); }
     .star-value-label { font-size:12px; color:var(--muted); margin-left:8px; min-width:60px; }
-    .status-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-    .status-pill input[type="radio"] { display:none; }
-    .status-pill label { display:flex; align-items:center; justify-content:center; gap:7px; padding:10px 8px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; }
-    .status-pill label i { font-size:12px; }
-    .pill-activo    input:checked + label { background:rgba(93,202,165,0.12);  border-color:#5DCAA5; color:#5DCAA5; }
-    .pill-inactivo  input:checked + label { background:rgba(138,155,181,0.12); border-color:var(--muted); color:var(--muted); }
-    .pill-vacaciones input:checked + label { background:rgba(250,199,117,0.12); border-color:#FAC775; color:#FAC775; }
-    .pill-baja      input:checked + label { background:rgba(240,149,149,0.12); border-color:var(--danger); color:var(--danger); }
-    .status-pill label:hover { background:rgba(200,169,110,0.06); border-color:var(--gold); color:var(--gold); }
     .form-divider { height:1px; background:var(--border); }
     .form-footer { padding:1.5rem 2rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .form-footer-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
@@ -125,7 +114,7 @@
     .footer-contact a { font-size:12px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .footer-contact a:hover { color:var(--gold); }
     .footer-contact a i { font-size:13px; color:var(--gold); }
-    @media(max-width:680px){.col-2{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr 1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}}
+    @media(max-width:680px){.col-2{grid-template-columns:1fr}.page-header{flex-direction:column;align-items:flex-start}.form-footer{flex-direction:column;align-items:stretch}}
   </style>
 </head>
 <body>
@@ -136,24 +125,12 @@
 </header>
 
 <nav>
-  <a class="nav-link" href="../Paginaprincipal.html">
-    <i class="fa-solid fa-house"></i> Inicio
-  </a>
-  <a class="nav-link" href="../CapHumano/ListaCap.html">
-    <i class="fa-solid fa-users-gear"></i> Cap. Humano
-  </a>
-  <a class="nav-link active" href="VisualizarTrabajadores.html">
-    <i class="fa-solid fa-user"></i> Trabajadores
-  </a>
-  <a class="nav-link" href="../Contratista/ListaContratistas.html">
-    <i class="fa-solid fa-people-group"></i> Contratistas
-  </a>
-  <a class="nav-link" href="../Proyecto/ListaProyectos.html">
-    <i class="fa-solid fa-diagram-project"></i> Proyectos
-  </a>
-  <a class="nav-link" href="../Reportes/Reportes.html">
-    <i class="fa-solid fa-file-pdf"></i> Reportes
-  </a>
+  <a class="nav-link" href="../Paginaprincipal.html"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a class="nav-link" href="../CapHumano/ListaCap.html"><i class="fa-solid fa-users-gear"></i> Cap. Humano</a>
+  <a class="nav-link active" href="VisualizarTrabajadores.html"><i class="fa-solid fa-user"></i> Trabajadores</a>
+  <a class="nav-link" href="../Contratista/ListaContratistas.html"><i class="fa-solid fa-people-group"></i> Contratistas</a>
+  <a class="nav-link" href="../Proyecto/ListaProyectos.html"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>
+  <a class="nav-link" href="../Reportes/Reportes.html"><i class="fa-solid fa-file-pdf"></i> Reportes</a>
   <div class="nav-sep"></div>
   <div class="profile-pill">
     <div class="nav-avatar" id="navAvatar">--</div>
@@ -163,9 +140,7 @@
     </div>
   </div>
   <div class="nav-div"></div>
-  <button class="nav-logout" onclick="cerrarSesion()">
-    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-  </button>
+  <button class="nav-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
 </nav>
 
 <main>
@@ -206,30 +181,53 @@
 
     <form class="form-body" id="formEditar" novalidate>
 
+      <!-- INFORMACIÓN PERSONAL -->
       <div class="form-section">
         <div class="section-label"><i class="fa-solid fa-circle-user" style="color:var(--gold);font-size:11px"></i> Información personal</div>
         <div class="form-row col-2">
-          <div class="field">
+          <div class="field" id="field-nombre">
             <label>Nombre completo <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-user"></i><input type="text" id="nombreTrabajador" placeholder="Ej. Juan García López" maxlength="100" /></div>
+            <div class="input-wrap"><i class="fa-solid fa-user"></i><input type="text" id="nombreTrabajador" maxlength="100" /></div>
+            <span class="field-error">El nombre es obligatorio</span>
           </div>
+          <div class="field" id="field-curp">
+            <label>CURP <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-id-card"></i><input type="text" id="curp" maxlength="18" style="text-transform:uppercase" /></div>
+            <span class="field-error">El CURP es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-rfc">
+            <label>RFC <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-file-invoice"></i><input type="text" id="rfc" maxlength="13" style="text-transform:uppercase" /></div>
+            <span class="field-error">El RFC es obligatorio</span>
+          </div>
+          <div class="field" id="field-nacionalidad">
+            <label>Nacionalidad <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-flag"></i><input type="text" id="nacionalidad" maxlength="100" /></div>
+            <span class="field-error">La nacionalidad es obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
           <div class="field">
             <label>NSS</label>
-            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i><input type="text" id="nssTrabajador" placeholder="Ej. 12345678901" maxlength="15" /></div>
+            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i><input type="text" id="nssTrabajador" maxlength="11" /></div>
           </div>
-        </div>
-        <div class="form-row col-2">
-          <div class="field">
+          <div class="field" id="field-telefono">
             <label>Teléfono <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-phone"></i><input type="tel" id="telefonoTrabajador" placeholder="+52 000 000 0000" maxlength="15" /></div>
+            <div class="input-wrap"><i class="fa-solid fa-phone"></i><input type="tel" id="telefonoTrabajador" maxlength="15" /></div>
+            <span class="field-error">El teléfono es obligatorio</span>
           </div>
-          <div class="field">
+        </div>
+        <div class="form-row col-1">
+          <div class="field" id="field-correo">
             <label>Correo electrónico <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-envelope"></i><input type="email" id="correoTrabajador" placeholder="correo@ejemplo.com" maxlength="100" /></div>
+            <div class="input-wrap"><i class="fa-solid fa-envelope"></i><input type="email" id="correoTrabajador" maxlength="100" /></div>
+            <span class="field-error">Correo inválido</span>
           </div>
         </div>
         <div class="form-row col-2">
-          <div class="field">
+          <div class="field" id="field-sexo">
             <label>Sexo <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-venus-mars"></i>
               <select id="sexo">
@@ -239,8 +237,137 @@
                 <option value="Otro">Otro</option>
               </select>
             </div>
+            <span class="field-error">El sexo es obligatorio</span>
           </div>
           <div class="field">
+            <label>Estado civil</label>
+            <div class="input-wrap"><i class="fa-solid fa-ring"></i><input type="text" id="estadoCivil" maxlength="50" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- DOMICILIO -->
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-house" style="color:var(--gold);font-size:11px"></i> Domicilio</div>
+        <div class="form-row col-2">
+          <div class="field" id="field-calle">
+            <label>Calle <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-road"></i><input type="text" id="calle" maxlength="100" /></div>
+            <span class="field-error">La calle es obligatoria</span>
+          </div>
+          <div class="field" id="field-numExt">
+            <label>Número exterior <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-hashtag"></i><input type="text" id="numExt" maxlength="10" /></div>
+            <span class="field-error">El número exterior es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-colonia">
+            <label>Colonia <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-map"></i><input type="text" id="colonia" maxlength="100" /></div>
+            <span class="field-error">La colonia es obligatoria</span>
+          </div>
+          <div class="field" id="field-codPost">
+            <label>Código postal <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-envelopes-bulk"></i><input type="text" id="codPost" maxlength="5" inputmode="numeric" /></div>
+            <span class="field-error">El código postal es obligatorio</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-munAlc">
+            <label>Municipio / Alcaldía <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-building"></i><input type="text" id="munAlc" maxlength="100" /></div>
+            <span class="field-error">El municipio es obligatorio</span>
+          </div>
+          <div class="field" id="field-estadoDom">
+            <label>Estado <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
+              <select id="estadoDomicilio">
+                <option value="" disabled>Selecciona…</option>
+                <option value="1">Ciudad de México (CDMX)</option>
+                <option value="2">Hidalgo</option>
+                <option value="3">Puebla</option>
+              </select>
+            </div>
+            <span class="field-error">El estado es obligatorio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- INFORMACIÓN PROFESIONAL -->
+      <div class="form-section">
+        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Información profesional</div>
+        <div class="form-row col-2">
+          <div class="field" id="field-puesto">
+            <label>Puesto <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i><input type="text" id="puesto" maxlength="100" /></div>
+            <span class="field-error">El puesto es obligatorio</span>
+          </div>
+          <div class="field" id="field-especialidad">
+            <label>Especialidad <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-helmet-safety"></i>
+              <select id="especialidadTrabajador">
+                <option value="" disabled>Selecciona…</option>
+                <option value="Obra">Obra</option>
+                <option value="Remodelacion">Remodelación</option>
+                <option value="Instalacion de mobiliario">Instalación de mobiliario</option>
+                <option value="Venta de mobiliario">Venta de mobiliario</option>
+              </select>
+            </div>
+            <span class="field-error">La especialidad es obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="field" id="field-descPuesto">
+            <label>Descripción del puesto <span class="req">*</span></label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i><textarea id="descPuesto" maxlength="500"></textarea></div>
+            <span class="field-error">La descripción es obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-escolaridad">
+            <label>Escolaridad <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-graduation-cap"></i><input type="text" id="escolaridad" maxlength="100" /></div>
+            <span class="field-error">La escolaridad es obligatoria</span>
+          </div>
+          <div class="field" id="field-fecha">
+            <label>Fecha de ingreso <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-calendar-day"></i><input type="date" id="fechaIngreso" /></div>
+            <span class="field-error">Fecha obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-contratacion">
+            <label>Contratación <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-file-signature"></i><input type="text" id="contratacion" maxlength="200" /></div>
+            <span class="field-error">Obligatoria</span>
+          </div>
+          <div class="field" id="field-jornada">
+            <label>Jornada <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-clock"></i><input type="text" id="jornada" maxlength="200" /></div>
+            <span class="field-error">Obligatoria</span>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field" id="field-estadoTrabajador">
+            <label>Estado del trabajador <span class="req">*</span></label>
+            <div class="input-wrap"><i class="fa-solid fa-circle-info"></i>
+              <select id="estadoTrabajador">
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+                <option value="DESCANSO">DESCANSO</option>
+                <option value="VACACIONES">VACACIONES</option>
+                <option value="INCAPACIDAD">INCAPACIDAD</option>
+                <option value="BAJA">BAJA</option>
+                <option value="BOLETINADO">BOLETINADO</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" id="field-estadoCalidadVida">
             <label>Estado (calidad de vida) <span class="req">*</span></label>
             <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
               <select id="estadoCalidadVida">
@@ -250,78 +377,18 @@
                 <option value="3">Puebla</option>
               </select>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-divider"></div>
-
-      <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:11px"></i> Información profesional</div>
-        <div class="form-row col-2">
-          <div class="field">
-            <label>Puesto <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-id-badge"></i><input type="text" id="puesto" placeholder="Ej. Albañil / Supervisor" maxlength="100" /></div>
-          </div>
-          <div class="field">
-            <label>Escolaridad <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-graduation-cap"></i><input type="text" id="escolaridad" placeholder="Ej. Preparatoria / Licenciatura" maxlength="100" /></div>
+            <span class="field-error">Obligatorio</span>
           </div>
         </div>
         <div class="form-row col-1">
           <div class="field">
-            <label>Descripción del puesto <span class="req">*</span></label>
-            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
-              <textarea id="descPuesto" placeholder="Describe las funciones del puesto…" maxlength="500"></textarea>
-            </div>
+            <label>Experiencia</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i><textarea id="experiencia" maxlength="200"></textarea></div>
           </div>
         </div>
-        <div class="form-row col-2">
+        <div class="form-row col-1">
           <div class="field">
-            <label>Contratación <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-file-signature"></i><input type="text" id="contratacion" placeholder="Ej. Por obra determinada / Indefinido" maxlength="200" /></div>
-          </div>
-          <div class="field">
-            <label>Jornada <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-clock"></i><input type="text" id="jornada" placeholder="Ej. 8h L-V" maxlength="200" /></div>
-          </div>
-        </div>
-        <div class="form-row col-2">
-          <div class="field">
-            <label>Especialidad <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-helmet-safety"></i>
-              <select id="especialidadTrabajador">
-                <option value="" disabled>Selecciona una especialidad…</option>
-                <option value="Obra">Obra</option>
-                <option value="Remodelacion">Remodelación</option>
-                <option value="Instalacion de mobiliario">Instalación de mobiliario</option>
-                <option value="Venta de mobiliario">Venta de mobiliario</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label>Fecha de ingreso <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-calendar-day"></i><input type="date" id="fechaIngreso" /></div>
-          </div>
-        </div>
-        <div class="form-row col-2">
-          <div class="field">
-            <label>Ubicación <span class="req">*</span></label>
-            <div class="input-wrap"><i class="fa-solid fa-location-dot"></i>
-              <!--
-                Values EXACTOS del enum Ubicacion en Java:
-                CDMX | Hidalgo | Puebla
-              -->
-              <select id="ubicacionTrabajador">
-                <option value="" disabled>Selecciona…</option>
-                <option value="CDMX">CDMX</option>
-                <option value="Hidalgo">Hidalgo</option>
-                <option value="Puebla">Puebla</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label>Calificación</label>
+            <label>Evaluación</label>
             <div class="stars-container">
               <div class="stars-wrap">
                 <button type="button" class="star-btn" data-val="1">&#9733;</button>
@@ -332,40 +399,46 @@
                 <span class="star-value-label" id="starLabel">Sin calificar</span>
               </div>
             </div>
-            <input type="hidden" id="calificacionTrabajador" />
-          </div>
-        </div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Experiencia</label>
-            <div class="input-wrap top-icon"><i class="fa-solid fa-star-half-stroke"></i>
-              <textarea id="experiencia" placeholder="Describe brevemente la experiencia…" maxlength="200"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="form-row col-1">
-          <div class="field">
-            <label>Descripción del trabajador</label>
-            <div class="input-wrap top-icon"><i class="fa-solid fa-align-left"></i>
-              <textarea id="descripcionTrabajador" placeholder="Información adicional relevante…" maxlength="800" style="min-height:120px"></textarea>
-            </div>
+            <input type="hidden" id="evaluacionTrabajador" />
           </div>
         </div>
       </div>
 
       <div class="form-divider"></div>
 
+      <!-- INFORMACIÓN ADICIONAL -->
       <div class="form-section">
-        <div class="section-label"><i class="fa-solid fa-sliders" style="color:var(--gold);font-size:11px"></i> Estado</div>
+        <div class="section-label"><i class="fa-solid fa-circle-plus" style="color:var(--gold);font-size:11px"></i> Información adicional</div>
         <div class="form-row col-1">
           <div class="field">
-            <label>Estado del trabajador</label>
-            <div class="status-grid">
-              <div class="status-pill pill-activo"><input type="radio" name="estadoTrabajador" id="est-activo" value="ACTIVO"/><label for="est-activo"><i class="fa-solid fa-circle-check"></i> Activo</label></div>
-              <div class="status-pill pill-inactivo"><input type="radio" name="estadoTrabajador" id="est-inactivo" value="INACTIVO"/><label for="est-inactivo"><i class="fa-solid fa-circle-xmark"></i> Inactivo</label></div>
-              <div class="status-pill pill-vacaciones"><input type="radio" name="estadoTrabajador" id="est-vac" value="VACACIONES"/><label for="est-vac"><i class="fa-solid fa-umbrella-beach"></i> Vacaciones</label></div>
-              <div class="status-pill pill-baja"><input type="radio" name="estadoTrabajador" id="est-baja" value="BAJA"/><label for="est-baja"><i class="fa-solid fa-user-slash"></i> Baja</label></div>
-            </div>
+            <label>Antecedentes penales</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-gavel"></i><textarea id="antPenal" maxlength="500"></textarea></div>
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="field">
+            <label>Deudor alimentario</label>
+            <div class="input-wrap top-icon"><i class="fa-solid fa-scale-balanced"></i><textarea id="deudorAlim" maxlength="500"></textarea></div>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Folio licencia de conducir</label>
+            <div class="input-wrap"><i class="fa-solid fa-car"></i><input type="text" id="folioLicCond" maxlength="20" /></div>
+          </div>
+          <div class="field">
+            <label>Foto de perfil (URL)</label>
+            <div class="input-wrap"><i class="fa-solid fa-image"></i><input type="url" id="fotoPerfilUrl" maxlength="255" /></div>
+          </div>
+        </div>
+        <div class="form-row col-2">
+          <div class="field">
+            <label>Idiomas</label>
+            <div class="input-wrap"><i class="fa-solid fa-language"></i><input type="text" id="idiomas" maxlength="200" /></div>
+          </div>
+          <div class="field">
+            <label>Lengua indígena</label>
+            <div class="input-wrap"><i class="fa-solid fa-feather"></i><input type="text" id="lenguaIndigena" maxlength="100" /></div>
           </div>
         </div>
       </div>
@@ -417,26 +490,6 @@
 
   let trabajadorActual = null, originales = {}, currentStar = 0;
 
-  /*
-    Normaliza ubicación al valor EXACTO del enum Java:
-    CDMX | Hidalgo | Puebla
-    Elimina el .toUpperCase() que causaba HIDALGO/PUEBLA → Error 400
-  */
-  function normalizarUbicacion(val) {
-    const mapa = {
-      'CDMX'    : 'CDMX',
-      'cdmx'    : 'CDMX',
-      'HIDALGO' : 'Hidalgo',
-      'hidalgo' : 'Hidalgo',
-      'Hidalgo' : 'Hidalgo',
-      'PUEBLA'  : 'Puebla',
-      'puebla'  : 'Puebla',
-      'Puebla'  : 'Puebla'
-    };
-    return mapa[val] !== undefined ? mapa[val] : val;
-  }
-
-  /* ── INIT ── */
   function init() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) { mostrarNoBanner(); return; }
@@ -449,53 +502,65 @@
     $('noWorkerBanner').style.display = 'block';
   }
 
-  /* ── CARGAR DATOS ── */
-  function cargarDatos(d) {
-    $('badgeName').textContent   = d.nombreTrabajador || '—';
-    $('badgeIdNum').textContent  = d.idTrabajador || '—';
-    setVal('nombreTrabajador',    d.nombreTrabajador);
-    setVal('nssTrabajador',       d.nssTrabajador);
-    setVal('telefonoTrabajador',  d.telefonoTrabajador);
-    setVal('correoTrabajador',    d.correoTrabajador);
-    setVal('fechaIngreso',        d.fechaIngreso);
-    setVal('experiencia',         d.experiencia);
-    setVal('descripcionTrabajador', d.descripcionTrabajador);
-    setVal('puesto',              d.puesto);
-    setVal('descPuesto',          d.descPuesto);
-    setVal('escolaridad',         d.escolaridad);
-    setVal('contratacion',        d.contratacion);
-    setVal('jornada',             d.jornada);
-    if (d.sexo) $('sexo').value = d.sexo;
-    if (d.estadoCalidadVida && d.estadoCalidadVida.idEstado != null) {
-      $('estadoCalidadVida').value = String(d.estadoCalidadVida.idEstado);
-    } else if (d.estadoCalidadVida != null && typeof d.estadoCalidadVida !== 'object') {
-      $('estadoCalidadVida').value = String(d.estadoCalidadVida);
+  function setVal(id, val) { const el = $(id); if (el && val != null) el.value = val; }
+
+  function cargarDatos(t) {
+    $('badgeName').textContent   = t.nombreTrabajador || '—';
+    $('badgeIdNum').textContent  = t.idTrabajador || '—';
+
+    setVal('nombreTrabajador', t.nombreTrabajador);
+    setVal('curp', t.curp);
+    setVal('rfc', t.rfc);
+    setVal('nssTrabajador', t.nssTrabajador);
+    setVal('nacionalidad', t.nacionalidad);
+    setVal('telefonoTrabajador', t.telefonoTrabajador);
+    setVal('correoTrabajador', t.correoTrabajador);
+    setVal('puesto', t.puesto);
+    setVal('descPuesto', t.descPuesto);
+    setVal('escolaridad', t.escolaridad);
+    setVal('experiencia', t.experiencia);
+    setVal('contratacion', t.contratacion);
+    setVal('jornada', t.jornada);
+    setVal('fechaIngreso', t.fechaIngreso);
+    setVal('antPenal', t.antPenal);
+    setVal('deudorAlim', t.deudorAlim);
+    setVal('folioLicCond', t.folioLicCond);
+    setVal('estadoCivil', t.estadoCivil);
+    setVal('idiomas', t.idiomas);
+    setVal('lenguaIndigena', t.lenguaIndigena);
+    setVal('fotoPerfilUrl', t.fotoPerfilUrl);
+
+    if (t.sexo) $('sexo').value = t.sexo;
+    if (t.estadoTrabajador) $('estadoTrabajador').value = t.estadoTrabajador;
+
+    if (t.especialidadTrabajador) {
+      const sel = $('especialidadTrabajador');
+      const exists = [...sel.options].some(o => o.value === t.especialidadTrabajador);
+      if (!exists) {
+        const o = document.createElement('option');
+        o.value = t.especialidadTrabajador; o.textContent = t.especialidadTrabajador;
+        sel.appendChild(o);
+      }
+      sel.value = t.especialidadTrabajador;
     }
 
-    /* especialidad */
-    if (d.especialidadTrabajador) {
-      const sel = $('especialidadTrabajador');
-      const exists = [...sel.options].some(o => o.value === d.especialidadTrabajador);
-      if (exists) {
-        sel.value = d.especialidadTrabajador;
-      } else {
-        const o = document.createElement('option');
-        o.value = d.especialidadTrabajador; o.textContent = d.especialidadTrabajador;
-        sel.appendChild(o); sel.value = d.especialidadTrabajador;
+    if (t.estadoCalidadVida && t.estadoCalidadVida.idEstado != null) {
+      $('estadoCalidadVida').value = String(t.estadoCalidadVida.idEstado);
+    }
+
+    if (t.domicilio) {
+      setVal('calle', t.domicilio.calle);
+      setVal('numExt', t.domicilio.numExt);
+      setVal('colonia', t.domicilio.colonia);
+      setVal('codPost', t.domicilio.codPost);
+      setVal('munAlc', t.domicilio.munAlc);
+      if (t.domicilio.estado && t.domicilio.estado.idEstado != null) {
+        $('estadoDomicilio').value = String(t.domicilio.estado.idEstado);
       }
     }
 
-    /* ubicación — normalizar para que coincida con las opciones del select */
-    const ubic = normalizarUbicacion((d.ubicacionTrabajador || '').toString());
-    if (ubic) $('ubicacionTrabajador').value = ubic;
-
-    /* estado */
-    const radio = document.querySelector(`input[name="estadoTrabajador"][value="${d.estadoTrabajador}"]`);
-    if (radio) radio.checked = true;
-
-    /* estrellas */
-    currentStar = d.calificacionTrabajador || 0;
-    $('calificacionTrabajador').value = currentStar || '';
+    currentStar = t.evaluacionTrabajador || 0;
+    $('evaluacionTrabajador').value = currentStar || '';
     paintStars(currentStar);
     $('starLabel').textContent = currentStar > 0 ? STAR_LABELS[currentStar] : 'Sin calificar';
 
@@ -504,56 +569,105 @@
       .forEach(el => { el.addEventListener('input', detectarCambios); el.addEventListener('change', detectarCambios); });
   }
 
-  function setVal(id, val) { const el = $(id); if (el && val != null) el.value = val; }
-
-  /* ── LEER FORMULARIO ── */
   function leerFormulario() {
-    const r = document.querySelector('input[name="estadoTrabajador"]:checked');
     const idEstadoCV = parseInt($('estadoCalidadVida').value, 10);
     return {
       nombreTrabajador:       $('nombreTrabajador').value.trim(),
+      curp:                   $('curp').value.trim().toUpperCase(),
+      rfc:                    $('rfc').value.trim().toUpperCase(),
       nssTrabajador:          $('nssTrabajador').value.trim() || null,
-      telefonoTrabajador:     $('telefonoTrabajador').value.trim(),
-      correoTrabajador:       $('correoTrabajador').value.trim(),
-      especialidadTrabajador: $('especialidadTrabajador').value,
-      fechaIngreso:           $('fechaIngreso').value,
-      experiencia:            $('experiencia').value.trim() || null,
-      descripcionTrabajador:  $('descripcionTrabajador').value.trim() || null,
-      calificacionTrabajador: currentStar > 0 ? currentStar : null,
-      /* Normalizado: nunca se manda HIDALGO ni PUEBLA al backend */
-      ubicacionTrabajador:    normalizarUbicacion($('ubicacionTrabajador').value || ''),
+      nacionalidad:           $('nacionalidad').value.trim(),
       puesto:                 $('puesto').value.trim(),
       descPuesto:             $('descPuesto').value.trim(),
+      especialidadTrabajador: $('especialidadTrabajador').value,
       escolaridad:            $('escolaridad').value.trim(),
+      experiencia:            $('experiencia').value.trim() || null,
+      telefonoTrabajador:     $('telefonoTrabajador').value.trim(),
+      correoTrabajador:       $('correoTrabajador').value.trim(),
       contratacion:           $('contratacion').value.trim(),
       jornada:                $('jornada').value.trim(),
+      evaluacionTrabajador:   currentStar > 0 ? currentStar : null,
+      fechaIngreso:           $('fechaIngreso').value,
       sexo:                   $('sexo').value || null,
+      antPenal:               $('antPenal').value.trim() || null,
+      deudorAlim:             $('deudorAlim').value.trim() || null,
+      folioLicCond:           $('folioLicCond').value.trim() || null,
+      estadoCivil:            $('estadoCivil').value.trim() || null,
+      idiomas:                $('idiomas').value.trim() || null,
+      lenguaIndigena:         $('lenguaIndigena').value.trim() || null,
+      fotoPerfilUrl:          $('fotoPerfilUrl').value.trim() || null,
       estadoCalidadVida:      Number.isNaN(idEstadoCV) ? null : { idEstado: idEstadoCV },
-      estadoTrabajador:       r ? r.value : ''
+      estadoTrabajador:       $('estadoTrabajador').value
     };
   }
 
-  function guardarSnapshot() { originales = leerFormulario(); }
-  function detectarCambios() {
-    const actual = leerFormulario();
-    const mod = Object.keys(originales).filter(k => String(actual[k] ?? '') !== String(originales[k] ?? '')).length;
-    const lbl = $('changesLabel');
-    lbl.textContent = mod > 0 ? `${mod} campo${mod > 1 ? 's' : ''} modificado${mod > 1 ? 's' : ''}` : 'Sin cambios pendientes';
-    lbl.style.color = mod > 0 ? 'var(--warning)' : '';
+  function leerDomicilio() {
+    const idEstado = parseInt($('estadoDomicilio').value, 10);
+    const cp = $('codPost').value.trim();
+    return {
+      calle:   $('calle').value.trim(),
+      numExt:  $('numExt').value.trim(),
+      colonia: $('colonia').value.trim(),
+      codPost: cp ? parseInt(cp, 10) : null,
+      munAlc:  $('munAlc').value.trim(),
+      estado:    Number.isNaN(idEstado) ? null : { idEstado },
+      idEstado:  Number.isNaN(idEstado) ? null : idEstado,
+      id_estado: Number.isNaN(idEstado) ? null : idEstado
+    };
   }
 
-  /* ── GUARDAR ── */
+  function guardarSnapshot() { originales = JSON.stringify({ ...leerFormulario(), dom: leerDomicilio() }); }
+  function detectarCambios() {
+    const actual = JSON.stringify({ ...leerFormulario(), dom: leerDomicilio() });
+    const mod = actual !== originales;
+    const lbl = $('changesLabel');
+    lbl.textContent = mod ? 'Cambios pendientes' : 'Sin cambios pendientes';
+    lbl.style.color = mod ? 'var(--warning)' : '';
+  }
+
   async function guardarCambios() {
     if (!trabajadorActual) return;
     const btn = $('btnGuardar');
     setLoading(btn, true);
-    const payload = leerFormulario();
-    const { estadoTrabajador, ...dtoSinEstado } = payload;
     try {
+      // 1) PUT domicilio si existe id previo
+      const idDomPrev = trabajadorActual.domicilio && trabajadorActual.domicilio.idDomicilio;
+      let idDomicilio = idDomPrev;
+      if (idDomPrev) {
+        const domPayload = leerDomicilio();
+        const resDom = await fetch(`${API_BASE}/domicilios/${idDomPrev}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(domPayload)
+        });
+        if (!resDom.ok) {
+          const e = await resDom.json().catch(() => ({}));
+          throw new Error(e.message || `Error domicilio ${resDom.status}`);
+        }
+      } else {
+        // crear uno nuevo
+        const resDom = await fetch(`${API_BASE}/domicilios`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(leerDomicilio())
+        });
+        if (!resDom.ok && resDom.status !== 201) {
+          const e = await resDom.json().catch(() => ({}));
+          throw new Error(e.message || `Error domicilio ${resDom.status}`);
+        }
+        const dom = await resDom.json();
+        idDomicilio = dom.idDomicilio;
+      }
+
+      const payload = leerFormulario();
+      const estadoNuevo = payload.estadoTrabajador;
+      delete payload.estadoTrabajador;
+      payload.domicilio = { idDomicilio };
+
       const resPut = await fetch(`${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dtoSinEstado)
+        body: JSON.stringify(payload)
       });
       if (!resPut.ok) {
         const e = await resPut.json().catch(() => ({}));
@@ -561,10 +675,9 @@
       }
       const updated = await resPut.json();
 
-      /* PATCH estado solo si cambió */
-      if (estadoTrabajador && estadoTrabajador !== trabajadorActual.estadoTrabajador) {
+      if (estadoNuevo && estadoNuevo !== trabajadorActual.estadoTrabajador) {
         const resPatch = await fetch(
-          `${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}/estado?estado=${estadoTrabajador}`,
+          `${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}/estado?estado=${estadoNuevo}`,
           { method: 'PATCH' }
         );
         if (!resPatch.ok) {
@@ -573,29 +686,30 @@
         }
       }
 
-      trabajadorActual = { ...updated, estadoTrabajador };
+      trabajadorActual = { ...updated, estadoTrabajador: estadoNuevo || updated.estadoTrabajador };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(trabajadorActual));
       $('badgeName').textContent = trabajadorActual.nombreTrabajador;
       guardarSnapshot(); detectarCambios();
       showToast('Cambios guardados correctamente', true);
-    } catch(e) { showToast(e.message || 'Error al guardar', false); }
-    finally { setLoading(btn, false); }
+    } catch(e) {
+      showToast(e.message || 'Error al guardar', false);
+    } finally {
+      setLoading(btn, false);
+    }
   }
 
   function descartarCambios() {
     if (trabajadorActual) { cargarDatos(trabajadorActual); showToast('Cambios descartados', false); }
   }
 
-  /* ── ESTRELLAS ── */
   const stars = document.querySelectorAll('.star-btn');
   stars.forEach(s => {
-    s.addEventListener('click', () => { currentStar = parseInt(s.dataset.val); $('calificacionTrabajador').value = currentStar; paintStars(currentStar); $('starLabel').textContent = STAR_LABELS[currentStar]; detectarCambios(); });
+    s.addEventListener('click', () => { currentStar = parseInt(s.dataset.val); $('evaluacionTrabajador').value = currentStar; paintStars(currentStar); $('starLabel').textContent = STAR_LABELS[currentStar]; detectarCambios(); });
     s.addEventListener('mouseenter', () => paintStars(parseInt(s.dataset.val)));
     s.addEventListener('mouseleave', () => paintStars(currentStar));
   });
   function paintStars(n) { stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= n)); }
 
-  /* ── HELPERS ── */
   function setLoading(btn, on) { btn.disabled = on; btn.classList.toggle('loading', on); btn.querySelector('.btn-label').textContent = on ? 'Guardando…' : 'Guardar cambios'; }
   function showToast(msg, ok) { const t = $('toast'); $('toastMsg').textContent = msg; t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)'; const ic = $('toastIcon'); ic.style.color = ok ? 'var(--success)' : 'var(--danger)'; ic.className = ok ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
   function cerrarSesion() { window.location.href = '../../index.html'; }

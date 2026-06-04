@@ -575,52 +575,59 @@
     </div>
 
     <div class="det-section">
-      <div class="det-section-title">
-        <i class="fa-solid fa-address-card" style="color:var(--gold);font-size:10px"></i>
-        Contacto
-      </div>
+      <div class="det-section-title"><i class="fa-solid fa-address-card" style="color:var(--gold);font-size:10px"></i> Datos personales</div>
       <div class="det-grid">
-        <div class="det-field">
-          <div class="det-lbl">Teléfono</div>
-          <div class="det-val" id="detTelefono">—</div>
-        </div>
-        <div class="det-field">
-          <div class="det-lbl">Correo electrónico</div>
-          <div class="det-val" id="detCorreo">—</div>
-        </div>
+        <div class="det-field"><div class="det-lbl">ID</div><div class="det-val" id="detId">—</div></div>
+        <div class="det-field"><div class="det-lbl">CURP</div><div class="det-val" id="detCurp">—</div></div>
+        <div class="det-field"><div class="det-lbl">RFC</div><div class="det-val" id="detRfc">—</div></div>
+        <div class="det-field"><div class="det-lbl">NSS</div><div class="det-val" id="detNss">—</div></div>
+        <div class="det-field"><div class="det-lbl">Nacionalidad</div><div class="det-val" id="detNacionalidad">—</div></div>
+        <div class="det-field"><div class="det-lbl">Sexo</div><div class="det-val" id="detSexo">—</div></div>
+        <div class="det-field"><div class="det-lbl">Estado civil</div><div class="det-val" id="detEstadoCivil">—</div></div>
+        <div class="det-field"><div class="det-lbl">Teléfono</div><div class="det-val" id="detTelefono">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Correo electrónico</div><div class="det-val" id="detCorreo">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Foto de perfil</div><div class="det-val" id="detFotoWrap">—</div></div>
       </div>
     </div>
 
     <div class="det-section">
-      <div class="det-section-title">
-        <i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:10px"></i>
-        Información laboral
-      </div>
+      <div class="det-section-title"><i class="fa-solid fa-briefcase" style="color:var(--gold);font-size:10px"></i> Información laboral</div>
       <div class="det-grid">
-        <div class="det-field">
-          <div class="det-lbl">NSS</div>
-          <div class="det-val" id="detNss">—</div>
-        </div>
-        <div class="det-field">
-          <div class="det-lbl">Fecha de ingreso</div>
-          <div class="det-val" id="detFecha">—</div>
-        </div>
-        <div class="det-field">
-          <div class="det-lbl">Ubicación</div>
-          <div class="det-val" id="detUbicacion">—</div>
-        </div>
-        <div class="det-field">
-          <div class="det-lbl">Calificación</div>
-          <div class="det-stars-wrap" id="detStars"></div>
-        </div>
-        <div class="det-field full">
-          <div class="det-lbl">Experiencia</div>
-          <div class="det-val muted-val" id="detExperiencia">—</div>
-        </div>
-        <div class="det-field full">
-          <div class="det-lbl">Descripción adicional</div>
-          <div class="det-val muted-val" id="detDescripcion">—</div>
-        </div>
+        <div class="det-field"><div class="det-lbl">Puesto</div><div class="det-val" id="detPuesto">—</div></div>
+        <div class="det-field"><div class="det-lbl">Especialidad</div><div class="det-val" id="detEspecialidad">—</div></div>
+        <div class="det-field"><div class="det-lbl">Escolaridad</div><div class="det-val" id="detEscolaridad">—</div></div>
+        <div class="det-field"><div class="det-lbl">Fecha de ingreso</div><div class="det-val" id="detFecha">—</div></div>
+        <div class="det-field"><div class="det-lbl">Contratación</div><div class="det-val" id="detContratacion">—</div></div>
+        <div class="det-field"><div class="det-lbl">Jornada</div><div class="det-val" id="detJornada">—</div></div>
+        <div class="det-field"><div class="det-lbl">Estado trabajador</div><div class="det-val" id="detEstadoTrab">—</div></div>
+        <div class="det-field"><div class="det-lbl">Estado calidad vida</div><div class="det-val" id="detEstadoCV">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Descripción del puesto</div><div class="det-val muted-val" id="detDescPuesto">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Experiencia</div><div class="det-val muted-val" id="detExperiencia">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Evaluación</div><div class="det-stars-wrap" id="detStars"></div></div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-house" style="color:var(--gold);font-size:10px"></i> Domicilio</div>
+      <div class="det-grid">
+        <div class="det-field"><div class="det-lbl">Calle</div><div class="det-val" id="detCalle">—</div></div>
+        <div class="det-field"><div class="det-lbl">Núm. exterior</div><div class="det-val" id="detNumExt">—</div></div>
+        <div class="det-field"><div class="det-lbl">Colonia</div><div class="det-val" id="detColonia">—</div></div>
+        <div class="det-field"><div class="det-lbl">Código postal</div><div class="det-val" id="detCodPost">—</div></div>
+        <div class="det-field"><div class="det-lbl">Municipio/Alcaldía</div><div class="det-val" id="detMunAlc">—</div></div>
+        <div class="det-field"><div class="det-lbl">Estado</div><div class="det-val" id="detEstadoDom">—</div></div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title"><i class="fa-solid fa-circle-plus" style="color:var(--gold);font-size:10px"></i> Información adicional</div>
+      <div class="det-grid">
+        <div class="det-field full"><div class="det-lbl">Antecedentes penales</div><div class="det-val muted-val" id="detAntPenal">—</div></div>
+        <div class="det-field full"><div class="det-lbl">Deudor alimentario</div><div class="det-val muted-val" id="detDeudorAlim">—</div></div>
+        <div class="det-field"><div class="det-lbl">Folio licencia conducir</div><div class="det-val" id="detFolioLic">—</div></div>
+        <div class="det-field"><div class="det-lbl">Registro migratorio</div><div class="det-val" id="detRegMig">—</div></div>
+        <div class="det-field"><div class="det-lbl">Idiomas</div><div class="det-val" id="detIdiomas">—</div></div>
+        <div class="det-field"><div class="det-lbl">Lengua indígena</div><div class="det-val" id="detLengua">—</div></div>
       </div>
     </div>
 
@@ -792,11 +799,11 @@
         <div>
           <div class="wname">${t.nombreTrabajador}</div>
           <div class="wmeta">
+            <div class="wrow"><i class="fa-solid fa-id-badge"></i>${t.puesto||'—'}</div>
             <div class="wrow"><i class="fa-solid fa-helmet-safety"></i>${t.especialidadTrabajador||'—'}</div>
-            <div class="wrow"><i class="fa-solid fa-phone"></i>${t.telefonoTrabajador||'—'}</div>
             <div class="wrow"><i class="fa-solid fa-envelope"></i>${t.correoTrabajador||'—'}</div>
+            <div class="wrow"><i class="fa-solid fa-phone"></i>${t.telefonoTrabajador||'—'}</div>
             <div class="wrow"><i class="fa-solid fa-calendar-day"></i>Alta: ${fmt(t.fechaIngreso)}</div>
-            <div class="wrow"><i class="fa-solid fa-id-badge"></i>NSS: ${t.nssTrabajador||'—'}</div>
           </div>
           <div class="wfooter">
             <div class="wactions">
@@ -810,7 +817,7 @@
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>
             </div>
-            <div class="stars-mini">${miniStars(t.calificacionTrabajador)}</div>
+            <div class="stars-mini">${miniStars(t.evaluacionTrabajador)}</div>
           </div>
         </div>
         <div class="status-badge ${cl}${pulso}">${lb}</div>
@@ -840,17 +847,50 @@
     badge.textContent = ESTADO_LBL[t.estadoTrabajador]||t.estadoTrabajador||'—';
     badge.className   = `det-badge status-badge ${ESTADO_CLS[t.estadoTrabajador]||''}`;
 
-    // Contacto
-    $('detTelefono').textContent = t.telefonoTrabajador||'—';
-    $('detCorreo').textContent   = t.correoTrabajador||'—';
+    // Datos personales
+    $('detId').textContent           = '#' + (t.idTrabajador||'—');
+    $('detCurp').textContent         = t.curp||'—';
+    $('detRfc').textContent          = t.rfc||'—';
+    $('detNss').textContent          = t.nssTrabajador||'—';
+    $('detNacionalidad').textContent = t.nacionalidad||'—';
+    $('detSexo').textContent         = t.sexo||'—';
+    $('detEstadoCivil').textContent  = t.estadoCivil||'—';
+    $('detTelefono').textContent     = t.telefonoTrabajador||'—';
+    $('detCorreo').textContent       = t.correoTrabajador||'—';
+    const foto = t.fotoPerfilUrl;
+    $('detFotoWrap').innerHTML = foto
+      ? `<img src="${foto}" alt="Foto" style="max-width:120px;border-radius:8px;border:1px solid rgba(255,255,255,0.08)"/>`
+      : 'Sin foto';
 
     // Laboral
-    $('detNss').textContent       = t.nssTrabajador||'—';
-    $('detFecha').textContent     = fmt(t.fechaIngreso);
-    $('detUbicacion').textContent = t.ubicacionTrabajador||'—';
-    $('detStars').innerHTML       = detStars(t.calificacionTrabajador);
+    $('detPuesto').textContent       = t.puesto||'—';
+    $('detEspecialidad').textContent = t.especialidadTrabajador||'—';
+    $('detEscolaridad').textContent  = t.escolaridad||'—';
+    $('detFecha').textContent        = fmt(t.fechaIngreso);
+    $('detContratacion').textContent = t.contratacion||'—';
+    $('detJornada').textContent      = t.jornada||'—';
+    $('detEstadoTrab').textContent   = t.estadoTrabajador||'—';
+    $('detEstadoCV').textContent     = (t.estadoCalidadVida && (t.estadoCalidadVida.nombreEst || t.estadoCalidadVida.idEstado))||'—';
+    $('detDescPuesto').textContent   = t.descPuesto||'Sin registrar';
     $('detExperiencia').textContent  = t.experiencia||'Sin registrar';
-    $('detDescripcion').textContent  = t.descripcionTrabajador||'Sin registrar';
+    $('detStars').innerHTML          = detStars(t.evaluacionTrabajador);
+
+    // Domicilio
+    const d = t.domicilio || {};
+    $('detCalle').textContent    = d.calle||'—';
+    $('detNumExt').textContent   = d.numExt||'—';
+    $('detColonia').textContent  = d.colonia||'—';
+    $('detCodPost').textContent  = d.codPost||'—';
+    $('detMunAlc').textContent   = d.munAlc||'—';
+    $('detEstadoDom').textContent= (d.estado && (d.estado.nombreEst || d.estado.idEstado))||'—';
+
+    // Adicional
+    $('detAntPenal').textContent  = t.antPenal||'Sin registrar';
+    $('detDeudorAlim').textContent= t.deudorAlim||'Sin registrar';
+    $('detFolioLic').textContent  = t.folioLicCond||'—';
+    $('detRegMig').textContent    = (t.registroMigratorio && (t.registroMigratorio.folioDocumento || t.registroMigratorio.idMigratorio))||'—';
+    $('detIdiomas').textContent   = t.idiomas||'—';
+    $('detLengua').textContent    = t.lenguaIndigena||'—';
 
     // Botones de acción en el footer del detalle
     $('detBtnEditar').onclick   = () => { cerrarDetalle(); irAEditar(id); };
