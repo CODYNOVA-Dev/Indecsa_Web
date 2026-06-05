@@ -97,7 +97,7 @@
 
     .form-group { margin-bottom: 1rem; }
     label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
-    select, input[type="date"] {
+    select, input[type="date"], input[type="text"] {
       width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
       border-radius: 8px; padding: 9px 12px; color: var(--white);
       font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
@@ -106,6 +106,13 @@
     select:focus, input:focus { border-color: var(--gold); }
     select option { background: var(--navy-mid); }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .filter-bar { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; margin-bottom: 8px; }
+    .input-wrap { position: relative; }
+    .input-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events:none; }
+    .input-wrap input { padding-left: 32px; }
+    .check-row { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); margin: 4px 0 12px; cursor:pointer; user-select:none; }
+    .check-row input { width:14px; height:14px; accent-color: var(--gold); cursor:pointer; }
+    .count-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
     .btn-gen {
       width: 100%; padding: 13px; border-radius: 10px; border: none;
@@ -221,6 +228,13 @@
           <span class="pill-sub">Partidas ejecutadas, programadas y porcentaje de avance</span>
         </div>
       </button>
+      <button class="tipo-pill" onclick="setTipo(this,'general')">
+        <i class="fa-solid fa-file-lines"></i>
+        <div class="pill-text">
+          <span class="pill-title">Reporte General de Proyecto</span>
+          <span class="pill-sub">Datos del proyecto, contratistas, trabajadores, horas y avance — todo en uno</span>
+        </div>
+      </button>
     </div>
 
     <div class="divider"></div>
@@ -229,19 +243,56 @@
 
     <div class="form-group" id="grpTrabajador">
       <label>Trabajador *</label>
+      <div class="filter-bar">
+        <div class="input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="busqTrabajador" placeholder="Buscar por nombre…" oninput="renderTrabajadorOpts()" />
+        </div>
+        <select id="filtroEstadoTrab" onchange="renderTrabajadorOpts()">
+          <option value="">Todos los estados</option>
+          <option value="ACTIVO">Activo</option>
+          <option value="VACACIONES">Vacaciones</option>
+          <option value="INCAPACIDAD">Incapacidad</option>
+          <option value="BAJA">Baja</option>
+        </select>
+      </div>
       <select id="selTrabajador">
         <option value="">Cargando trabajadores…</option>
       </select>
+      <div class="count-hint" id="hintTrab"></div>
     </div>
 
     <div class="form-group" id="grpProyecto" style="display:none">
       <label>Proyecto *</label>
+      <div class="filter-bar">
+        <div class="input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="busqProyecto" placeholder="Buscar por nombre…" oninput="renderProyectoOpts()" />
+        </div>
+        <select id="filtroEstatusProy" onchange="renderProyectoOpts()">
+          <option value="">Todos los estatus</option>
+          <option value="PLANEACION">Planeación</option>
+          <option value="EN_CURSO">En curso</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="FINALIZADO">Finalizado</option>
+          <option value="CANCELADO">Cancelado</option>
+        </select>
+      </div>
       <select id="selProyecto">
         <option value="">Cargando proyectos…</option>
       </select>
+      <label class="check-row" id="lblSoloConTrab">
+        <input type="checkbox" id="chkSoloConTrab" onchange="renderProyectoOpts()" />
+        Solo proyectos con trabajadores asignados
+      </label>
+      <label class="check-row" id="lblSoloConHoras">
+        <input type="checkbox" id="chkSoloConHoras" onchange="renderProyectoOpts()" />
+        Solo proyectos con horas registradas
+      </label>
+      <div class="count-hint" id="hintProy"></div>
     </div>
 
-    <div class="row-2">
+    <div class="row-2" id="grpFechas">
       <div class="form-group">
         <label>Fecha inicio *</label>
         <input type="date" id="inpDesde" />
@@ -278,10 +329,17 @@
   let tipoActual = 'rendimiento';
   const HISTORY_KEY = 'indecsa_reportes_history';
 
+  let trabajadores = [];
+  let proyectos = [];
+  let asignacionesTP = [];
+  let registrosHoras = [];
+  let asignacionesPC = [];
+
   window.addEventListener('DOMContentLoaded', () => {
     setDefaultDates();
     cargarTrabajadores();
     cargarProyectos();
+    cargarAsignacionesYHoras();
     renderHistory();
     initNavHide();
   });
@@ -305,15 +363,8 @@
   async function cargarTrabajadores() {
     try {
       const r = await fetch(`${API}/trabajadores`);
-      const lista = await r.json();
-      const sel = document.getElementById('selTrabajador');
-      sel.innerHTML = '<option value="">— Selecciona trabajador —</option>';
-      lista.forEach(t => {
-        const o = document.createElement('option');
-        o.value = t.idTrabajador;
-        o.textContent = t.nombreTrabajador || `Trabajador #${t.idTrabajador}`;
-        sel.appendChild(o);
-      });
+      trabajadores = await r.json();
+      renderTrabajadorOpts();
     } catch {
       document.getElementById('selTrabajador').innerHTML =
         '<option value="">Error al cargar trabajadores</option>';
@@ -323,19 +374,72 @@
   async function cargarProyectos() {
     try {
       const r = await fetch(`${API}/proyectos`);
-      const lista = await r.json();
-      const sel = document.getElementById('selProyecto');
-      sel.innerHTML = '<option value="">— Selecciona proyecto —</option>';
-      lista.forEach(p => {
-        const o = document.createElement('option');
-        o.value = p.idProyecto;
-        o.textContent = p.nombreProyecto;
-        sel.appendChild(o);
-      });
+      proyectos = await r.json();
+      renderProyectoOpts();
     } catch {
       document.getElementById('selProyecto').innerHTML =
         '<option value="">Error al cargar proyectos</option>';
     }
+  }
+
+  async function cargarAsignacionesYHoras() {
+    try {
+      const [a1, a2, h] = await Promise.all([
+        fetch(`${API}/asignaciones-trabajador-proyecto`).then(r => r.ok ? r.json() : []),
+        fetch(`${API}/asignaciones-proyecto-contratista`).then(r => r.ok ? r.json() : []),
+        fetch(`${API}/registros-horas`).then(r => r.ok ? r.json() : [])
+      ]);
+      asignacionesTP = a1 || [];
+      asignacionesPC = a2 || [];
+      registrosHoras = h || [];
+      renderProyectoOpts();
+    } catch { /* no es bloqueante */ }
+  }
+
+  function renderTrabajadorOpts() {
+    const q = (document.getElementById('busqTrabajador').value || '').toLowerCase().trim();
+    const est = document.getElementById('filtroEstadoTrab').value;
+    const sel = document.getElementById('selTrabajador');
+    const prev = sel.value;
+    const lista = trabajadores.filter(t =>
+      (!q || (t.nombreTrabajador || '').toLowerCase().includes(q)) &&
+      (!est || t.estadoTrabajador === est)
+    );
+    sel.innerHTML = '<option value="">— Selecciona trabajador —</option>' +
+      lista.map(t => `<option value="${t.idTrabajador}">${t.nombreTrabajador || 'Trabajador #' + t.idTrabajador}</option>`).join('');
+    if (lista.some(t => String(t.idTrabajador) === prev)) sel.value = prev;
+    document.getElementById('hintTrab').textContent =
+      `${lista.length} de ${trabajadores.length} trabajadores`;
+  }
+
+  function renderProyectoOpts() {
+    const q = (document.getElementById('busqProyecto').value || '').toLowerCase().trim();
+    const est = document.getElementById('filtroEstatusProy').value;
+    const soloTrab = document.getElementById('chkSoloConTrab').checked;
+    const soloHoras = document.getElementById('chkSoloConHoras').checked;
+    const sel = document.getElementById('selProyecto');
+    const prev = sel.value;
+
+    const idsConTrab = new Set(
+      asignacionesTP.map(a => a.proyecto && a.proyecto.idProyecto).filter(Boolean)
+    );
+    const idsConHoras = new Set(
+      registrosHoras
+        .map(r => r.asignacionTrabajadorProyecto && r.asignacionTrabajadorProyecto.proyecto && r.asignacionTrabajadorProyecto.proyecto.idProyecto)
+        .filter(Boolean)
+    );
+
+    const lista = proyectos.filter(p =>
+      (!q || (p.nombreProyecto || '').toLowerCase().includes(q)) &&
+      (!est || p.estatusProyecto === est) &&
+      (!soloTrab || idsConTrab.has(p.idProyecto)) &&
+      (!soloHoras || idsConHoras.has(p.idProyecto))
+    );
+    sel.innerHTML = '<option value="">— Selecciona proyecto —</option>' +
+      lista.map(p => `<option value="${p.idProyecto}">${p.nombreProyecto}</option>`).join('');
+    if (lista.some(p => String(p.idProyecto) === prev)) sel.value = prev;
+    document.getElementById('hintProy').textContent =
+      `${lista.length} de ${proyectos.length} proyectos`;
   }
 
   function setTipo(btn, tipo) {
@@ -344,9 +448,21 @@
     tipoActual = tipo;
     document.getElementById('grpTrabajador').style.display = tipo === 'rendimiento' ? '' : 'none';
     document.getElementById('grpProyecto').style.display  = tipo !== 'rendimiento' ? '' : 'none';
+    document.getElementById('grpFechas').style.display    = tipo === 'general' ? 'none' : '';
+
+    // Mostrar/ocultar toggles según tipo
+    document.getElementById('lblSoloConTrab').style.display  = (tipo === 'horas' || tipo === 'general') ? '' : 'none';
+    document.getElementById('lblSoloConHoras').style.display = (tipo === 'horas') ? '' : 'none';
+
+    const btnGen = document.getElementById('btnGen');
+    btnGen.innerHTML = tipo === 'general'
+      ? '<i class="fa-solid fa-file-lines"></i> Generar reporte general'
+      : '<i class="fa-solid fa-file-arrow-down"></i> Generar PDF';
   }
 
   async function generarPDF() {
+    if (tipoActual === 'general') { return generarReporteGeneral(); }
+
     const desde = document.getElementById('inpDesde').value;
     const hasta  = document.getElementById('inpHasta').value;
 
@@ -395,6 +511,186 @@
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-file-arrow-down"></i> Generar PDF';
     }
+  }
+
+  /* ── REPORTE GENERAL DE PROYECTO (client-side, imprimible / guardable como PDF) ── */
+  async function generarReporteGeneral() {
+    const sel = document.getElementById('selProyecto');
+    const id = sel.value;
+    const nombre = sel.options[sel.selectedIndex]?.text || '';
+    if (!id) { toast('Selecciona un proyecto', 'err'); return; }
+
+    const btn = document.getElementById('btnGen');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Recopilando datos…';
+
+    try {
+      const proy = proyectos.find(p => String(p.idProyecto) === String(id));
+      const trabs = asignacionesTP.filter(a => a.proyecto && a.proyecto.idProyecto == id);
+      const contratos = asignacionesPC.filter(a => a.proyecto && a.proyecto.idProyecto == id);
+      const horas = registrosHoras.filter(r =>
+        r.asignacionTrabajadorProyecto &&
+        r.asignacionTrabajadorProyecto.proyecto &&
+        r.asignacionTrabajadorProyecto.proyecto.idProyecto == id
+      );
+      const totalHoras = horas.reduce((s, r) => s + Number(r.horasTrabajadas || 0), 0);
+
+      const horasPorTrab = {};
+      horas.forEach(r => {
+        const t = r.asignacionTrabajadorProyecto && r.asignacionTrabajadorProyecto.trabajador;
+        if (!t) return;
+        const k = t.idTrabajador;
+        if (!horasPorTrab[k]) horasPorTrab[k] = { nombre: t.nombreTrabajador, total: 0 };
+        horasPorTrab[k].total += Number(r.horasTrabajadas || 0);
+      });
+
+      const html = construirHtmlReporteGeneral(proy, trabs, contratos, horas, totalHoras, horasPorTrab);
+      const w = window.open('', '_blank');
+      if (!w) { toast('Habilita popups para generar el reporte', 'err'); return; }
+      w.document.write(html);
+      w.document.close();
+
+      const fname = `reporte_general_${(proy.nombreProyecto||'proyecto').replace(/\s+/g,'_')}.pdf`;
+      guardarHistorial(fname, 'general', '', '');
+      renderHistory();
+      toast('Reporte general listo — usa "Imprimir → Guardar como PDF"', 'ok');
+    } catch(e) {
+      console.error(e);
+      toast('Error al construir el reporte general', 'err');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-file-lines"></i> Generar reporte general';
+    }
+  }
+
+  function construirHtmlReporteGeneral(p, trabs, contratos, horas, totalHoras, horasPorTrab) {
+    const dom = p.domicilio || {};
+    const est = (dom.estado && (dom.estado.nombreEst || dom.estado.idEstado)) || '—';
+    const fmtF = f => f ? f.split('-').reverse().join('/') : '—';
+
+    const filasContratos = contratos.length ? contratos.map(c => `
+      <tr>
+        <td>${c.contratista?.nombreContratista || '—'}</td>
+        <td>${c.numeroContrato || '—'}</td>
+        <td>${c.personalAsignado ?? '—'}</td>
+        <td>${fmtF(c.fechaInicio)}</td>
+        <td>${fmtF(c.fechaFinEstimada)}</td>
+        <td>${c.estatusContrato || '—'}</td>
+      </tr>`).join('') : '<tr><td colspan="6" class="empty">Sin contratistas asignados</td></tr>';
+
+    const filasTrabs = trabs.length ? trabs.map(a => {
+      const t = a.trabajador || {};
+      const h = horasPorTrab[t.idTrabajador]?.total || 0;
+      return `
+      <tr>
+        <td>${t.nombreTrabajador || '—'}</td>
+        <td>${a.puestoEnProyecto || t.puesto || '—'}</td>
+        <td>${t.especialidadTrabajador || '—'}</td>
+        <td>${fmtF(a.fechaInicio)}</td>
+        <td>${fmtF(a.fechaFinEstimada)}</td>
+        <td>${a.estatusAsignacion || '—'}</td>
+        <td style="text-align:right">${h.toFixed(2)}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="7" class="empty">Sin trabajadores asignados</td></tr>';
+
+    return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<title>Reporte General — ${p.nombreProyecto}</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+  body{background:#fff;color:#0B1F3A;padding:30px 38px}
+  .doc-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #C8A96E;padding-bottom:14px;margin-bottom:24px}
+  .doc-head .brand{font-family:'Georgia',serif;font-size:24px;color:#0B1F3A;letter-spacing:1px}
+  .doc-head .tag{font-size:10px;color:#8A9BB5;letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+  .doc-head .meta{text-align:right;font-size:11px;color:#555}
+  h1{font-family:'Georgia',serif;font-size:20px;color:#0B1F3A;margin-bottom:4px}
+  .sub{color:#666;font-size:12px;margin-bottom:18px}
+  .badge{display:inline-block;background:#C8A96E;color:#fff;font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+  h2{font-family:'Georgia',serif;font-size:14px;color:#0B1F3A;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid #C8A96E}
+  h2 i{color:#C8A96E}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px}
+  .grid div{padding:5px 0;border-bottom:1px dashed #e8e8e8}
+  .grid b{color:#0B1F3A;display:inline-block;min-width:130px;font-weight:600}
+  table{width:100%;border-collapse:collapse;margin-top:6px;font-size:11px}
+  thead th{background:#0B1F3A;color:#fff;padding:7px 8px;text-align:left;font-weight:600;letter-spacing:.5px}
+  tbody td{padding:6px 8px;border-bottom:1px solid #eee}
+  tbody tr:nth-child(even){background:#fafafa}
+  td.empty{text-align:center;color:#999;font-style:italic;padding:14px}
+  .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 6px}
+  .kpi{border:1px solid #e0d3b6;border-left:4px solid #C8A96E;padding:10px 12px;border-radius:4px}
+  .kpi .lbl{font-size:10px;color:#888;letter-spacing:.5px;text-transform:uppercase}
+  .kpi .val{font-size:18px;color:#0B1F3A;font-weight:700;font-family:'Georgia',serif}
+  .desc{background:#f7f5ef;border-left:3px solid #C8A96E;padding:10px 14px;font-size:12px;color:#555;border-radius:0 4px 4px 0;margin-top:6px}
+  .foot{margin-top:30px;border-top:1px solid #ccc;padding-top:10px;font-size:10px;color:#888;display:flex;justify-content:space-between}
+  .actions{position:fixed;top:14px;right:14px;display:flex;gap:8px}
+  .actions button{background:#C8A96E;color:#0B1F3A;border:none;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
+  .actions button.sec{background:#0B1F3A;color:#fff}
+  @media print{.actions{display:none}body{padding:18px 22px}}
+</style></head><body>
+  <div class="actions">
+    <button onclick="window.print()">🖨 Imprimir / PDF</button>
+    <button class="sec" onclick="window.close()">Cerrar</button>
+  </div>
+
+  <div class="doc-head">
+    <div>
+      <div class="brand">INDECSA</div>
+      <div class="tag">Reporte General de Proyecto</div>
+    </div>
+    <div class="meta">
+      Generado: ${new Date().toLocaleString('es-MX')}<br>
+      Folio: RG-${p.idProyecto}-${Date.now().toString().slice(-6)}
+    </div>
+  </div>
+
+  <h1>${p.nombreProyecto || 'Proyecto sin nombre'}</h1>
+  <div class="sub">${p.tipoProyecto || '—'} · <span class="badge">${p.estatusProyecto || '—'}</span></div>
+
+  <h2><i>◆</i> Información general</h2>
+  <div class="grid">
+    <div><b>Cliente:</b> ${p.cliente || '—'}</div>
+    <div><b>Tipo de proyecto:</b> ${p.tipoProyecto || '—'}</div>
+    <div><b>Fecha inicio:</b> ${fmtF(p.fechaEstimadaInicio)}</div>
+    <div><b>Fecha fin:</b> ${fmtF(p.fechaEstimadaFin)}</div>
+    <div><b>Calificación:</b> ${p.calificacionProyecto ? '★'.repeat(p.calificacionProyecto) + '☆'.repeat(5-p.calificacionProyecto) : 'Sin calificar'}</div>
+    <div><b>Estatus:</b> ${p.estatusProyecto || '—'}</div>
+  </div>
+
+  <h2><i>◆</i> Ubicación</h2>
+  <div class="grid">
+    <div><b>Estado:</b> ${est}</div>
+    <div><b>Municipio / Alcaldía:</b> ${dom.munAlc || '—'}</div>
+    <div><b>Colonia:</b> ${dom.colonia || '—'}</div>
+    <div><b>Código postal:</b> ${dom.codPost || '—'}</div>
+    <div style="grid-column:1/-1"><b>Domicilio:</b> ${(dom.calle||'—')} ${(dom.numExt||'')}</div>
+  </div>
+
+  ${p.descripcionProyecto ? `<h2><i>◆</i> Descripción</h2><div class="desc">${p.descripcionProyecto}</div>` : ''}
+
+  <h2><i>◆</i> Resumen ejecutivo</h2>
+  <div class="summary">
+    <div class="kpi"><div class="lbl">Contratistas</div><div class="val">${contratos.length}</div></div>
+    <div class="kpi"><div class="lbl">Trabajadores</div><div class="val">${trabs.length}</div></div>
+    <div class="kpi"><div class="lbl">Registros de horas</div><div class="val">${horas.length}</div></div>
+    <div class="kpi"><div class="lbl">Total de horas</div><div class="val">${totalHoras.toFixed(1)}</div></div>
+  </div>
+
+  <h2><i>◆</i> Contratistas asignados</h2>
+  <table>
+    <thead><tr><th>Contratista</th><th>N° Contrato</th><th>Personal</th><th>Inicio</th><th>Fin estimado</th><th>Estatus</th></tr></thead>
+    <tbody>${filasContratos}</tbody>
+  </table>
+
+  <h2><i>◆</i> Trabajadores asignados y horas</h2>
+  <table>
+    <thead><tr><th>Trabajador</th><th>Puesto</th><th>Especialidad</th><th>Inicio</th><th>Fin estimado</th><th>Estatus</th><th>Horas acum.</th></tr></thead>
+    <tbody>${filasTrabs}</tbody>
+  </table>
+
+  <div class="foot">
+    <span>INDECSA · Gestión de Proyectos &amp; Contratistas</span>
+    <span>Página 1 · Reporte automático</span>
+  </div>
+</body></html>`;
   }
 
   function guardarHistorial(nombre, tipo, desde, hasta) {
