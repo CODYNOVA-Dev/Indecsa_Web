@@ -930,7 +930,10 @@
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando…';
     try {
-      const res = await fetch(`${API_BASE}/trabajadores/${pendingBajaId}/estado?estado=BAJA`,{method:'PATCH'});
+      const trab = todos.find(t=>t.idTrabajador===pendingBajaId);
+      if (!trab) throw new Error('Trabajador no encontrado');
+      const body = {...trab, estadoTrabajador:'BAJA'};
+      const res = await fetch(`${API_BASE}/trabajadores/${pendingBajaId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if (!res.ok) throw new Error();
       const idx = todos.findIndex(t=>t.idTrabajador===pendingBajaId);
       if (idx!==-1) todos[idx].estadoTrabajador='BAJA';

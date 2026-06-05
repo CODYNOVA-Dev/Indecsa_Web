@@ -533,6 +533,7 @@
       }
 
       dto.domicilio = { idDomicilio };
+      dto.estatusProyecto = estatus || proyectoActual.estatusProyecto;
 
       const resPut = await fetch(`${API_BASE}/proyectos/${proyectoActual.idProyecto}`, {
         method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(dto)
@@ -542,14 +543,6 @@
         throw new Error(e.message || `Error ${resPut.status}`);
       }
       const updated = await resPut.json();
-
-      if (estatus && estatus !== proyectoActual.estatusProyecto) {
-        const resPatch = await fetch(`${API_BASE}/proyectos/${proyectoActual.idProyecto}/estatus?estatus=${estatus}`, { method:'PATCH' });
-        if (!resPatch.ok) {
-          const e = await resPatch.json().catch(() => ({}));
-          throw new Error(e.message || `Error estatus ${resPatch.status}`);
-        }
-      }
 
       proyectoActual = { ...updated, estatusProyecto: estatus || updated.estatusProyecto };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(proyectoActual));

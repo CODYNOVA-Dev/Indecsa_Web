@@ -660,8 +660,8 @@
       }
 
       const payload = leerFormulario();
-      const estadoNuevo = payload.estadoTrabajador;
-      delete payload.estadoTrabajador;
+      const estadoNuevo = payload.estadoTrabajador || trabajadorActual.estadoTrabajador;
+      payload.estadoTrabajador = estadoNuevo;
       payload.domicilio = { idDomicilio };
 
       const resPut = await fetch(`${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}`, {
@@ -674,17 +674,6 @@
         throw new Error(e.message || `Error ${resPut.status}`);
       }
       const updated = await resPut.json();
-
-      if (estadoNuevo && estadoNuevo !== trabajadorActual.estadoTrabajador) {
-        const resPatch = await fetch(
-          `${API_BASE}/trabajadores/${trabajadorActual.idTrabajador}/estado?estado=${estadoNuevo}`,
-          { method: 'PATCH' }
-        );
-        if (!resPatch.ok) {
-          const e = await resPatch.json().catch(() => ({}));
-          throw new Error(e.message || `Error estado ${resPatch.status}`);
-        }
-      }
 
       trabajadorActual = { ...updated, estadoTrabajador: estadoNuevo || updated.estadoTrabajador };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(trabajadorActual));

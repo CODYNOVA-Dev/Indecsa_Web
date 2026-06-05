@@ -588,7 +588,10 @@
     const btn=$('btnConfirmEstatus');
     btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Aplicando…';
     try {
-      const res=await fetch(`${API_BASE}/proyectos/${pendingEstatusId}/estatus?estatus=${radio.value}`,{method:'PATCH'});
+      const proy=todos.find(p=>p.idProyecto===pendingEstatusId);
+      if(!proy) throw new Error('Proyecto no encontrado');
+      const body={...proy, estatusProyecto:radio.value};
+      const res=await fetch(`${API_BASE}/proyectos/${pendingEstatusId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if(!res.ok) throw new Error(`HTTP ${res.status}`);
       const idx=todos.findIndex(p=>p.idProyecto===pendingEstatusId);
       if(idx!==-1) todos[idx].estatusProyecto=radio.value;
